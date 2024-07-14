@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include "generate_rSolution.h"
 using namespace std;
 
 
@@ -17,8 +18,6 @@ vector<vector<bool>> generate_solution(int num_turb, int upperBoundX, int upperB
 
     // inicializa a matriz solução
     vector<vector<bool>> solution(upperBoundY, vector<bool>(upperBoundX, false));
-
-    srand(time(0));
 
     int rand_int;
     int elmn;
@@ -38,33 +37,4 @@ vector<vector<bool>> generate_solution(int num_turb, int upperBoundX, int upperB
     }
 
     return solution;
-}
-
-// É possível executar o programa para testar a função generate_solution
-// Caso seja executado sem parâmetros adicionais, serão 50 turbinas em um grid 20 x 20
-// Caso tenha 1 ou 2 parâmetros adicionais, serão arg1 numero de turbinas em um grid 20 x 20
-// Caso tenha 3 ou mais parâmetros adicionais, serão arg1 numero de turbinas em um grid arg2 x arg3
-int main(int argc, char** argv){
-    int num_turb = 50;
-    int upperBoundX = 20;
-    int upperBoundY = 20;
-    
-    if(argc > 3){
-        num_turb = atoi(argv[1]);
-        upperBoundX = atoi(argv[2]);
-        upperBoundY = atoi(argv[3]);
-    } else if (argc > 1){
-        num_turb = atoi(argv[1]);
-    }
-
-    vector<vector<bool>> solution = generate_solution(num_turb, upperBoundX, upperBoundY);
-
-    // Printa no console a matriz solução
-    for(int i = 0; i < solution.size(); i++){
-        for(int j = 0; j < solution[i].size(); j++){
-            cout << solution[i][j] << " ";
-        }
-        cout << endl;
-    }
-
 }
