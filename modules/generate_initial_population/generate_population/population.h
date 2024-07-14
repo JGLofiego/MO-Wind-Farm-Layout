@@ -2,8 +2,9 @@
 #define POPULATION_H
 
 #include <vector>
+#include "../generate_random_solution/generate_rSolution.h"
 using namespace std;
 
-vector<vector<vector<bool>>> create_initial_population(int size_population, int num_turb, int upperBoundX, int upperBoundY);
+vector<Solution> create_initial_population(int size_population, int num_turb, int upperBoundX, int upperBoundY);
 
 #endif 

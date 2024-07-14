@@ -14,16 +14,15 @@ int main(){
   int size_population = 3; //Size of the population
 
   //Initial population
-  vector<vector<vector<bool>>> initial_population = create_initial_population(size_population, num_turb, upperBoundX, upperBoundY);  
+  vector<Solution> initial_population = create_initial_population(size_population, num_turb, upperBoundX, upperBoundY);  
   
   for (int k = 0; k < initial_population.size(); ++k) {
-        cout << "Solution " << k + 1 << ":\n";
-    for (int i = 0; i < initial_population[k].size(); ++i) {
-      for (int j = 0; j < initial_population[k][i].size(); ++j) {
-        cout << initial_population[k][i][j] << " ";
+    cout << "Solution " << k + 1 << ":\n";
+    for (int i = 0; i < initial_population[k].grid.size(); ++i) {
+      for (int j = 0; j < initial_population[k].grid[i].size(); ++j) {
+        cout << initial_population[k].grid[i][j] << " ";
       }
       cout << endl;
     }
-    cout << endl;
   }
 }

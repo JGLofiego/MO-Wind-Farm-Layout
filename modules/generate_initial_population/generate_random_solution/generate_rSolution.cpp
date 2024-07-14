@@ -2,22 +2,24 @@
 #include <vector>
 #include <time.h>
 #include "generate_rSolution.h"
+#include "../generate_random_solution/generate_rSolution.h"
 using namespace std;
 
-
 // Função para gerar uma solução aleatória, retorna uma matriz booleana a qual false = sem turbina, e true = turbina
-vector<vector<bool>> generate_solution(int num_turb, int upperBoundX, int upperBoundY){
+Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY){
 
     // inicializa um vector de int com todas as possiveis posições de um grid upperboundX x upperBoundY 
     int mul = upperBoundX * upperBoundY;
     vector<int> pos(mul);
+    vector<int> pos_na;
+
     for (int i = 0; i < pos.size(); i++){
         // Cada posição i do vector é igual ao próprio i
         pos[i] = i;
     }
 
     // inicializa a matriz solução
-    vector<vector<bool>> solution(upperBoundY, vector<bool>(upperBoundX, false));
+    vector<vector<bool>> solution_grid(upperBoundY, vector<bool>(upperBoundX, false));
 
     int rand_int;
     int elmn;
@@ -30,11 +32,25 @@ vector<vector<bool>> generate_solution(int num_turb, int upperBoundX, int upperB
         // numero / upperBoundX = linha a qual número deveria estar
         // numero % upperBoundX = coluna a qual o número deveria estar
         elmn = pos[rand_int];
-        solution[elmn / upperBoundX][elmn % upperBoundX] = true;
+        solution_grid[elmn / upperBoundX][elmn % upperBoundX] = true;
+
+        // armazena a posicao que agora esta ocupada com a turbina no vetor de posicoes nao disponiveis
+        pos_na.push_back(elmn);
 
         // apaga o elemento do array de posições disponíveis, evitando possíveis repetições
         pos.erase(pos.begin() + rand_int);
     }
 
-    return solution;
+    //Filling the Solution
+
+    double cost = 0.0; 
+    double netpower = 0.0;
+
+    Solution rSolution;
+    rSolution.grid = solution_grid;
+    rSolution.available_positions = pos;
+    rSolution.n_available_positions = pos_na;
+    rSolution.fitness = make_pair(cost, netpower);
+
+    return rSolution;
 }
