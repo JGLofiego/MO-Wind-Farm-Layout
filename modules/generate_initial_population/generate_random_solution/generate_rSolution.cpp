@@ -1,8 +1,6 @@
-#include <iostream>
 #include <vector>
-#include <time.h>
+#include <cstdlib>
 #include "generate_rSolution.h"
-#include "../generate_random_solution/generate_rSolution.h"
 using namespace std;
 
 // Função para gerar uma solução aleatória, retorna uma matriz booleana a qual false = sem turbina, e true = turbina
@@ -18,8 +16,7 @@ Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY){
         pos[i] = i;
     }
 
-    // inicializa a matriz solução
-    //vector<vector<bool>> solution_grid(upperBoundY, vector<bool>(upperBoundX, false));
+    // inicializa o vetor solução
 
     vector<bool> solution_grid(mul, false);
 
