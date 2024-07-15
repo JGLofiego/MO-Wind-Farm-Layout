@@ -19,7 +19,9 @@ Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY){
     }
 
     // inicializa a matriz solução
-    vector<vector<bool>> solution_grid(upperBoundY, vector<bool>(upperBoundX, false));
+    //vector<vector<bool>> solution_grid(upperBoundY, vector<bool>(upperBoundX, false));
+
+    vector<bool> solution_grid(mul, false);
 
     int rand_int;
     int elmn;
@@ -32,7 +34,8 @@ Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY){
         // numero / upperBoundX = linha a qual número deveria estar
         // numero % upperBoundX = coluna a qual o número deveria estar
         elmn = pos[rand_int];
-        solution_grid[elmn / upperBoundX][elmn % upperBoundX] = true;
+        //solution_grid[elmn / upperBoundX][elmn % upperBoundX] = true;
+        solution_grid[elmn] = true;
 
         // armazena a posicao que agora esta ocupada com a turbina no vetor de posicoes nao disponiveis
         pos_na.push_back(elmn);

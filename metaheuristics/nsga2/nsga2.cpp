@@ -16,13 +16,15 @@ int main(){
   //Initial population
   vector<Solution> initial_population = create_initial_population(size_population, num_turb, upperBoundX, upperBoundY);  
   
-  for (int k = 0; k < initial_population.size(); ++k) {
-    cout << "Solution " << k + 1 << ":\n";
-    for (int i = 0; i < initial_population[k].grid.size(); ++i) {
-      for (int j = 0; j < initial_population[k].grid[i].size(); ++j) {
-        cout << initial_population[k].grid[i][j] << " ";
+  for (int i = 0; i < initial_population.size(); i++) {
+      cout << "Solution " << i + 1 << ":\n";
+      // Print the 1D grid as a 2D grid (matrix)
+      for (int j = 0; j < upperBoundY; j++) {
+        for (int k = 0; k < upperBoundX; k++) {
+          cout << initial_population[i].grid[j * upperBoundX + k] << " ";
+        }
+        cout << endl;
       }
-      cout << endl;
-    }
   }
+  
 }
