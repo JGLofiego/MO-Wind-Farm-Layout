@@ -18,7 +18,7 @@ Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY){
 
     // inicializa o vetor solução
 
-    vector<bool> solution_grid(mul, false);
+    vector<int> solution_grid(mul, 0);
 
     int rand_int;
     int elmn;
@@ -27,12 +27,8 @@ Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY){
         // Gera um número aleatório do tamanho do vector de posições disponíveis
         rand_int = rand() % pos.size();
 
-        // Verifica o número no vector e descobre a posição da matriz seguindo a logica m[i][j] = i * maxJ + j
-        // numero / upperBoundX = linha a qual número deveria estar
-        // numero % upperBoundX = coluna a qual o número deveria estar
         elmn = pos[rand_int];
-        //solution_grid[elmn / upperBoundX][elmn % upperBoundX] = true;
-        solution_grid[elmn] = true;
+        solution_grid[elmn] = i+1; //Number of the turbine. 
 
         // armazena a posicao que agora esta ocupada com a turbina no vetor de posicoes nao disponiveis
         pos_na.push_back(elmn);

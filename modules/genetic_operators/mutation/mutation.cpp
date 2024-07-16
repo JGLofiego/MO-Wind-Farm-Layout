@@ -1,5 +1,5 @@
-#include "../generate_population/population.h"
-#include "../generate_random_solution/generate_rSolution.h"
+#include "../../generate_initial_population/generate_population/population.h"
+#include "../../headers/mutation.h"
 #include <cstdlib>
 using namespace std;
 
@@ -9,7 +9,7 @@ void mutation(Solution &solution){
     int rand_intA = rand() % solution.available_positions.size();
     int rand_intB;
 
-    // Ensure rand_intA and rand_intB are different
+    // Ensure that rand_intA and rand_intB are different
     do{
       rand_intB = rand() % solution.n_available_positions.size();
     } while(rand_intA == rand_intB);
@@ -28,6 +28,6 @@ void mutation(Solution &solution){
     solution.available_positions.push_back(gene_unavailable); 
 
     // Update the grid
-    solution.grid[gene_available] = true;
-    solution.grid[gene_unavailable] = false;
+    solution.grid[gene_available] = solution.grid[gene_unavailable]; //Filling the available position with the number of the turbine
+    solution.grid[gene_unavailable] = 0;
 }
