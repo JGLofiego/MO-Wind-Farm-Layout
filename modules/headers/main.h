@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "population.h"
-using namespace std;
-
-Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB);
+#include "generate_rSolution.h"
+#include "mutation.h"
+#include "crossover.h"
 
 #endif 

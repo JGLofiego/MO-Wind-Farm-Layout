@@ -1,10 +1,9 @@
 #ifndef CROSSOVER_H
 #define CROSSOVER_H
 
-#include <vector>
 #include "population.h"
-#include "crossover.h"
-#include "mutation.h"
-#include "generate_rSolution.h"
+using namespace std;
+
+Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB);
 
 #endif 
