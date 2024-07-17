@@ -1,6 +1,6 @@
 #include <vector>
 #include <cstdlib>
-#include "generate_rSolution.h"
+#include "../../headers/generate_rSolution.h"
 using namespace std;
 
 // Função para gerar uma solução aleatória, retorna uma matriz booleana a qual false = sem turbina, e true = turbina

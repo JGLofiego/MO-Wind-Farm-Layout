@@ -1,4 +1,4 @@
-#include "../../generate_initial_population/generate_population/population.h"
+#include "../../headers/population.h"
 #include "../../headers/mutation.h"
 #include <cstdlib>
 using namespace std;

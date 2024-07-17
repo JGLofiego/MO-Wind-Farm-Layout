@@ -1,6 +1,4 @@
-#include "../../modules/generate_initial_population/generate_population/population.h"
-#include "../../modules/headers/mutation.h"
-#include "../../modules/headers/crossover.h"
+#include "../../modules/headers/main.h"
 #include <iostream>
 #include <ctime> 
 using namespace std;

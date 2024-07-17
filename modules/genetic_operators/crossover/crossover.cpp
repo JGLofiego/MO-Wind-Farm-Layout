@@ -1,4 +1,4 @@
-#include "../../generate_initial_population/generate_population/population.h"
+#include "../../headers/population.h"
 #include "../../headers/crossover.h"
 #include <cstdlib>
 #include <vector>

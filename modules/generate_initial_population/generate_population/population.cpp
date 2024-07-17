@@ -1,5 +1,5 @@
-#include "population.h"
-#include "../generate_random_solution/generate_rSolution.h"
+#include "../../headers/population.h"
+#include "../../headers/generate_rSolution.h"
 #include <iostream>
 using namespace std;
 

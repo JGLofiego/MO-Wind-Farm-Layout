@@ -2,7 +2,7 @@
 #define MUTATION_H
 
 #include <vector>
-#include "../generate_initial_population/generate_population/population.h"
+#include "population.h"
 using namespace std;
 
 void mutation(Solution &solution);
