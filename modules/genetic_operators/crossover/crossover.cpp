@@ -41,7 +41,8 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
   }
 
   // Second part of crossover with parent_solutionA
-  for(int i = rand_int; i < parent_solutionB.grid.size(); i++){
+  
+  for(int i = 0; i < parent_solutionB.grid.size(); i++){
     if(notInOffspring(parent_solutionB.grid[i], offspring_solution.grid)){
       offspring_solution.grid[lastIndex + 1] = parent_solutionB.grid[i];
       lastIndex++;
@@ -49,13 +50,6 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
         offspring_solution.available_positions.push_back(lastIndex);
       else
         offspring_solution.n_available_positions.push_back(lastIndex);
-    }
-    else{
-      if(parent_solutionB.grid[i] == 0){
-        offspring_solution.grid[lastIndex + 1] = 0;
-        lastIndex++;
-        offspring_solution.available_positions.push_back(lastIndex);
-      }
     }
   }
 
