@@ -5,29 +5,20 @@ using namespace std;
 
 void mutation(Solution &solution){
 
-    // Select one available and one unavailable position at random
-    int rand_intA = rand() % solution.available_positions.size();
-    int rand_intB;
+    int grid_size = solution.grid.size();
+    int rand_intA, rand_intB;
 
-    // Ensure that rand_intA and rand_intB are different
+    // Select two positions at random
+    // Ensure that rand_intA and rand_intB are different and both are not a available position
     do{
-      rand_intB = rand() % solution.n_available_positions.size();
-    } while(rand_intA == rand_intB);
+      rand_intA = rand() % grid_size;
+      rand_intB = rand() % grid_size;
+    } while(rand_intA == rand_intB || (solution.grid[rand_intA] == 0 && solution.grid[rand_intB] == 0));
 
-    int gene_available = solution.available_positions[rand_intA];
-    int gene_unavailable = solution.n_available_positions[rand_intB];
+    // Swapping the genes betwen grid[rand_intA] e grid[rand_intB]
+    int geneA = solution.grid[rand_intA];
+    int geneB = solution.grid[rand_intB];
 
-    // Remove unavailable position from the unavailable list, because now it's available
-    solution.n_available_positions.erase(solution.n_available_positions.begin() + rand_intB); 
-    // Add the available position to the unavailable list, because the available position it is now unavailable 
-    solution.n_available_positions.push_back(gene_available);
-
-    // Remove available position from the available list, because now it's unavailable
-    solution.available_positions.erase(solution.available_positions.begin() + rand_intA);  
-    // Add the unavailable position to the available list, because the unavailable position it is now available 
-    solution.available_positions.push_back(gene_unavailable); 
-
-    // Update the grid
-    solution.grid[gene_available] = solution.grid[gene_unavailable]; //Filling the available position with the number of the turbine
-    solution.grid[gene_unavailable] = 0;
+    solution.grid[rand_intA] = geneB;
+    solution.grid[rand_intB] = geneA;
 }
