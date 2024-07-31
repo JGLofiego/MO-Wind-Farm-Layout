@@ -49,10 +49,11 @@ vector<vector<pair<Solution, int>>> build_fronts(set<pair<Solution, int>, Soluti
 
       if(!dominated){
         front.push_back(solution);
-        to_remove.push_back(solution); //Removing the latest created front from the solutions 
+        to_remove.push_back(solution);
       }
     }
 
+    // Remove all solutions added to the current front
     for(const auto& solution : to_remove){
       solutions.erase(solution);
     }
@@ -74,10 +75,12 @@ vector<vector<pair<Solution, int>>> non_dominated_sorting(vector<Solution>& popu
   vector<vector<pair<Solution, int>>> fronts = build_fronts(solutions);
 
   //Adding the rank inside of solutions
-  for(int i = 0; i < fronts.size(); i++){
-    for(int j = 0; j < fronts[i].size(); j++){
-      fronts[i][j].second = i+1;
+  int rank = 1;
+  for(auto& front : fronts){
+    for(auto& solution : front){
+      solution.second = rank;
     }
+    rank++;
   }
 
   return fronts;

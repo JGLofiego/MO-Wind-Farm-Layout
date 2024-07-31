@@ -16,36 +16,11 @@ int main(){
   //Initial population
   vector<Solution> initial_population = create_initial_population(size_population, num_turb, upperBoundX, upperBoundY);  
   
-  for (int i = 0; i < initial_population.size(); i++) {
-      cout << "Solution " << i + 1 << ":\n";
-      // Print the 1D grid as a 2D grid (matrix)
-      for (int j = 0; j < upperBoundY; j++) {
-        for (int k = 0; k < upperBoundX; k++) {
-          cout << initial_population[i].grid[j * upperBoundX + k] << " ";
-        }
-        cout << endl;
-      }
-  }
-
-  /*Mutation
-  mutation(initial_population[0]);
-    
-  for (int i = 0; i < initial_population.size(); i++) {
-      cout << "Solution " << i + 1 << ":\n";
-      // Print the 1D grid as a 2D grid (matrix)
-      for (int j = 0; j < upperBoundY; j++) {
-        for (int k = 0; k < upperBoundX; k++) {
-          cout << initial_population[i].grid[j * upperBoundX + k] << " ";
-        }
-        cout << endl;
-      }
-  }*/
-
-  //Crossover
-  Solution sol = crossover(initial_population[0], initial_population[1]);
-    
-  for (int i = 0; i < initial_population[0].grid.size(); i++) {
-    cout << sol.grid[i] << " ";
+  for(int i = 0; i < 10; i++){
+    for(auto& solution: initial_population){
+      //Parent selection
+      
+    }
   }
   
 }
