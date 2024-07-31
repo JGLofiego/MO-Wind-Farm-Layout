@@ -1,4 +1,3 @@
-#include "../headers/generate_rSolution.h"
 #include "../headers/non_dominated_sorting.h"
 #include <vector>
 #include <utility>
@@ -63,7 +62,7 @@ vector<vector<pair<Solution, int>>> build_fronts(set<pair<Solution, int>, Soluti
   return fronts;
 }
 
-vector<vector<pair<Solution, int>>> non_dominated_sorting(vector<Solution>& population_rt){
+vector<vector<Solution>> non_dominated_sorting(vector<Solution>& population_rt){
   set<pair<Solution, int>, SolutionComparator> solutions;
 
   //Filling the set 'solutions' with the solutions given by the arguments and given them an id. 
@@ -72,15 +71,16 @@ vector<vector<pair<Solution, int>>> non_dominated_sorting(vector<Solution>& popu
   }
 
   //Building the front
-  vector<vector<pair<Solution, int>>> fronts = build_fronts(solutions);
+  vector<vector<pair<Solution, int>>> fronts_raw = build_fronts(solutions);
+  vector<vector<Solution>> fronts;
 
-  //Adding the rank inside of solutions
-  int rank = 1;
-  for(auto& front : fronts){
-    for(auto& solution : front){
-      solution.second = rank;
+  //Extracting solutions from 'fronts_raw', ignoring the 'id'
+  for(auto& front_raw : fronts_raw){
+    vector<Solution> front;
+    for(auto& solution : front_raw){
+      front.push_back(solution.first);
     }
-    rank++;
+    fronts.push_back(front);
   }
 
   return fronts;

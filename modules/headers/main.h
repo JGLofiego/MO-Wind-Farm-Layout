@@ -7,5 +7,6 @@
 #include "crossover.h"
 #include "binary_tournament.h"
 #include "non_dominated_sorting.h"
+#include "crowding_distance.h"
 
 #endif 

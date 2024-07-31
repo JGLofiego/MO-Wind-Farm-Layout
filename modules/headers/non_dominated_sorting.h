@@ -5,6 +5,6 @@
 #include <vector>
 using namespace std;
 
-vector<vector<pair<Solution, int>>> non_dominated_sorting(vector<Solution>& population_rt);
+vector<vector<Solution>> non_dominated_sorting(vector<Solution>& population_rt);
 
 #endif 

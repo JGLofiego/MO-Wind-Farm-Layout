@@ -1,9 +1,9 @@
-#include "../../headers/population.h"
+#include "../../headers/generate_rSolution.h"
 #include "../../headers/mutation.h"
 #include <cstdlib>
 using namespace std;
 
-void mutation(Solution &solution){
+Solution mutation(Solution& solution){
 
     int grid_size = solution.grid.size();
     int rand_intA, rand_intB;
@@ -15,10 +15,12 @@ void mutation(Solution &solution){
       rand_intB = rand() % grid_size;
     } while(rand_intA == rand_intB || (solution.grid[rand_intA] == 0 && solution.grid[rand_intB] == 0));
 
-    // Swapping the genes betwen grid[rand_intA] e grid[rand_intB]
+    // Swapping the genes between grid[rand_intA] e grid[rand_intB]
     int geneA = solution.grid[rand_intA];
     int geneB = solution.grid[rand_intB];
 
     solution.grid[rand_intA] = geneB;
     solution.grid[rand_intB] = geneA;
+
+    return solution;
 }

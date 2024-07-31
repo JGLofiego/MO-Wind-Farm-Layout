@@ -5,6 +5,6 @@
 #include <utility>
 using namespace std;
 
-pair<Solution, Solution> binary_tornament(Solution& ParentX, Solution& ParentY, Solution& ParentW, Solution& ParentZ);
+pair<Solution, Solution> binary_tornament(vector<Solution>& population);
 
 #endif 

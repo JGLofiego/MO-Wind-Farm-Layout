@@ -2,9 +2,9 @@
 #define MUTATION_H
 
 #include <vector>
-#include "population.h"
+#include "generate_rSolution.h"
 using namespace std;
 
-void mutation(Solution &solution);
+Solution mutation(Solution &solution);
 
 #endif 
