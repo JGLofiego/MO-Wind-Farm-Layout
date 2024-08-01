@@ -26,7 +26,7 @@ int main(){
   while(generation < max_generations){
     vector<Solution> offspring;
 
-    for(int i = 0; i < 2*size_population; i++){
+    for(int i = 0; i < size_population; i++){
       //Parent selection
       pair<Solution, Solution> parents = binary_tornament(population);
       
