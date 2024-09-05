@@ -5,5 +5,6 @@
 #include "generate_rSolution.h"
 #include "mutation.h"
 #include "crossover.h"
+#include "turbine.h"
 
 #endif 
