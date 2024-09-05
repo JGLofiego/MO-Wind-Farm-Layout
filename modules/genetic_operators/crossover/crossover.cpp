@@ -39,5 +39,9 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
     }
   }
 
+  calculate_cost(offspring_solution);
+  // ************ Adaptar para o ângulo e a velocidade do vento estejam guardados na solução. ************
+  // calculate_power(offspring_solution);
+
   return offspring_solution;
 }

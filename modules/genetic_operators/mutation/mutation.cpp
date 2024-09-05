@@ -21,4 +21,8 @@ void mutation(Solution &solution){
 
     solution.grid[rand_intA] = geneB;
     solution.grid[rand_intB] = geneA;
+
+    calculate_cost(solution);
+    // ************ Adaptar para o ângulo e a velocidade do vento estejam guardados na solução. ************
+  // calculate_power(offspring_solution);
 }

@@ -113,6 +113,7 @@ Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY, float
 
         //Coloca informações da turbina, depois adiciona a turbina no vector
         t.id = i + 1;
+        solution_grid[rand_int] = t.id;
         t.index = elmn;
         turbines[i] = t;
 
@@ -122,6 +123,7 @@ Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY, float
 
     //Filling the Solution
 
+    // ************* Pegar os valores de custo por terreno *************
     vector<float> costs(num_turb, 0.0);
 
     Solution rSolution;
