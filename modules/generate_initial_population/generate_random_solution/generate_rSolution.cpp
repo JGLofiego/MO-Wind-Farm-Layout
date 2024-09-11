@@ -3,7 +3,10 @@
 #include "../../headers/main.h"
 // #include "../../headers/turbine.h"
 #include <cmath>
+#include <iostream>
 using namespace std;
+
+const double PI = 3.14159265358979323846;
 
 double calculate_cost(Solution& sol){
     double acc = 0;
@@ -20,14 +23,16 @@ double calculate_cost(Solution& sol){
 
 double calculate_interference(Turbine& t_initial, Turbine& t_interfered, float& angle){
 
+    double toRadians = angle * PI / 180.0;
+
     // Se a turbina for a mesma, então interferência 0
     if(t_initial.id == t_interfered.id){
         return 0;
     }
 
     // Componente horizontal e vertical do vento
-    float xWind = cos(angle);
-    float yWind = sin(angle);
+    float xWind = cos(toRadians);
+    float yWind = sin(toRadians);
 
     // Vetor com direção da turbina inicial até a turbina possivelmente interferida 
     float xVector = t_interfered.x - t_initial.x;
@@ -37,7 +42,7 @@ double calculate_interference(Turbine& t_initial, Turbine& t_interfered, float& 
     // projetado no vetor da direção do vento
     float scalar = (xVector * xWind + yVector * yWind) / (xWind * xWind + yWind * yWind);
 
-    // Caso esse escalar seja negativo, portanto a turbina es
+    // Caso esse escalar seja negativo, portanto a turbina está atrás em relação ao vento
     if(scalar <= 0){
         return 0;
     }
@@ -60,22 +65,32 @@ double calculate_interference(Turbine& t_initial, Turbine& t_interfered, float& 
         return 0;
     }
 
-    return 1 - ((1 - sqrt(1 - t_interfered.thrust_coef)) * (t_interfered.diameter / wakeDiameter * t_interfered.diameter / wakeDiameter));
+    double result = (1 - sqrt(1 - t_interfered.thrust_coef)) * (t_interfered.diameter / wakeDiameter * t_interfered.diameter / wakeDiameter);
+
+    // ********** Teste da interferência entre turbinas **********
+    // cout << "Interferencia que a turbina " << t_initial.id << " causa na turbina "
+    // << t_interfered.id << " eh : " << result << endl;
+
+    return result;
 }
 
 double calculate_power(Solution& sol, float& freeWind, float& angle){
     double power = 0;
-    double deficit, wind;
+    double deficit, wind, result;
 
     for(int i = 0; i < sol.turbines.size(); i++){
         deficit = 0;
 
-        for(int j = 0; j < sol.turbines.size(); i++){
-            double result = calculate_interference(sol.turbines[i], sol.turbines[j], angle);
+        for(int j = 0; j < sol.turbines.size(); j++){
+            result = calculate_interference(sol.turbines[i], sol.turbines[j], angle);
             deficit += result * result;
         }
 
         wind = freeWind * (1 - sqrt(deficit));
+
+        // ********** Teste da potência produzida **********
+        // cout << "Velocidade do vento em "<< sol.turbines[i].id << " : " <<
+        //  wind << " produz " << power_produced(wind, sol.turbines[i]) << endl;
 
         power += power_produced(wind, sol.turbines[i]);
     }
@@ -141,5 +156,40 @@ Solution generate_solution(int num_turb, int upperBoundX, int upperBoundY, float
 }
 
 int main(){
+    Turbine turbina1, turbina2, turbina3;
+    float angle = 270.0;
+    float freeWind = 10.0;
 
+    Solution sol;
+
+    turbina1.id = 1;
+    turbina1.diameter = 179;
+    turbina1.height = 119;
+    turbina1.power = 9.06;
+    turbina1.thrust_coef = 0.75;
+    turbina1.x = 131742.14216100215;
+    turbina1.y = 139742.14216100215;
+
+    turbina2.id = 2;
+    turbina2.diameter = 179;
+    turbina2.height = 119;
+    turbina2.power = 9.06;
+    turbina2.thrust_coef = 0.75;
+    turbina2.x = 131742.14216100215;
+    turbina2.y = 134742.14216100215;
+
+    turbina3.id = 3;
+    turbina3.diameter = 179;
+    turbina3.height = 119;
+    turbina3.power = 9.06;
+    turbina3.thrust_coef = 0.75;
+    turbina3.x = 131742.14216100215;
+    turbina3.y = 133742.14216100215;
+
+    sol.turbines = vector<Turbine> {turbina1, turbina2, turbina3};
+    calculate_power(sol, freeWind, angle);
+
+    // double interferedWind = freeWind * (1 - sqrt(calculate_interference(turbina1, turbina2, angle)));
+
+    cout << "Producao da solucao: " << sol.fitness.second << endl;
 }
