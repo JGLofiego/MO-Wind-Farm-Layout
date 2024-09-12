@@ -112,7 +112,7 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">" << endl;
       cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">" << endl;
 
-      //Mutation
+      //Mutatio
       double mutation_prob = (double) rand() / RAND_MAX;
 
       if(mutation_prob < probMutacao){
