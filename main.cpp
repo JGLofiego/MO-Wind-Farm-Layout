@@ -3,7 +3,7 @@
 #include "metaheuristics/moead/moead.cpp"
 #include "./modules/moead/generate_weight_vectors.cpp"
 #include "./modules/moead/generate_neighborhood.cpp"
-#include "./modules/moead/get_best_z_point..cpp"
+#include "./modules/moead/get_best_z_point.cpp"
 #include "./modules/moead/tchebycheff.cpp"
 #include "./modules/generate_initial_population/generate_random_solution/generate_rSolution.cpp"
 #include "./modules/generate_initial_population/generate_population/population.cpp"
@@ -15,7 +15,7 @@
 using namespace std;
 
 int main(){
-    cout << fixed << setprecision(10);
+    cout << fixed << setprecision(5);
 
     ifstream file;
     Foundation t;
