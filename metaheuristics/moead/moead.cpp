@@ -15,17 +15,16 @@
 using namespace std;
 
 bool dominates(Solution solutionA, Solution solutionB){
-  return (solutionA.fitness.first <= solutionB.fitness.first && solutionA.fitness.second <= solutionB.fitness.second) && (solutionA.fitness.first < solutionB.fitness.first || solutionA.fitness.second < solutionB.fitness.second);
+  return (solutionA.fitness.first >= solutionB.fitness.first && solutionA.fitness.second >= solutionB.fitness.second) && (solutionA.fitness.first > solutionB.fitness.first || solutionA.fitness.second > solutionB.fitness.second);
 }
 
-int main(){
+bool is_equal(Solution solutionA, Solution solutionB) {
+  return (solutionA.fitness.first == solutionB.fitness.first) && (solutionA.fitness.second == solutionB.fitness.second);
+}
 
-  srand(time(0)); //Initializing the random number generator 
+vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_coef, float& angle, vector<double> *&costs, vector<Foundation> *&foundations){
 
-  //Information that must be extracted from each instance
-  int num_turb = 3;
-  int upperBoundX = 3;
-  int upperBoundY = 3;
+  //srand(time(0)); //Initializing the random number generator 
 
   //MOAED parameters 
   int size_population = 10; //Size of the population
@@ -35,7 +34,7 @@ int main(){
   int max_generations = 3;
  
   //Initial population
-  vector<Solution> population = create_initial_population(size_population, num_turb, upperBoundX, upperBoundY);  
+  vector<Solution> population = create_initial_population(size_population, num_turb, wind, power, thrust_coef, angle, costs, foundations);  
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 
@@ -55,7 +54,31 @@ int main(){
   }
 
   // Step 1.1: Initialize EP (External Population)
-  vector<Solution> EP = population;
+  //The EP vector will contain only the non-dominated solutions from the population
+  vector<Solution> EP;
+
+  for (int i = 0; i < population.size(); i++) {
+    bool isDominated = false;
+    for (int j = 0; j < population.size(); j++) {
+      if (i != j && dominates(population[j], population[i])) {
+        isDominated = true;
+        break;
+      }
+    }
+    if (!isDominated) {
+      EP.push_back(population[i]);
+    }
+  }
+
+  // cout << "===================== EP INICIAL =====================" << endl << endl;
+
+  // for(auto& i : EP){
+  //   cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
+  // }
+
+  // cout << endl;
+
+  // cout << "======================================================" << endl << endl;
 
   int generation = 0;
 
@@ -66,6 +89,11 @@ int main(){
       // Randomly select two indices k and l from the neighborhood B(i)
       int k = neighborhood[i][rand() % neighborhood[i].size()];
       int l = neighborhood[i][rand() % neighborhood[i].size()];
+
+      cout << "xxxxxxxxxxxxxxxx CROSSOVER xxxxxxxxxxxxxxxxxxxx" << endl;
+
+      cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">" << endl;
+      cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">" << endl;
 
       // Generate new solution y using genetic operators
 
@@ -81,17 +109,20 @@ int main(){
         child2 = population[l];
       }
 
-      //Mutation
+      cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">" << endl;
+      cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">" << endl;
+
+      //Mutatio
       double mutation_prob = (double) rand() / RAND_MAX;
 
       if(mutation_prob < probMutacao){
-        child1 = mutation(child1);
-        child2 = mutation(child2);
+        mutation(child1);
+        mutation(child2);
       }
 
       // Step 2.3: Update of z point
-      z_point.first = min(z_point.first, min(child1.fitness.first, child2.fitness.first));
-      z_point.second = min(z_point.second, min(child1.fitness.second, child2.fitness.second));
+      z_point.first = max(z_point.first, max(child1.fitness.first, child2.fitness.first));
+      z_point.second = max(z_point.second, max(child1.fitness.second, child2.fitness.second));
 
       // Step 2.4: Neighboring solutions update
       for (int j : neighborhood[i]) {
@@ -100,11 +131,17 @@ int main(){
           population[j] = child1;
           tch_vector[j] = child1_tch;
         }
+        
+        double child2_tch = calculate_gte(child2.fitness, lambda_vector[j], z_point);
+        if (child2_tch <= tch_vector[j]) {
+          population[j] = child2;
+          tch_vector[j] = child2_tch;
+        }
       }
     }
 
     // Step 2.5: Update EP for child1
-    // Remove dominated solutions from EP and add the new solution if it's not dominated
+    // Remove dominated solutions from EP and add the new solutions (child1 e child2) if it's not dominated
     auto it = EP.begin();
     bool flag1 = true;
 
@@ -112,44 +149,70 @@ int main(){
       if (dominates(child1, *it)) {
         it = EP.erase(it);  // Remove solutions dominated by child1
       } 
-      else if (dominates(*it, child1)) {
-        flag1 = false;
-        break;  // child1 is dominated, we don't add it to EP
-      } 
       else {
+        if (dominates(*it, child1)) {
+          flag1 = false;  // Mark that child1 is dominated, keep checking
+        }
         ++it;
       }
     }
-    if (flag1) {
-      EP.push_back(child1);  // Add child1 if not dominated
+
+    // Check if child1 is already present in EP
+    bool already_exists1 = false;
+    for (const auto& sol : EP) {
+      if (is_equal(child1, sol)) {
+        already_exists1 = true;
+        break;
+      }
+    }
+
+    // Add child1 to EP if it is not dominated (flag1) and not duplicated (!already_exists1)
+    if (flag1 && !already_exists1) {
+      EP.push_back(child1);
     }
 
     // Step 2.5: Update EP for child2
-    it = EP.begin();  
+    it = EP.begin();
     bool flag2 = true;
 
     while (it != EP.end()) {
       if (dominates(child2, *it)) {
         it = EP.erase(it);  // Remove solutions dominated by child2
       } 
-      else if (dominates(*it, child2)) {
-        flag2 = false;
-        break;  // child2 is dominated, we don't add it to EP
-      } 
       else {
+        if (dominates(*it, child2)) {
+          flag2 = false;  // Mark that child2 is dominated, keep checking
+        }
         ++it;
       }
     }
-    if (flag2) {
-      EP.push_back(child2);  // Add child2 if not dominated
+
+    // Check if child2 is already present in EP
+    bool already_exists2 = false;
+    for (const auto& sol : EP) {
+      if (is_equal(child2, sol)) {
+        already_exists2 = true;
+        break;
+      }
+    }
+
+    // Add child1 to EP if it is not dominated (flag2) and not duplicated (!already_exists2)
+    if (flag2 && !already_exists2) {
+      EP.push_back(child2);
     }
 
     generation++;
   }
-  cout << "===================== EP =====================" << endl;
+
+  cout << "===================== EP FINAL =====================" << endl << endl;
 
   for(auto& i : EP){
-    cout << "<" << i.fitness.first << ", " << i.fitness.second << ">" << endl;
+    cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
   }
 
+  cout << endl;
+
+  cout << "======================================================" << endl << endl;
+
+  return EP;
 }

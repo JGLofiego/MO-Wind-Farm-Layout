@@ -6,6 +6,7 @@
 #include "population.h"
 #include "mutation.h"
 #include "crossover.h"
+#include "turbine.h"
 
 //NSGA2
 #include "binary_tournament.h"
