@@ -18,16 +18,20 @@ bool dominates(Solution solutionA, Solution solutionB){
   return (solutionA.fitness.first >= solutionB.fitness.first && solutionA.fitness.second >= solutionB.fitness.second) && (solutionA.fitness.first > solutionB.fitness.first || solutionA.fitness.second > solutionB.fitness.second);
 }
 
+bool is_equal(Solution solutionA, Solution solutionB) {
+  return (solutionA.fitness.first == solutionB.fitness.first) && (solutionA.fitness.second == solutionB.fitness.second);
+}
+
 vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_coef, float& angle, vector<double> *&costs, vector<Foundation> *&foundations){
 
   //srand(time(0)); //Initializing the random number generator 
 
   //MOAED parameters 
-  int size_population = 10; //Size of the population
+  int size_population = 200; //Size of the population
   double probCross = 0.8;
   double probMutacao = 0.4;
   int number_of_neighbors = 5;
-  int max_generations = 10;
+  int max_generations = 25;
  
   //Initial population
   vector<Solution> population = create_initial_population(size_population, num_turb, wind, power, thrust_coef, angle, costs, foundations);  
@@ -65,6 +69,16 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       EP.push_back(population[i]);
     }
   }
+
+  cout << "===================== EP INICIAL =====================" << endl << endl;
+
+  for(auto& i : EP){
+    cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
+  }
+
+  cout << endl;
+
+  cout << "======================================================" << endl << endl;
 
   int generation = 0;
 
@@ -119,7 +133,7 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
     }
 
     // Step 2.5: Update EP for child1
-    // Remove dominated solutions from EP and add the new solution if it's not dominated
+    // Remove dominated solutions from EP and add the new solutions (child1 e child2) if it's not dominated
     auto it = EP.begin();
     bool flag1 = true;
 
@@ -135,8 +149,18 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       }
     }
 
-    if (flag1) {
-      EP.push_back(child1);  // Add child1 if not dominated by any solution in EP
+    // Check if child1 is already present in EP
+    bool already_exists1 = false;
+    for (const auto& sol : EP) {
+      if (is_equal(child1, sol)) {
+        already_exists1 = true;
+        break;
+      }
+    }
+
+    // Add child1 to EP if it is not dominated (flag1) and not duplicated (!already_exists1)
+    if (flag1 && !already_exists1) {
+      EP.push_back(child1);
     }
 
     // Step 2.5: Update EP for child2
@@ -155,17 +179,32 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       }
     }
 
-    if (flag2) {
-        EP.push_back(child2);  // Add child2 if not dominated by any solution in EP
+    // Check if child2 is already present in EP
+    bool already_exists2 = false;
+    for (const auto& sol : EP) {
+      if (is_equal(child2, sol)) {
+        already_exists2 = true;
+        break;
+      }
+    }
+
+    // Add child1 to EP if it is not dominated (flag2) and not duplicated (!already_exists2)
+    if (flag2 && !already_exists2) {
+      EP.push_back(child2);
     }
 
     generation++;
   }
-  cout << "===================== EP =====================" << endl;
+
+  cout << "===================== EP FINAL =====================" << endl << endl;
 
   for(auto& i : EP){
-    cout << "<" << i.fitness.first << ", " << i.fitness.second << ">" << endl;
+    cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
   }
+
+  cout << endl;
+
+  cout << "======================================================" << endl << endl;
 
   return EP;
 }
