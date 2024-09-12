@@ -3,6 +3,7 @@
 #include "./modules/headers/population.h"
 #include "modules/genetic_operators/mutation/mutation.cpp"
 #include "modules/genetic_operators/crossover/crossover.cpp"
+#include "./metaheuristics/moead/moead.cpp"
 #include <iomanip>
 #include <fstream>
 #include <iostream>
@@ -65,6 +66,10 @@ int main(){
     file.close();
 
     srand(time(0));
+
+    int num_turb = 10;
+
+    vector<Solution> EP = moead(num_turb, windSpd, pow, tc, angle, costs, foundations);
 
     // vector<Solution> population = create_initial_population(10, 15, windSpd, pow, tc, angle, costs, foundations);
 
