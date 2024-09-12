@@ -1,39 +1,49 @@
 #include <vector>
+#include <utility>
 #include <iostream>
+#include <cmath>
+#include <algorithm> 
 #include "../headers/generate_neighborhood.h"
 using namespace std;
+
+//Function to calculate the Euclidean distance between two weight vectors
+double euclidean_distance(pair<double, double>& a, pair<double, double>& b) {
+  return sqrt(pow(a.first - b.first, 2) + pow(a.second - b.second, 2));
+}
 
 vector<vector<int>> build_neighborhood(int number_of_neighbors, vector<pair<double, double>>& lambda_vector, int size_population){
 
   /*Contains all the indices of the neighbors of a given lambda vector i.
-  Ex: for lambda vector (subproblem) i, there is a neighbor vector, i.e. a vector of neighboring indices j*/
-  vector<vector<int>> neighborhood; 
+  Ex: for the lambda vector (subproblem) i, there is a neighbor vector, i.e. a vector of neighbors of indices j*/
+  vector<vector<int>> neighborhood(lambda_vector.size());
 
   //The number of neighbors cannot be greater than the population size minus 1.
-  if (number_of_neighbors > size_population-1) {
-    throw runtime_error("ERROR - MOEAD:generate_neighbood ==> The number of neighbors cannot be greater than the population size minus 1.");
+  if (number_of_neighbors > size_population - 1) {
+    throw runtime_error("ERROR - MOEAD: generate_neighbood ==> The number of neighbors cannot be greater than the population size minus 1.");
   }
 
   //Building the neighborhood of a lambda vector (subproblem) i by fingind the 't' nearest neighbors of i. t = number_of_neighbors
-  for(size_t i = 0; i < lambda_vector.size(); i++){
-    vector<int> nearest_neighbors;
+  // For each weight vector i
+  for (int i = 0; i < lambda_vector.size(); i++) {
+    vector<pair<double, int>> distances; 
 
-    //Initialize the left and right indexes
-    int left = i - 1;
-    int right = i + 1;
+    distances.push_back({0.0, i});
 
-    for(int j = 0; j < number_of_neighbors; j++){
-      //Toggle between adding the predecessor and successor
-      if (j % 2 == 0 && left >= 0) {
-        nearest_neighbors.push_back(left--);
-      } else if (right < lambda_vector.size()) { //Add successors even when there are no predecessors (left == 0)
-        nearest_neighbors.push_back(right++);
-      } else if (left >= 0) { //If successors run out, add more predecessors
-        nearest_neighbors.push_back(left--);
+    // Calculate the distance from i to all other vectors
+    for (size_t j = 0; j < lambda_vector.size(); j++) {
+      if (i != j) {  // Avoid calculating the distance from a vector to itself (already done)
+        double distance = euclidean_distance(lambda_vector[i], lambda_vector[j]);
+        distances.push_back(make_pair(distance, j));
       }
     }
 
-    neighborhood.push_back(nearest_neighbors);
+    // Sort based on distance (shortest distance first)
+    sort(distances.begin(), distances.end());
+
+    // Get the T nearest neighbors and save the indices
+    for (int t = 0; t < number_of_neighbors; t++) {
+      neighborhood[i].push_back(distances[t].second); 
+    }
   }  
 
   return neighborhood;

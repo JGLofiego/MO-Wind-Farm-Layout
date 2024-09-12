@@ -1,39 +1,34 @@
-# Nome do executável
-TARGET = mo-wind-farm-layout
-
-# Compilador
+# Nome do compilador
 CXX = g++
 
-# Flags de compilação
-CXXFLAGS = -Wall -std=c++11
+# Flags de compilação (adicionar flags de otimização, warnings, etc., se necessário)
+CXXFLAGS = -std=c++11
 
-# Diretórios
-SRC_DIR = modules
-OBJ_DIR = obj
-BIN_DIR = bin
-INC_DIR = modules/headers
+# Nome do executável
+TARGET = moead
 
-# Arquivos fonte e objetos
-SOURCES = $(wildcard $(SRC_DIR)/*/*.cpp) $(wildcard $(SRC_DIR)/*/*/*.cpp)
-OBJECTS = $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SOURCES))
+# Diretórios com os arquivos fonte
+MOEAD_DIR = metaheuristics/moead
+POPULATION_DIR = modules/generate_initial_population/generate_population
+RANDOM_SOLUTION_DIR = modules/generate_initial_population/generate_random_solution
+GENETIC_OPERATORS_DIR = modules/genetic_operators
+MODULES_DIR = modules/moead
 
-# Regras
-all: create_dirs $(BIN_DIR)/$(TARGET)
+# Arquivos fonte
+SRCS = $(MOEAD_DIR)/moead.cpp \
+       $(POPULATION_DIR)/population.cpp \
+       $(RANDOM_SOLUTION_DIR)/generate_rSolution.cpp \
+       $(MODULES_DIR)/generate_weight_vectors.cpp \
+       $(MODULES_DIR)/generate_neighborhood.cpp \
+       $(MODULES_DIR)/get_best_z_point.cpp \
+       $(MODULES_DIR)/tchebycheff.cpp \
+       $(GENETIC_OPERATORS_DIR)/mutation/mutation.cpp \
+       $(GENETIC_OPERATORS_DIR)/crossover/crossover.cpp
 
-# Regra para criar diretórios
-create_dirs:
-	@mkdir -p $(OBJ_DIR) $(BIN_DIR)
+# Regra para criar o executável
+$(TARGET): $(SRCS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS)
 
-# Regra para compilar o executável
-$(BIN_DIR)/$(TARGET): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -o $@ $^
-
-# Regra para compilar os arquivos objeto
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -o $@ -c $<
-
-# Regra para limpar os arquivos compilados
+# Regra de limpeza (para remover arquivos gerados, como o executável)
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
-
-.PHONY: all clean
+	rm -f $(TARGET)

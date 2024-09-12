@@ -1,5 +1,6 @@
 #include <utility>
 #include <vector>
+#include <iostream>
 #include "../headers/generate_weight_vectors.h"
 
 using namespace std;
