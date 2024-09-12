@@ -1,6 +1,7 @@
 #include "./modules/headers/generate_rSolution.h"
 #include "./modules/headers/turbine.h"
 #include "./modules/headers/population.h"
+#include "modules/genetic_operators/mutation/mutation.cpp"
 #include <iomanip>
 #include <fstream>
 #include <iostream>
@@ -64,9 +65,17 @@ int main(){
 
     srand(time(0));
 
-    vector<Solution> population = create_initial_population(10, 15, windSpd, pow, tc, angle, costs, foundations);
+    // vector<Solution> population = create_initial_population(10, 15, windSpd, pow, tc, angle, costs, foundations);
 
-    for(int i = 0; i < population.size(); i++){
-        cout << population[i].fitness.first << " " << population[i].fitness.second << endl;
-    }
+    // for(int i = 0; i < population.size(); i++){
+    //     cout << population[i].fitness.first << " " << population[i].fitness.second << endl;
+    // }
+
+    Solution solucao = generate_solution(10, windSpd, pow, tc, angle, costs, foundations);
+
+    cout << solucao.fitness.first << " " << solucao.fitness.second << endl;
+
+    mutation(solucao);
+
+    cout << solucao.fitness.first << " " << solucao.fitness.second << endl;
 }

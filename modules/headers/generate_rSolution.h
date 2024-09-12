@@ -12,6 +12,8 @@ struct Foundation {
 };
 struct Solution {
     vector<Foundation> *foundations; // Represents all positions of the grid with respective x and y coordinates
+    float wind; // Represents the wind speed of the solution
+    float angle; // Represents the angle of the wind direction
     vector<int> grid; //Represents the terrain of the wind farm in a 1D vector. '0' means there is no turbine in that position. Otherwise, there is. 
     vector<int> available_positions; //Available positions of the wind farm 
     vector<Turbine> turbines; // The Structure that is going to store the turbines off solution
@@ -20,7 +22,7 @@ struct Solution {
 };
 
 Solution generate_solution(
-    int num_turb, 
+    int num_turb,
     float& wind,
     float& power,
     float& thrust_coef,
@@ -33,6 +35,6 @@ double calculate_cost(Solution& sol);
 
 double calculate_interference(Turbine& t_initial, Turbine& t_interfered, float& angle);
 
-double calculate_power(Solution& sol, float& freeWind, float& angle);
+double calculate_power(Solution& sol);
 
 #endif

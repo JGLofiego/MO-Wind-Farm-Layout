@@ -80,7 +80,7 @@ double calculate_interference(Turbine& t_initial, Turbine& t_interfered, float& 
     return result;
 }
 
-double calculate_power(Solution& sol, float& freeWind, float& angle){
+double calculate_power(Solution& sol){
     double power = 0;
     double deficit, wind, result;
 
@@ -88,11 +88,11 @@ double calculate_power(Solution& sol, float& freeWind, float& angle){
         deficit = 0;
 
         for(int j = 0; j < sol.turbines.size(); j++){
-            result = calculate_interference(sol.turbines[i], sol.turbines[j], angle);
+            result = calculate_interference(sol.turbines[i], sol.turbines[j], sol.angle);
             deficit += result * result;
         }
 
-        wind = freeWind * (1 - sqrt(deficit));
+        wind = sol.wind * (1 - sqrt(deficit));
 
         // ********** Teste da potência produzida **********
         // cout << "Velocidade do vento em "<< sol.turbines[i].id << " : " <<
@@ -165,10 +165,12 @@ Solution generate_solution(
     double cost = calculate_cost(rSolution); 
 
     rSolution.grid = solution_grid;
+    rSolution.wind = wind;
+    rSolution.angle = angle;
     rSolution.available_positions = pos;
     rSolution.turbines = turbines;
     rSolution.fitness.first = calculate_cost(rSolution);
-    rSolution.fitness.second = calculate_power(rSolution, wind, angle);
+    rSolution.fitness.second = calculate_power(rSolution);
 
     return rSolution;
 }
