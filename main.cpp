@@ -2,6 +2,7 @@
 #include "./modules/headers/turbine.h"
 #include "./modules/headers/population.h"
 #include "modules/genetic_operators/mutation/mutation.cpp"
+#include "modules/genetic_operators/crossover/crossover.cpp"
 #include <iomanip>
 #include <fstream>
 #include <iostream>
@@ -71,11 +72,17 @@ int main(){
     //     cout << population[i].fitness.first << " " << population[i].fitness.second << endl;
     // }
 
-    Solution solucao = generate_solution(10, windSpd, pow, tc, angle, costs, foundations);
+    // Solution solucao1 = generate_solution(10, windSpd, pow, tc, angle, costs, foundations);
+    // Solution solucao2 = generate_solution(10, windSpd, pow, tc, angle, costs, foundations);
+    
+    // cout << "Solucao 1: " << solucao1.fitness.first << " " << solucao1.fitness.second << endl;
+    // cout << "Solucao 2: " << solucao2.fitness.first << " " << solucao2.fitness.second << endl;
 
-    cout << solucao.fitness.first << " " << solucao.fitness.second << endl;
+    // Solution filho = crossover(solucao1, solucao2);
 
-    mutation(solucao);
+    // cout << "Solucao filho: " << filho.fitness.first << " " << filho.fitness.second << " " << filho.turbines.size() << endl;
 
-    cout << solucao.fitness.first << " " << solucao.fitness.second << endl;
+    // for(int i = 0; i < filho.turbines.size(); i++){
+    //     cout << filho.turbines[i].id << endl;
+    // }
 }
