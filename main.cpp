@@ -3,7 +3,13 @@
 #include "./modules/headers/population.h"
 #include "modules/genetic_operators/mutation/mutation.cpp"
 #include "modules/genetic_operators/crossover/crossover.cpp"
-#include "./metaheuristics/moead/moead.cpp"
+#include "metaheuristics/moead/moead.cpp"
+#include "./modules/moead/generate_weight_vectors.cpp"
+#include "./modules/moead/generate_neighborhood.cpp"
+#include "./modules/moead/get_best_z_point..cpp"
+#include "./modules/moead/tchebycheff.cpp"
+#include "./modules/generate_initial_population/generate_random_solution/generate_rSolution.cpp"
+#include "./modules/generate_initial_population/generate_population/population.cpp"
 #include <iomanip>
 #include <fstream>
 #include <iostream>
@@ -42,7 +48,7 @@ int main(){
     costs->pop_back();
     foundations->pop_back();
 
-    float wind = 3.0;
+    float wind = 10.0;
     float angle = 30.0;
 
     file.open("../wtg/NREL-10-179.txt");

@@ -15,7 +15,7 @@
 using namespace std;
 
 bool dominates(Solution solutionA, Solution solutionB){
-  return (solutionA.fitness.first <= solutionB.fitness.first && solutionA.fitness.second <= solutionB.fitness.second) && (solutionA.fitness.first < solutionB.fitness.first || solutionA.fitness.second < solutionB.fitness.second);
+  return (solutionA.fitness.first <= solutionB.fitness.first && solutionA.fitness.second >= solutionB.fitness.second) && (solutionA.fitness.first < solutionB.fitness.first || solutionA.fitness.second > solutionB.fitness.second);
 }
 
 vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_coef, float& angle, vector<double> *&costs, vector<Foundation> *&foundations){
