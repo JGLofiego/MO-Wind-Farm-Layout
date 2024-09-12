@@ -27,11 +27,11 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
   //srand(time(0)); //Initializing the random number generator 
 
   //MOAED parameters 
-  int size_population = 200; //Size of the population
+  int size_population = 10; //Size of the population
   double probCross = 0.8;
   double probMutacao = 0.4;
   int number_of_neighbors = 5;
-  int max_generations = 25;
+  int max_generations = 3;
  
   //Initial population
   vector<Solution> population = create_initial_population(size_population, num_turb, wind, power, thrust_coef, angle, costs, foundations);  
@@ -70,15 +70,15 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
     }
   }
 
-  cout << "===================== EP INICIAL =====================" << endl << endl;
+  // cout << "===================== EP INICIAL =====================" << endl << endl;
 
-  for(auto& i : EP){
-    cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
-  }
+  // for(auto& i : EP){
+  //   cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
+  // }
 
-  cout << endl;
+  // cout << endl;
 
-  cout << "======================================================" << endl << endl;
+  // cout << "======================================================" << endl << endl;
 
   int generation = 0;
 
@@ -89,6 +89,11 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       // Randomly select two indices k and l from the neighborhood B(i)
       int k = neighborhood[i][rand() % neighborhood[i].size()];
       int l = neighborhood[i][rand() % neighborhood[i].size()];
+
+      cout << "xxxxxxxxxxxxxxxx CROSSOVER xxxxxxxxxxxxxxxxxxxx" << endl;
+
+      cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">" << endl;
+      cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">" << endl;
 
       // Generate new solution y using genetic operators
 
@@ -103,6 +108,9 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
         child1 = population[k];
         child2 = population[l];
       }
+
+      cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">" << endl;
+      cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">" << endl;
 
       //Mutation
       double mutation_prob = (double) rand() / RAND_MAX;
