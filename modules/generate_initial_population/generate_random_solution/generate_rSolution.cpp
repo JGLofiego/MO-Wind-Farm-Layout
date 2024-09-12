@@ -24,7 +24,7 @@ double calculate_cost(Solution& sol){
 
     sol.fitness.first = acc;
 
-    return acc;
+    return -1 * acc;
 }
 
 double calculate_interference(Turbine& t_initial, Turbine& t_interfered, float& angle){

@@ -1,6 +1,3 @@
-#include "./modules/headers/generate_rSolution.h"
-#include "./modules/headers/turbine.h"
-#include "./modules/headers/population.h"
 #include "modules/genetic_operators/mutation/mutation.cpp"
 #include "modules/genetic_operators/crossover/crossover.cpp"
 #include "metaheuristics/moead/moead.cpp"
@@ -48,7 +45,7 @@ int main(){
     costs->pop_back();
     foundations->pop_back();
 
-    float wind = 10.0;
+    float wind = 25.0;
     float angle = 30.0;
 
     file.open("../wtg/NREL-10-179.txt");
@@ -74,6 +71,14 @@ int main(){
     srand(time(0));
 
     int num_turb = 10;
+
+    // Solution solucao = generate_solution(num_turb, windSpd, pow, tc, angle, costs, foundations);
+
+    // for (int i = 0; i < solucao.turbines.size(); i++){
+    //     cout << "Turbina x:" << solucao.turbines[i].x << " Turbina Y:  " << solucao.turbines[i].y<< endl;
+    // }
+
+    // cout << "Custo da solucao: " << solucao.fitness.first << " Potencia energetica: " << solucao.fitness.second << endl;
 
     vector<Solution> EP = moead(num_turb, windSpd, pow, tc, angle, costs, foundations);
 

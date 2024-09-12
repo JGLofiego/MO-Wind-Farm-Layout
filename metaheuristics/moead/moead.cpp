@@ -15,7 +15,7 @@
 using namespace std;
 
 bool dominates(Solution solutionA, Solution solutionB){
-  return (solutionA.fitness.first <= solutionB.fitness.first && solutionA.fitness.second >= solutionB.fitness.second) && (solutionA.fitness.first < solutionB.fitness.first || solutionA.fitness.second > solutionB.fitness.second);
+  return (solutionA.fitness.first >= solutionB.fitness.first && solutionA.fitness.second >= solutionB.fitness.second) && (solutionA.fitness.first > solutionB.fitness.first || solutionA.fitness.second > solutionB.fitness.second);
 }
 
 vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_coef, float& angle, vector<double> *&costs, vector<Foundation> *&foundations){
@@ -27,7 +27,7 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
   double probCross = 0.8;
   double probMutacao = 0.4;
   int number_of_neighbors = 5;
-  int max_generations = 3;
+  int max_generations = 10;
  
   //Initial population
   vector<Solution> population = create_initial_population(size_population, num_turb, wind, power, thrust_coef, angle, costs, foundations);  
@@ -85,8 +85,8 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       }
 
       // Step 2.3: Update of z point
-      z_point.first = min(z_point.first, min(child1.fitness.first, child2.fitness.first));
-      z_point.second = min(z_point.second, min(child1.fitness.second, child2.fitness.second));
+      z_point.first = max(z_point.first, max(child1.fitness.first, child2.fitness.first));
+      z_point.second = max(z_point.second, max(child1.fitness.second, child2.fitness.second));
 
       // Step 2.4: Neighboring solutions update
       for (int j : neighborhood[i]) {
@@ -94,6 +94,12 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
         if (child1_tch <= tch_vector[j]) {
           population[j] = child1;
           tch_vector[j] = child1_tch;
+        }
+        
+        double child2_tch = calculate_gte(child2.fitness, lambda_vector[j], z_point);
+        if (child2_tch <= tch_vector[j]) {
+          population[j] = child2;
+          tch_vector[j] = child2_tch;
         }
       }
     }
