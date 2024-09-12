@@ -50,7 +50,21 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
   }
 
   // Step 1.1: Initialize EP (External Population)
-  vector<Solution> EP = population;
+  //The EP vector will contain only the non-dominated solutions from the population
+  vector<Solution> EP;
+
+  for (int i = 0; i < population.size(); i++) {
+    bool isDominated = false;
+    for (int j = 0; j < population.size(); j++) {
+      if (i != j && dominates(population[j], population[i])) {
+        isDominated = true;
+        break;
+      }
+    }
+    if (!isDominated) {
+      EP.push_back(population[i]);
+    }
+  }
 
   int generation = 0;
 
@@ -113,36 +127,36 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       if (dominates(child1, *it)) {
         it = EP.erase(it);  // Remove solutions dominated by child1
       } 
-      else if (dominates(*it, child1)) {
-        flag1 = false;
-        break;  // child1 is dominated, we don't add it to EP
-      } 
       else {
+        if (dominates(*it, child1)) {
+          flag1 = false;  // Mark that child1 is dominated, keep checking
+        }
         ++it;
       }
     }
+
     if (flag1) {
-      EP.push_back(child1);  // Add child1 if not dominated
+      EP.push_back(child1);  // Add child1 if not dominated by any solution in EP
     }
 
     // Step 2.5: Update EP for child2
-    it = EP.begin();  
+    it = EP.begin();
     bool flag2 = true;
 
     while (it != EP.end()) {
       if (dominates(child2, *it)) {
         it = EP.erase(it);  // Remove solutions dominated by child2
       } 
-      else if (dominates(*it, child2)) {
-        flag2 = false;
-        break;  // child2 is dominated, we don't add it to EP
-      } 
       else {
+        if (dominates(*it, child2)) {
+          flag2 = false;  // Mark that child2 is dominated, keep checking
+        }
         ++it;
       }
     }
+
     if (flag2) {
-      EP.push_back(child2);  // Add child2 if not dominated
+        EP.push_back(child2);  // Add child2 if not dominated by any solution in EP
     }
 
     generation++;

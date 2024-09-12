@@ -22,6 +22,10 @@ double calculate_cost(Solution& sol){
         acc += (*sol.costs)[sol.turbines[i].index];
     }
 
+    if(acc > 0){
+        acc = acc * (-1);
+    }
+
     sol.fitness.first = acc;
 
     return acc;
