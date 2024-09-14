@@ -116,11 +116,10 @@ Solution generate_solution(
     float& power,
     float& thrust_coef,
     float& angle,
-    vector<double> *&costs,
-    vector<Foundation> *&foundations
+    vector<double> *&costs
 ){
     // inicializa um vector de int com todas as possiveis posições de um grid upperboundX x upperBoundY 
-    vector<int> pos(foundations->size());
+    vector<int> pos(foundations.size());
     vector<Turbine> turbines(num_turb);
     Turbine t;
 
@@ -132,7 +131,7 @@ Solution generate_solution(
 
     // inicializa o vetor solução
 
-    vector<int> solution_grid(foundations->size(), 0);
+    vector<int> solution_grid(foundations.size(), 0);
 
     int rand_int;
     int elmn;
@@ -147,8 +146,8 @@ Solution generate_solution(
         t.id = i + 1;
         solution_grid[rand_int] = t.id;
         t.index = elmn;
-        t.x = (*foundations)[rand_int].x;
-        t.y = (*foundations)[rand_int].y;
+        t.x = foundations[rand_int].x;
+        t.y = foundations[rand_int].y;
         t.power = power;
         t.thrust_coef = thrust_coef;
         turbines[i] = t;
@@ -164,8 +163,7 @@ Solution generate_solution(
     // ************* Pegar os valores de custo por terreno *************
     Solution rSolution;
     rSolution.costs = costs;
-    rSolution.foundations = foundations;
-
+    
     double cost = calculate_cost(rSolution); 
 
     rSolution.grid = solution_grid;

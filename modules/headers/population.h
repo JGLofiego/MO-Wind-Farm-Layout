@@ -12,8 +12,7 @@ vector<Solution> create_initial_population(
     float& power,
     float& thrust_coef,
     float& angle,
-    vector<double> *&costs,
-    vector<Foundation> *&foundations
+    vector<double> *&costs
     );
 
 #endif 

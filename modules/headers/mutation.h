@@ -5,6 +5,8 @@
 #include "population.h"
 using namespace std;
 
+extern vector<Foundation> foundations;
+
 void mutation(Solution &solution);
 
 #endif 

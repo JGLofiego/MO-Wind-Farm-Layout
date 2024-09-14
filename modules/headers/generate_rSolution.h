@@ -10,8 +10,9 @@ struct Foundation {
     double x;
     double y;
 };
+
+extern vector<Foundation> foundations;
 struct Solution {
-    vector<Foundation> *foundations; // Represents all positions of the grid with respective x and y coordinates
     float wind; // Represents the wind speed of the solution
     float angle; // Represents the angle of the wind direction
     vector<int> grid; //Represents the terrain of the wind farm in a 1D vector. '0' means there is no turbine in that position. Otherwise, there is. 
@@ -27,8 +28,7 @@ Solution generate_solution(
     float& power,
     float& thrust_coef,
     float& angle,
-    vector<double> *&costs,
-    vector<Foundation> *&foundations
+    vector<double> *&costs
 );
 
 double calculate_cost(Solution& sol);

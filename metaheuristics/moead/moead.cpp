@@ -22,7 +22,7 @@ bool is_equal(Solution solutionA, Solution solutionB) {
   return (solutionA.fitness.first == solutionB.fitness.first) && (solutionA.fitness.second == solutionB.fitness.second);
 }
 
-vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_coef, float& angle, vector<double> *&costs, vector<Foundation> *&foundations){
+vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_coef, float& angle, vector<double> *&costs){
 
   //srand(time(0)); //Initializing the random number generator 
 
@@ -34,7 +34,7 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
   int max_generations = 3;
  
   //Initial population
-  vector<Solution> population = create_initial_population(size_population, num_turb, wind, power, thrust_coef, angle, costs, foundations);  
+  vector<Solution> population = create_initial_population(size_population, num_turb, wind, power, thrust_coef, angle, costs);  
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 

@@ -28,7 +28,6 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
   offspring_solution.angle = parent_solutionA.angle;
   offspring_solution.wind = parent_solutionA.wind;
   offspring_solution.costs = parent_solutionA.costs;
-  offspring_solution.foundations = parent_solutionA.foundations;
   offspring_solution.grid.resize(parent_solutionA.grid.size(), 0);
 
 

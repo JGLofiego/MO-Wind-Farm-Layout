@@ -57,12 +57,12 @@ void mutation(Solution &solution){
       solution.turbines[indexB].y = y;
     } else if (indexA != -1 && indexB == -1){
       solution.turbines[indexA].index = rand_intB;
-      solution.turbines[indexA].x = (*solution.foundations)[rand_intB].x;
-      solution.turbines[indexA].y = (*solution.foundations)[rand_intB].y;
+      solution.turbines[indexA].x = foundations[rand_intB].x;
+      solution.turbines[indexA].y = foundations[rand_intB].y;
     } else {
       solution.turbines[indexB].index = rand_intA;
-      solution.turbines[indexB].x = (*solution.foundations)[rand_intA].x;
-      solution.turbines[indexB].y = (*solution.foundations)[rand_intA].y;
+      solution.turbines[indexB].x = foundations[rand_intA].x;
+      solution.turbines[indexB].y = foundations[rand_intA].y;
     }
 
     solution.grid[rand_intA] = geneB;
