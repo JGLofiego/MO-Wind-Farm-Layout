@@ -13,26 +13,23 @@ struct Foundation {
 };
 
 extern vector<Foundation> foundations;
+
+extern float wind;
+extern float power;
+extern float thrust_coef;
+extern float angle;
+
 struct Solution {
-    float wind; // Represents the wind speed of the solution
-    float angle; // Represents the angle of the wind direction
     vector<int> grid; //Represents the terrain of the wind farm in a 1D vector. '0' means there is no turbine in that position. Otherwise, there is. 
-    vector<int> available_positions; //Available positions of the wind farm 
     vector<Turbine> turbines; // The Structure that is going to store the turbines off solution
     pair<double, double> fitness;  // The representation of the fitness evaluation, the first one is the cost while the second one is the netpower
 };
 
-Solution generate_solution(
-    int num_turb,
-    float& wind,
-    float& power,
-    float& thrust_coef,
-    float& angle
-);
+Solution generate_solution(int num_turb);
 
 double calculate_cost(Solution& sol);
 
-double calculate_interference(Turbine& t_initial, Turbine& t_interfered, float& angle);
+double calculate_interference(Turbine& t_initial, Turbine& t_interfered);
 
 double calculate_power(Solution& sol);
 

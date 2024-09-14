@@ -25,8 +25,6 @@ bool notInOffspring(int turbine_id, const vector<int> &grid) {
 
 Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
   Solution offspring_solution;
-  offspring_solution.angle = parent_solutionA.angle;
-  offspring_solution.wind = parent_solutionA.wind;
   offspring_solution.grid.resize(parent_solutionA.grid.size(), 0);
 
 

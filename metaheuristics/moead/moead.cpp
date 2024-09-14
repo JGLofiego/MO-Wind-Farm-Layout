@@ -34,7 +34,7 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
   int max_generations = 3;
  
   //Initial population
-  vector<Solution> population = create_initial_population(size_population, num_turb, wind, power, thrust_coef, angle, costs);  
+  vector<Solution> population = create_initial_population(size_population, num_turb);  
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 
