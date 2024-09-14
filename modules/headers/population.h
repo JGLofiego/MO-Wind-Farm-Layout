@@ -11,8 +11,7 @@ vector<Solution> create_initial_population(
     float& wind,
     float& power,
     float& thrust_coef,
-    float& angle,
-    vector<double> *&costs
+    float& angle
     );
 
 #endif 

@@ -9,6 +9,7 @@ using namespace std;
 struct Foundation {
     double x;
     double y;
+    double cost;
 };
 
 extern vector<Foundation> foundations;
@@ -18,7 +19,6 @@ struct Solution {
     vector<int> grid; //Represents the terrain of the wind farm in a 1D vector. '0' means there is no turbine in that position. Otherwise, there is. 
     vector<int> available_positions; //Available positions of the wind farm 
     vector<Turbine> turbines; // The Structure that is going to store the turbines off solution
-    vector<double> *costs; //Cost of site based on the index 
     pair<double, double> fitness;  // The representation of the fitness evaluation, the first one is the cost while the second one is the netpower
 };
 
@@ -27,8 +27,7 @@ Solution generate_solution(
     float& wind,
     float& power,
     float& thrust_coef,
-    float& angle,
-    vector<double> *&costs
+    float& angle
 );
 
 double calculate_cost(Solution& sol);

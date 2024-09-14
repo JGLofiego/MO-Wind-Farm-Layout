@@ -17,9 +17,8 @@ float power_produced(double& wind, Turbine& turbine){
 double calculate_cost(Solution& sol){
     double acc = 0;
 
-    for(int i = 0; i < sol.turbines.size(); i++){
-        //Acumulador recebe o custo da posição em que turbina se encontra 
-        acc += (*sol.costs)[sol.turbines[i].index];
+    for(int i = 0; i < sol.turbines.size(); i++){ 
+        acc += foundations[sol.turbines[i].index].cost; //Acumulador recebe o custo da posição em que turbina se encontra
     }
 
     if(acc > 0){
@@ -115,8 +114,7 @@ Solution generate_solution(
     float& wind,
     float& power,
     float& thrust_coef,
-    float& angle,
-    vector<double> *&costs
+    float& angle
 ){
     // inicializa um vector de int com todas as possiveis posições de um grid upperboundX x upperBoundY 
     vector<int> pos(foundations.size());
@@ -162,7 +160,6 @@ Solution generate_solution(
 
     // ************* Pegar os valores de custo por terreno *************
     Solution rSolution;
-    rSolution.costs = costs;
     
     double cost = calculate_cost(rSolution); 
 

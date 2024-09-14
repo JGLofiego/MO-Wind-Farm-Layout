@@ -2,11 +2,11 @@
 #include "./modules/generate_initial_population/generate_population/population.cpp"
 #include "modules/genetic_operators/mutation/mutation.cpp"
 #include "modules/genetic_operators/crossover/crossover.cpp"
-#include "metaheuristics/moead/moead.cpp"
-#include "./modules/moead/generate_weight_vectors.cpp"
-#include "./modules/moead/generate_neighborhood.cpp"
-#include "./modules/moead/get_best_z_point.cpp"
-#include "./modules/moead/tchebycheff.cpp"
+// #include "metaheuristics/moead/moead.cpp"
+// #include "./modules/moead/generate_weight_vectors.cpp"
+// #include "./modules/moead/generate_neighborhood.cpp"
+// #include "./modules/moead/get_best_z_point.cpp"
+// #include "./modules/moead/tchebycheff.cpp"
 #include <iomanip>
 #include <fstream>
 #include <iostream>
@@ -24,7 +24,6 @@ int main(){
 
     string _, strX, strY, strCost;
     string zone = "1";
-    vector<double> *costs = new vector<double>();
 
     string strWindSpd, strPow, strTC;
     float windSpd, pow;
@@ -36,14 +35,13 @@ int main(){
         file >> strX >> strY >> _ >> strCost >> zone;
         t.x = stold(strX);
         t.y = stold(strY);
+        t.cost = stold(strCost);
 
         foundations.push_back(t);
-        costs->push_back(stod(strCost));
     }
 
     file.close();
 
-    costs->pop_back();
     foundations.pop_back();
 
     float wind = 25.0;
@@ -73,10 +71,11 @@ int main(){
 
     int num_turb = 10;
 
-    Solution sol = generate_solution(10, windSpd, pow, tc, angle, costs);
+    Solution sol = generate_solution(10, windSpd, pow, tc, angle);
 
     for (int i = 0; i < sol.turbines.size(); i++){
         cout << sol.turbines[i].x << " " << sol.turbines[i].y << endl;
     } cout << endl;
 
+    // cout << sol.fitness.first << " " << sol.fitness.second << endl;
 }

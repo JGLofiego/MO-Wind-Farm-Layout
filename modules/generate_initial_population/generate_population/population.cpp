@@ -11,14 +11,13 @@ vector<Solution> create_initial_population
   float& wind,
   float& power,
   float& thrust_coef,
-  float& angle,
-  vector<double> *&costs
+  float& angle
   ) {
 
   vector<Solution> population;
 
   for (int i = 0; i < size_population; i++) {
-    population.push_back(generate_solution(num_turb, wind, power, thrust_coef, angle, costs));
+    population.push_back(generate_solution(num_turb, wind, power, thrust_coef, angle));
   }
 
   return population;
