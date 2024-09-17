@@ -18,6 +18,8 @@ extern float wind;
 extern float power;
 extern float thrust_coef;
 extern float angle;
+extern int num_zones;
+extern int id;
 
 struct Solution {
     vector<int> grid; //Represents the terrain of the wind farm in a 1D vector. '0' means there is no turbine in that position. Otherwise, there is. 

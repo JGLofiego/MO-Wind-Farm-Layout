@@ -129,6 +129,8 @@ Solution generate_solution(int num_turb){
     int rand_int;
     int elmn;
 
+    t.diameter = 240;
+
     for(int i = 0; i < num_turb; i++){
         // Gera um número aleatório do tamanho do vector de posições disponíveis
         rand_int = rand() % pos.size();
@@ -136,7 +138,7 @@ Solution generate_solution(int num_turb){
         elmn = pos[rand_int];
 
         //Coloca informações da turbina, depois adiciona a turbina no vector
-        t.id = i + 1;
+        t.id = id;
         solution_grid[rand_int] = t.id;
         t.index = elmn;
         t.x = foundations[rand_int].x;
@@ -147,6 +149,8 @@ Solution generate_solution(int num_turb){
 
         // apaga o elemento do array de posições disponíveis, evitando possíveis repetições
         pos.erase(pos.begin() + rand_int);
+
+        id++;
     }
 
     //Filling the Solution
