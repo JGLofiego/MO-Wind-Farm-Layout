@@ -1,12 +1,12 @@
 #include "./modules/generate_initial_population/generate_random_solution/generate_rSolution.cpp"
-#include "./modules/generate_initial_population/generate_population/population.cpp"
-#include "modules/genetic_operators/mutation/mutation.cpp"
-#include "modules/genetic_operators/crossover/crossover.cpp"
-#include "metaheuristics/moead/moead.cpp"
-#include "./modules/moead/generate_weight_vectors.cpp"
-#include "./modules/moead/generate_neighborhood.cpp"
-#include "./modules/moead/get_best_z_point.cpp"
-#include "./modules/moead/tchebycheff.cpp"
+// #include "./modules/generate_initial_population/generate_population/population.cpp"
+// #include "modules/genetic_operators/mutation/mutation.cpp"
+// #include "modules/genetic_operators/crossover/crossover.cpp"
+// #include "metaheuristics/moead/moead.cpp"
+// #include "./modules/moead/generate_weight_vectors.cpp"
+// #include "./modules/moead/generate_neighborhood.cpp"
+// #include "./modules/moead/get_best_z_point.cpp"
+// #include "./modules/moead/tchebycheff.cpp"
 #include <iomanip>
 #include <fstream>
 #include <iostream>
@@ -15,9 +15,10 @@
 #include <random>
 using namespace std;
 
-vector<Foundation> foundations;
+vector<vector<Foundation>> foundations(3);
 vector<Turbine> fixd;
 
+int num_zones;
 int id = 0;
 float wind;
 float power, powerFxd;
@@ -44,7 +45,7 @@ int main(int argc, char* argv[]){
     Turbine turb;
 
     string _, strX, strY, strCost;
-    string zone = "1";
+    string zone;
 
     string strWind = "0.0";
     string strPow, strTC;
@@ -79,14 +80,16 @@ int main(int argc, char* argv[]){
 
     file.open(pathSite + "availablePositions.txt");
 
-    while(file.good() && zone == "1" ){
+    while(file.good() ){
         file >> strX >> strY >> _ >> strCost >> zone;
         t.x = stold(strX);
         t.y = stold(strY);
         t.cost = stold(strCost);
 
-        foundations.push_back(t);
+        foundations[stoi(zone) - 1].push_back(t);
     }
+
+    num_zones = stoi(zone);
 
     file.close();
 
@@ -146,14 +149,22 @@ int main(int argc, char* argv[]){
 
     file.close();
 
-    vector<Solution> population = create_initial_population(9, num_turb);
-
-    for(Solution sol : population){
-        for (int i = 0; i < sol.turbines.size(); i++){
-            cout << sol.turbines[i].x << " " << sol.turbines[i].y << endl;
-        }
-        cout << sol.fitness.first << " " << sol.fitness.second << endl;
-        cout << endl;
+    Solution sol = generate_solution(num_turb);
+    
+    for(int z = 0; z < num_zones; z++){
+        for (int i = 0; i < sol.turbines[z].size(); i++){
+            cout << sol.turbines[z][i].x << " " << sol.turbines[z][i].y << endl;
+        } cout << endl;
     }
+
+    // vector<Solution> population = create_initial_population(9, num_turb);
+
+    // for(Solution sol : population){
+    //     for (int i = 0; i < sol.turbines.size(); i++){
+    //         cout << sol.turbines[i].x << " " << sol.turbines[i].y << endl;
+    //     }
+    //     cout << sol.fitness.first << " " << sol.fitness.second << endl;
+    //     cout << endl;
+    // }
 
 }
