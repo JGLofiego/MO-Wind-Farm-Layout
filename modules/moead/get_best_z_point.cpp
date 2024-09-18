@@ -7,18 +7,19 @@
 using namespace std;
 
 pair<double, double> get_best_z_point(vector<Solution>& population) {
-  double best_f_i = numeric_limits<double>::infinity(); 
-  double best_f_j = numeric_limits<double>::infinity();
+  // Initialize with very small values ​​for maximization
+  double best_cost = -numeric_limits<double>::infinity(); 
+  double best_power = -numeric_limits<double>::infinity();
 
   for (auto& individual : population) {
-    // For minimization: find the smallest values ​​of f_i(x) and f_j(x)
-    if (individual.fitness.first < best_f_i) {
-      best_f_i = individual.fitness.first;
+    // For maximization: find the largest values ​​of cost and power
+    if (individual.fitness.first > best_cost) {
+      best_cost = individual.fitness.first;
     }
-    if (individual.fitness.second < best_f_j) {
-      best_f_j = individual.fitness.second;
+    if (individual.fitness.second > best_power) {
+      best_power = individual.fitness.second;
     }
   }
 
-  return make_pair(best_f_i, best_f_j);
+  return make_pair(best_cost, best_power);
 }

@@ -30,8 +30,8 @@ vector<vector<int>> build_neighborhood(int number_of_neighbors, vector<pair<doub
     distances.push_back({0.0, i});
 
     // Calculate the distance from i to all other vectors
-    for (size_t j = 0; j < lambda_vector.size(); j++) {
-      if (i != j) {  // Avoid calculating the distance from a vector to itself (already done)
+    for (int j = 0; j < lambda_vector.size(); j++) {
+      if (i != j) {  // Avoid calculating the distance from a vector to itself (already done --> line 30)
         double distance = euclidean_distance(lambda_vector[i], lambda_vector[j]);
         distances.push_back(make_pair(distance, j));
       }

@@ -27,12 +27,8 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
   Solution offspring_solution;
   offspring_solution.grid.resize(parent_solutionA.grid.size(), 0);
 
-
-
   int rand_int = rand() % parent_solutionA.grid.size();
-
   int index = -1;
-
   int lastIndex = 0;
 
   // First part of crossover with parent_solutionA
@@ -47,7 +43,7 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
     lastIndex = i;
   }
 
-  // Second part of crossover with parent_solutionA
+  // Second part of crossover with parent_solutionB
   
   for(int i = 0; i < parent_solutionB.grid.size(); i++){
     if(parent_solutionB.grid[i] != 0){
@@ -61,8 +57,8 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
     }
   }
 
-  calculate_cost(offspring_solution);
-  calculate_power(offspring_solution);
+  offspring_solution.fitness.first = calculate_cost(offspring_solution);
+  offspring_solution.fitness.second = calculate_power(offspring_solution);
 
   return offspring_solution;
 }

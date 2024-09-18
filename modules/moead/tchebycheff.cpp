@@ -23,7 +23,7 @@ double calculate_gte(pair<double, double>& x_j, pair<double, double>& lambda_j, 
   vector<double> z_values = {z_point.first, z_point.second};  
 
   // Calculate lambda_j_i * |f_i(x) - z_i*| for each i and find the maximum
-  double max_value = numeric_limits<double>::lowest();  // Inicializa com o menor valor possível para um double
+  double max_value = numeric_limits<double>::lowest();
   for (int i = 0; i < f_values.size(); ++i) {
     double current_value = lambda_j_values[i] * abs(f_values[i] - z_values[i]);
     if (current_value > max_value) {

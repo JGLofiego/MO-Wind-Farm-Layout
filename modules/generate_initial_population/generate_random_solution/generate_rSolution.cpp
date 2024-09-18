@@ -144,10 +144,10 @@ Solution generate_solution(int num_turb){
 
             //Coloca informações da turbina, depois adiciona a turbina no vector
             t.id = id;
-            solution_grid[rand_int] = t.id;
+            solution_grid[elmn] = t.id;
             t.index = elmn;
-            t.x = foundations[z][rand_int].x;
-            t.y = foundations[z][rand_int].y;
+            t.x = foundations[z][elmn].x;
+            t.y = foundations[z][elmn].y;
             t.power = power;
             t.thrust_coef = thrust_coef;
             turbines[z][i] = t;
@@ -168,7 +168,7 @@ Solution generate_solution(int num_turb){
 
     rSolution.grid = solution_grid;
     rSolution.turbines = turbines;
-    
+
     // rSolution.fitness.first = calculate_cost(rSolution);
     // rSolution.fitness.second = calculate_power(rSolution);
 
