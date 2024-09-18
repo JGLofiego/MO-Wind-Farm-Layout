@@ -22,19 +22,15 @@ bool is_equal(Solution solutionA, Solution solutionB) {
   return (solutionA.fitness.first == solutionB.fitness.first) && (solutionA.fitness.second == solutionB.fitness.second);
 }
 
-vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_coef, float& angle, vector<double> *&costs){
+vector<Solution> moead(vector<Solution>& population, int size_population){
 
   //srand(time(0)); //Initializing the random number generator 
 
   //MOAED parameters 
-  int size_population = 10; //Size of the population
   double probCross = 0.8;
   double probMutacao = 0.4;
   int number_of_neighbors = 5;
   int max_generations = 3;
- 
-  //Initial population
-  vector<Solution> population = create_initial_population(size_population, num_turb);  
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 
@@ -59,26 +55,43 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
 
   for (int i = 0; i < population.size(); i++) {
     bool isDominated = false;
+        
+    // Check if the solution is dominated by any other solution
     for (int j = 0; j < population.size(); j++) {
       if (i != j && dominates(population[j], population[i])) {
         isDominated = true;
         break;
       }
     }
+
+    // If the solution is not dominated, check if it is already in EP
     if (!isDominated) {
-      EP.push_back(population[i]);
+      bool alreadyInEP = false;
+      
+      for (const auto& sol : EP) {
+        if (is_equal(sol, population[i])) {
+          alreadyInEP = true;
+          break;
+        }
+      }
+
+      // Only add the solution if it's not already in EP
+      if (!alreadyInEP) {
+        EP.push_back(population[i]);
+      }
     }
   }
 
-  // cout << "===================== EP INICIAL =====================" << endl << endl;
+  cout << endl;
+  cout << "===================== EP INICIAL =====================" << endl << endl;
 
-  // for(auto& i : EP){
-  //   cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
-  // }
+  for(const auto& i : EP){
+    cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
+  }
 
-  // cout << endl;
+  cout << endl;
 
-  // cout << "======================================================" << endl << endl;
+  cout << "======================================================" << endl << endl;
 
   int generation = 0;
 
@@ -88,12 +101,11 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       // Step 2.1: Reproduction
       // Randomly select two indices k and l from the neighborhood B(i)
       int k = neighborhood[i][rand() % neighborhood[i].size()];
-      int l = neighborhood[i][rand() % neighborhood[i].size()];
+      int l;
 
-      cout << "xxxxxxxxxxxxxxxx CROSSOVER xxxxxxxxxxxxxxxxxxxx" << endl;
-
-      cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">" << endl;
-      cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">" << endl;
+      do {
+          l = neighborhood[i][rand() % neighborhood[i].size()];
+      } while (k == l);
 
       // Generate new solution y using genetic operators
 
@@ -101,23 +113,44 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       double cross_prob = (double) rand() / RAND_MAX;
 
       if(cross_prob < probCross){
+
+        cout << "xxxxxxxxxxxxxxxx CROSSOVER xxxxxxxxxxxxxxxxxxxx" << endl;
+
+        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
+        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
+
         child1 = crossover(population[k], population[l]);
         child2 = crossover(population[l], population[k]);
+
+        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
+        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
       }
       else{
+        cout << "xxxxxxxxxx SEM CROSSOVER (FILHOS IGUAIS AOS PAIS) xxxxxxxxxx" << endl;
+        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
+        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
         child1 = population[k];
         child2 = population[l];
+
+        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
+        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
       }
 
-      cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">" << endl;
-      cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">" << endl;
+      
+      cout << endl;
 
-      //Mutatio
+      //Mutation
       double mutation_prob = (double) rand() / RAND_MAX;
 
       if(mutation_prob < probMutacao){
+        cout << "xxxxxxxxxxxxxxxx MUTATION xxxxxxxxxxxxxxxxxxxx" << endl;
+        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
+        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
         mutation(child1);
         mutation(child2);
+        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
+        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
+        cout << endl;
       }
 
       // Step 2.3: Update of z point
@@ -196,7 +229,7 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
       }
     }
 
-    // Add child1 to EP if it is not dominated (flag2) and not duplicated (!already_exists2)
+    // Add child2 to EP if it is not dominated (flag2) and not duplicated (!already_exists2)
     if (flag2 && !already_exists2) {
       EP.push_back(child2);
     }
@@ -205,7 +238,7 @@ vector<Solution> moead(int num_turb, float& wind, float& power, float& thrust_co
   }
 
   cout << "===================== EP FINAL =====================" << endl << endl;
-
+  cout << "Size of EP: " << EP.size() << endl;
   for(auto& i : EP){
     cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
   }

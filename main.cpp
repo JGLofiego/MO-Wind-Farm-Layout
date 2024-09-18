@@ -146,14 +146,17 @@ int main(int argc, char* argv[]){
 
     file.close();
 
-    vector<Solution> population = create_initial_population(9, num_turb);
+    vector<Solution> population = create_initial_population(10, num_turb);
 
-    for(Solution sol : population){
-        for (int i = 0; i < sol.turbines.size(); i++){
-            cout << sol.turbines[i].x << " " << sol.turbines[i].y << endl;
-        }
-        cout << sol.fitness.first << " " << sol.fitness.second << endl;
-        cout << endl;
-    }
+    // for(Solution sol : population){
+    //     for (int i = 0; i < sol.turbines.size(); i++){
+    //         cout << "Position (x, y) of" << " turbine " << i << ": " << sol.turbines[i].x << " " << sol.turbines[i].y << endl;
+    //     }
+    //     cout << "Fitness: <" << sol.fitness.first << "," << sol.fitness.second << ">" << endl;
+    //     cout << endl;
+    // }
+
+
+    vector<Solution> EP = moead(population, population.size());
 
 }
