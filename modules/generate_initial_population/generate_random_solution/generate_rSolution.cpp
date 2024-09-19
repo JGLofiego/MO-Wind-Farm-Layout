@@ -18,8 +18,8 @@ double calculate_cost(Solution& sol){
     double acc = 0;
 
     for(int z = 0; z < num_zones; z++){
-        for(int i = 0; i < sol.turbines.size(); i++){ 
-            acc += foundations[sol.turbines[z][i].zone][sol.turbines[z][i].index].cost; //Acumulador recebe o custo da posição em que turbina se encontra
+        for(int i = 0; i < sol.turbines[z].size(); i++){
+            acc += foundations[sol.turbines[z][i].zone][sol.turbines[z][i].index].cost;//Acumulador recebe o custo da posição em que turbina se encontra
         }
     }
 
@@ -86,41 +86,80 @@ double calculate_interference(Turbine& t_initial, Turbine& t_interfered){
     return result;
 }
 
-// double calculate_power(Solution& sol){
-//     double power = 0;
-//     double deficit, windResulted, result;
+double calculate_power(Solution& sol){
+    double power = 0;
+    double deficit, windResulted, result;
 
-//     for(int i = 0; i < sol.turbines.size(); i++){
-//         deficit = 0;
+    for(int z = 0; z < num_zones; z++){
+        for(int i = 0; i < sol.turbines[z].size(); i++){
+            deficit = 0;
 
-//         for(int j = 0; j < sol.turbines.size(); j++){
-//             result = calculate_interference(sol.turbines[i], sol.turbines[j]);
-//             deficit += result * result;
-//         }
+            for(int j = 0; j < num_zones; j++){
+                for(int k = 0; k < sol.turbines[z].size(); k++){
+                    result = calculate_interference(sol.turbines[z][i], sol.turbines[j][k]);
+                    deficit += result * result;
+                }
+            }
 
-//         windResulted = wind * (1 - sqrt(deficit));
+            for( Turbine turbina: fixd){
+                result = calculate_interference(sol.turbines[z][i], turbina);
+                deficit += result * result;
+            }
 
-//         // ********** Teste da potência produzida **********
-//         // cout << "Velocidade do vento em "<< sol.turbines[i].id << " : " <<
-//         //  wind << " produz " << power_produced(wind, sol.turbines[i]) << endl;
+            windResulted = wind * (1 - sqrt(deficit));
 
-//         power += power_produced(windResulted, sol.turbines[i]);
-//     }
+            // ********** Teste da potência produzida **********
+            // cout << "Velocidade do vento em "<< sol.turbines[i].id << " : " <<
+            //  wind << " produz " << power_produced(wind, sol.turbines[i]) << endl;
 
-//     sol.fitness.second = power;
-//     return power;
-// }
+            power += power_produced(windResulted, sol.turbines[z][i]);
+        }
+    }
+
+    for (int i = 0; i < fixd.size(); i++){
+        deficit = 0.0;
+
+        for(int j = 0; j < fixd.size(); j++){
+            result = calculate_interference(fixd[i], fixd[j]);
+            deficit += result * result;
+        }
+
+        for(int j = 0; j < num_zones; j++){
+            for(int k = 0; k < num_zones; k++){
+                result = calculate_interference(fixd[i], sol.turbines[j][k]);
+                deficit += result * result;
+            }
+        }
+
+        windResulted = wind * (1 - sqrt(deficit));
+
+        power += power_produced(windResulted, fixd[i]);
+    }
+
+    sol.fitness.second = power;
+    return power;
+}
 
 // Função para gerar uma solução aleatória, retorna uma matriz booleana a qual false = sem turbina, e true = turbina
 Solution generate_solution(int num_turb){
     // inicializa um vector de int com todas as possiveis posições de um grid upperboundX x upperBoundY 
-    vector<vector<int>> pos(3, vector<int>(num_turb));
-    vector<vector<Turbine>> turbines(3, vector<Turbine>(num_turb));
+    vector<vector<int>> pos(num_zones);
+    
+    for(int i = 0; i < num_zones; i++){
+        pos[i].resize(foundations[i].size());
+    }
+
+    vector<vector<Turbine>> turbines(num_zones);
+    
+    for(int i = 0; i < num_zones; i++){
+        turbines[i].resize(num_turb);
+    }
+
     Turbine t;
 
 
     for(int z = 0; z < num_zones; z++){
-        for (int i = 0; i < pos.size(); i++){
+        for (int i = 0; i < pos[z].size(); i++){
             // Cada posição i do vector é igual ao próprio i
             pos[z][i] = i;
         }
@@ -144,33 +183,32 @@ Solution generate_solution(int num_turb){
 
             //Coloca informações da turbina, depois adiciona a turbina no vector
             t.id = id;
-            solution_grid[elmn] = t.id;
+            // solution_grid[elmn] = t.id;
             t.index = elmn;
             t.x = foundations[z][elmn].x;
             t.y = foundations[z][elmn].y;
             t.power = power;
             t.thrust_coef = thrust_coef;
+            t.zone = z;
             turbines[z][i] = t;
 
-            // apaga o elemento do array de posições disponíveis, evitando possíveis repetições
+            // // apaga o elemento do array de posições disponíveis, evitando possíveis repetições
             pos[z].erase(pos[z].begin() + rand_int);
 
             id++;
         }
     }
 
-    // //Filling the Solution
+    //Filling the Solution
 
-    // // ************* Pegar os valores de custo por terreno *************
+    // ************* Pegar os valores de custo por terreno *************
     Solution rSolution;
     
-    // double cost = calculate_cost(rSolution);
-
     rSolution.grid = solution_grid;
     rSolution.turbines = turbines;
 
-    // rSolution.fitness.first = calculate_cost(rSolution);
-    // rSolution.fitness.second = calculate_power(rSolution);
+    rSolution.fitness.first = calculate_cost(rSolution);
+    rSolution.fitness.second = calculate_power(rSolution);
 
     return rSolution;
 }

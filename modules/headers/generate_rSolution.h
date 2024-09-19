@@ -13,6 +13,7 @@ struct Foundation {
 };
 
 extern vector<vector<Foundation>> foundations;
+extern vector<Turbine> fixd;
 
 extern float wind;
 extern float power;
