@@ -25,13 +25,12 @@ bool is_equal(Solution solutionA, Solution solutionB) {
 
 vector<Solution> moead(vector<Solution>& population){
 
-  int size_population = population.size();
-
   //Initializing the random number generator 
   default_random_engine re{(unsigned)time(nullptr)};
   uniform_real_distribution<double> dist(0.0, 1.0);
 
   //MOAED parameters 
+  int size_population = population.size();
   double input_cross_prob = 0.8;
   double input_mutation_prob = 0.4;
   int number_of_neighbors = 5;
