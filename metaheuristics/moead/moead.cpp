@@ -106,6 +106,16 @@ vector<Solution> moead(vector<Solution>& population){
     cout << "+++++++++++++++++++++++++  GENERARATION " << generation << " +++++++++++++++++++++++++++++++" << endl;
     cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl << endl;
 
+      cout << "&&&&&&&&&&& NEIGHBORHOOD AT THE BEGIN OF GENERATION " << generation  << " &&&&&&&&&&&"<< endl;
+
+      for(int i = 0; i < neighborhood.size(); i++){
+        cout << "----- NEIGHBORS OF " << i << " -----" << endl;
+
+        for(int j = 0; j < neighborhood[i].size(); j++){
+          cout << "<" << population[neighborhood[i][j]].fitness.first << ", " << population[neighborhood[i][j]].fitness.second << ">" << endl;
+        }cout << endl;
+      }
+      cout << endl;
 
     Solution child1, child2;
     for (int i = 0; i < size_population; i++) {
@@ -248,6 +258,17 @@ vector<Solution> moead(vector<Solution>& population){
     if (flag2 && !already_exists2) {
       EP.push_back(child2);
     }
+
+      cout << "&&&&&&&&&&& NEIGHBORHOOD AT THE END OF GENERATION " << generation  << " &&&&&&&&&&&"<< endl;
+
+      for(int i = 0; i < neighborhood.size(); i++){
+        cout << "----- NEIGHBORS OF " << i << " -----" << endl;
+
+        for(int j = 0; j < neighborhood[i].size(); j++){
+          cout << "<" << population[neighborhood[i][j]].fitness.first << ", " << population[neighborhood[i][j]].fitness.second << ">" << endl;
+        }cout << endl;
+      }
+      cout << endl;
 
     generation++;
   }
