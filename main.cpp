@@ -184,9 +184,9 @@ int main(int argc, char* argv[]){
     //     }
     // } cout << endl;
     
-    vector<Solution> population = create_initial_population(200, num_turb);
+    vector<Solution> population = create_initial_population(10, num_turb);
 
-    vector<Solution> moeadResult = moead(population, population.size());
+    vector<Solution> moeadResult = moead(population);
 
     // for(Solution sol: population){
     //     for(int i = 0; i < num_zones; i++){

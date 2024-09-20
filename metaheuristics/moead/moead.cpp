@@ -23,19 +23,19 @@ bool is_equal(Solution solutionA, Solution solutionB) {
   return (solutionA.fitness.first == solutionB.fitness.first) && (solutionA.fitness.second == solutionB.fitness.second);
 }
 
-vector<Solution> moead(vector<Solution>& population, int size_population){
+vector<Solution> moead(vector<Solution>& population){
 
-  //srand(time(0)); //Initializing the random number generator 
+  int size_population = population.size();
 
+  //Initializing the random number generator 
   default_random_engine re{(unsigned)time(nullptr)};
-
   uniform_real_distribution<double> dist(0.0, 1.0);
 
   //MOAED parameters 
   double input_cross_prob = 0.8;
   double input_mutation_prob = 0.4;
   int number_of_neighbors = 5;
-  int max_generations = 15;
+  int max_generations = 3;
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 
@@ -90,6 +90,8 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
   cout << endl;
   cout << "===================== EP INICIAL =====================" << endl << endl;
 
+  cout << "Size of EP: " << EP.size() << endl << endl;
+
   for(const auto& i : EP){
     cout << "<" << i.fitness.first * (-1) << ", " << i.fitness.second << ">" << endl;
   }
@@ -101,6 +103,11 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
   int generation = 0;
 
   while (generation < max_generations) {
+    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
+    cout << "+++++++++++++++++++++++++  GENERARATION " << generation << " +++++++++++++++++++++++++++++++" << endl;
+    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl << endl;
+
+
     Solution child1, child2;
     for (int i = 0; i < size_population; i++) {
       // Step 2.1: Reproduction
@@ -117,25 +124,48 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
       //Crossover
       double random_cross_prob = dist(re);
 
-      if(random_cross_prob < input_cross_prob){
-
+      if(random_cross_prob < input_cross_prob){ 
+        cout << "xxxxxxxxxxxxxxxx CROSSOVER xxxxxxxxxxxxxxxxxxxx" << endl;
+        
+        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
+        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
+        
         child1 = crossover(population[k], population[l]);
         child2 = crossover(population[l], population[k]);
-
+        
+        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
+        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
+        cout << endl;
       }
       else{
+        cout << "xxxxxxxxxx SEM CROSSOVER (FILHOS IGUAIS AOS PAIS) xxxxxxxxxx" << endl;
+        
+        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
+        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
+        
         child1 = population[k];
         child2 = population[l];
-
+        
+        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
+        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
+        cout << endl;
       }
       
-
       //Mutation
       double random_mutation_prob = dist(re);
 
       if(random_mutation_prob < input_mutation_prob){
+        cout << "xxxxxxxxxxxxxxxx MUTATION xxxxxxxxxxxxxxxxxxxx" << endl;
+        
+        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
+        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
+        
         mutation(child1);
         mutation(child2);
+        
+        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
+        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
+        cout << endl;
       }
 
       // Step 2.3: Update of z point
@@ -147,6 +177,7 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
         double child1_tch = calculate_gte(child1.fitness, lambda_vector[j], z_point);
         if (child1_tch <= tch_vector[j]) {
           population[j] = child1;
+
           tch_vector[j] = child1_tch;
         }
         

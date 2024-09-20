@@ -26,7 +26,6 @@ bool notInOffspring(int turbine_id, const vector<int> &grid) {
 void crossoverAux(Solution &parent_solutionA, Solution &parent_solutionB, Solution &offspring_solution, int zona){
   offspring_solution.grid[zona].resize(parent_solutionA.grid[zona].size(), 0);
 
-
   int rand_int = rand() % parent_solutionA.grid[zona].size();
   int index = -1;
   int lastIndex = 0;
