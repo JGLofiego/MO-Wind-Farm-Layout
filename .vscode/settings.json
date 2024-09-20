@@ -43,6 +43,12 @@
     "xstring": "cpp",
     "xtr1common": "cpp",
     "xutility": "cpp",
-    "random": "cpp"
+    "random": "cpp",
+    "algorithm": "cpp",
+    "fstream": "cpp",
+    "iomanip": "cpp",
+    "string": "cpp",
+    "xlocmon": "cpp",
+    "xloctime": "cpp"
   }
 }

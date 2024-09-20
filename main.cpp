@@ -184,7 +184,7 @@ int main(int argc, char* argv[]){
     //     }
     // } cout << endl;
     
-    vector<Solution> population = create_initial_population(10, num_turb);
+    vector<Solution> population = create_initial_population(1000, num_turb);
 
     vector<Solution> moeadResult = moead(population);
 

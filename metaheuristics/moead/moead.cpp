@@ -12,6 +12,8 @@
 #include "../../modules/headers/tchebycheff.h"
 #include "../../modules/headers/mutation.h"
 #include "../../modules/headers/crossover.h"
+#include "../../modules/solution_validator.cpp"
+
 
 using namespace std;
 
@@ -34,7 +36,7 @@ vector<Solution> moead(vector<Solution>& population){
   double input_cross_prob = 0.8;
   double input_mutation_prob = 0.4;
   int number_of_neighbors = 5;
-  int max_generations = 3;
+  int max_generations = 15;
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 
