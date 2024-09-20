@@ -7,12 +7,12 @@
 using namespace std;
 
 pair<double, double> get_best_z_point(vector<Solution>& population) {
-  // Initialize with very small values ​​for maximization
+  // Initialize with small values ​​for maximization
   double best_cost = -numeric_limits<double>::infinity(); 
   double best_power = -numeric_limits<double>::infinity();
 
   for (auto& individual : population) {
-    // For maximization: find the largest values ​​of cost and power
+    // Finding the largest values ​​of cost and power (for maximization)
     if (individual.fitness.first > best_cost) {
       best_cost = individual.fitness.first;
     }

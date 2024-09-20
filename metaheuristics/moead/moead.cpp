@@ -27,8 +27,8 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
   //srand(time(0)); //Initializing the random number generator 
 
   //MOAED parameters 
-  double probCross = 0.8;
-  double probMutacao = 0.4;
+  double input_cross_prob = 0.8;
+  double input_mutation_prob = 0.4;
   int number_of_neighbors = 5;
   int max_generations = 3;
 
@@ -50,7 +50,7 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
   }
 
   // Step 1.1: Initialize EP (External Population)
-  //The EP vector will contain only the non-dominated solutions from the population
+  //The EP vector will contain only the non-dominated and not equal solutions from the initial population
   vector<Solution> EP;
 
   for (int i = 0; i < population.size(); i++) {
@@ -110,9 +110,9 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
       // Generate new solution y using genetic operators
 
       //Crossover
-      double cross_prob = (double) rand() / RAND_MAX;
+      double random_cross_prob = (double) rand() / RAND_MAX;
 
-      if(cross_prob < probCross){
+      if(random_cross_prob < input_cross_prob){
 
         cout << "xxxxxxxxxxxxxxxx CROSSOVER xxxxxxxxxxxxxxxxxxxx" << endl;
 
@@ -135,14 +135,13 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
         cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
         cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
       }
-
       
       cout << endl;
 
       //Mutation
-      double mutation_prob = (double) rand() / RAND_MAX;
+      double random_mutation_prob = (double) rand() / RAND_MAX;
 
-      if(mutation_prob < probMutacao){
+      if(random_mutation_prob < input_mutation_prob){
         cout << "xxxxxxxxxxxxxxxx MUTATION xxxxxxxxxxxxxxxxxxxx" << endl;
         cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
         cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;

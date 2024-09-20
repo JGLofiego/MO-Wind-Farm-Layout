@@ -14,8 +14,8 @@ double euclidean_distance(pair<double, double>& a, pair<double, double>& b) {
 vector<vector<int>> build_neighborhood(int number_of_neighbors, vector<pair<double, double>>& lambda_vector, int size_population){
 
   /*Contains all the indices of the neighbors of a given lambda vector i.
-  Ex: for the lambda vector (subproblem) i, there is a neighbor vector, i.e. a vector of neighbors of indices j*/
-  vector<vector<int>> neighborhood(lambda_vector.size());
+  Ex: for the lambda vector (subproblem) i, there is a vector of neighbors, i.e. a vector of neighbors of indices j*/
+  vector<vector<int>> neighborhood(size_population);
 
   //The number of neighbors cannot be greater than the population size minus 1.
   if (number_of_neighbors > size_population - 1) {
@@ -27,9 +27,9 @@ vector<vector<int>> build_neighborhood(int number_of_neighbors, vector<pair<doub
   for (int i = 0; i < lambda_vector.size(); i++) {
     vector<pair<double, int>> distances; 
 
-    distances.push_back({0.0, i});
+    distances.push_back(make_pair(0.0, i)); //The distance from a vector to itself is 0. ie, a vector 'i' is neighbor of itself. 
 
-    // Calculate the distance from i to all other vectors
+    // Calculate the distance from the weight vector i to all other vectors
     for (int j = 0; j < lambda_vector.size(); j++) {
       if (i != j) {  // Avoid calculating the distance from a vector to itself (already done --> line 30)
         double distance = euclidean_distance(lambda_vector[i], lambda_vector[j]);
@@ -37,7 +37,7 @@ vector<vector<int>> build_neighborhood(int number_of_neighbors, vector<pair<doub
       }
     }
 
-    // Sort based on distance (shortest distance first)
+    // Sort based on the distance (shortest distance first)
     sort(distances.begin(), distances.end());
 
     // Get the T nearest neighbors and save the indices
