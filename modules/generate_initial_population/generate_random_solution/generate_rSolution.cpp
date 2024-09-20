@@ -142,6 +142,8 @@ double calculate_power(Solution& sol){
 
 // Função para gerar uma solução aleatória, retorna uma matriz booleana a qual false = sem turbina, e true = turbina
 Solution generate_solution(int num_turb){
+    id = fixd.size();
+
     // inicializa um vector de int com todas as possiveis posições de um grid upperboundX x upperBoundY 
     vector<vector<int>> pos(num_zones);
     
@@ -167,7 +169,11 @@ Solution generate_solution(int num_turb){
 
     // inicializa o vetor solução
 
-    vector<int> solution_grid(foundations[0].size() + foundations[1].size() + foundations[2].size(), 0);
+    vector<vector<int>> solution_grid(num_zones);
+
+    for(int i = 0; i < num_zones; i++){
+        solution_grid[i].resize(foundations[i].size());
+    }
 
     int rand_int;
     int elmn;
@@ -183,7 +189,7 @@ Solution generate_solution(int num_turb){
 
             //Coloca informações da turbina, depois adiciona a turbina no vector
             t.id = id;
-            // solution_grid[elmn] = t.id;
+            solution_grid[z][elmn] = t.id;
             t.index = elmn;
             t.x = foundations[z][elmn].x;
             t.y = foundations[z][elmn].y;

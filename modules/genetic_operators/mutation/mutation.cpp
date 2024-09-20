@@ -14,9 +14,9 @@ int find_index(vector<Turbine> &vec, int value){
   return -1;
 }
 
-void mutation(Solution &solution){
+void mutationAux(Solution &solution, int zona){
 
-    int grid_size = solution.grid.size();
+    int grid_size = solution.grid[zona].size();
     int rand_intA, rand_intB;
     int indexA = -1;
     int indexB = -1;
@@ -26,48 +26,54 @@ void mutation(Solution &solution){
     do{
       rand_intA = rand() % grid_size;
       rand_intB = rand() % grid_size;
-    } while(rand_intA == rand_intB || (solution.grid[rand_intA] == 0 && solution.grid[rand_intB] == 0));
+    } while(rand_intA == rand_intB || (solution.grid[zona][rand_intA] == 0 && solution.grid[zona][rand_intB] == 0));
 
     // Swapping the genes betwen grid[rand_intA] e grid[rand_intB]
-    int geneA = solution.grid[rand_intA];
-    int geneB = solution.grid[rand_intB];
+    int geneA = solution.grid[zona][rand_intA];
+    int geneB = solution.grid[zona][rand_intB];
 
-    if(solution.grid[rand_intA] != 0){
-      indexA = find_index(solution.turbines, solution.grid[rand_intA]);
+    if(solution.grid[zona][rand_intA] != 0){
+      indexA = find_index(solution.turbines[zona], solution.grid[zona][rand_intA]);
     }
 
-    if(solution.grid[rand_intB] != 0){
-      indexB = find_index(solution.turbines, solution.grid[rand_intB]);
+    if(solution.grid[zona][rand_intB] != 0){
+      indexB = find_index(solution.turbines[zona], solution.grid[zona][rand_intB]);
     }
 
     if(indexA != -1 && indexB != -1){
       int index;
       double x, y;
 
-      index = solution.turbines[indexA].index;
-      x = solution.turbines[indexA].x;
-      y = solution.turbines[indexA].y;
+      index = solution.turbines[zona][indexA].index;
+      x = solution.turbines[zona][indexA].x;
+      y = solution.turbines[zona][indexA].y;
 
-      solution.turbines[indexA].index = solution.turbines[indexB].index;
-      solution.turbines[indexA].x = solution.turbines[indexB].x;
-      solution.turbines[indexA].y = solution.turbines[indexB].y;
+      solution.turbines[zona][indexA].index = solution.turbines[zona][indexB].index;
+      solution.turbines[zona][indexA].x = solution.turbines[zona][indexB].x;
+      solution.turbines[zona][indexA].y = solution.turbines[zona][indexB].y;
 
-      solution.turbines[indexB].index = index;
-      solution.turbines[indexB].x = x;
-      solution.turbines[indexB].y = y;
+      solution.turbines[zona][indexB].index = index;
+      solution.turbines[zona][indexB].x = x;
+      solution.turbines[zona][indexB].y = y;
     } else if (indexA != -1 && indexB == -1){
-      solution.turbines[indexA].index = rand_intB;
-      solution.turbines[indexA].x = foundations[rand_intB].x;
-      solution.turbines[indexA].y = foundations[rand_intB].y;
+      solution.turbines[zona][indexA].index = rand_intB;
+      solution.turbines[zona][indexA].x = foundations[zona][rand_intB].x;
+      solution.turbines[zona][indexA].y = foundations[zona][rand_intB].y;
     } else {
-      solution.turbines[indexB].index = rand_intA;
-      solution.turbines[indexB].x = foundations[rand_intA].x;
-      solution.turbines[indexB].y = foundations[rand_intA].y;
+      solution.turbines[zona][indexB].index = rand_intA;
+      solution.turbines[zona][indexB].x = foundations[zona][rand_intA].x;
+      solution.turbines[zona][indexB].y = foundations[zona][rand_intA].y;
     }
 
-    solution.grid[rand_intA] = geneB;
-    solution.grid[rand_intB] = geneA;
+    solution.grid[zona][rand_intA] = geneB;
+    solution.grid[zona][rand_intB] = geneA;
+}
 
-    calculate_cost(solution);
-    calculate_power(solution);
+void mutation(Solution &solution){
+  for(int i = 0; i < num_zones; i++){
+    mutationAux(solution, i);
+  }
+
+  calculate_cost(solution);
+  calculate_power(solution);
 }

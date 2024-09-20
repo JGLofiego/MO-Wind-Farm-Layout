@@ -2,7 +2,8 @@
 #include <vector>
 #include <iostream>
 #include <ctime> 
-#include <algorithm> 
+#include <algorithm>
+#include <random>
 #include "../../modules/headers/population.h"
 #include "../../modules/headers/generate_rSolution.h"
 #include "../../modules/headers/generate_weight_vectors.h"
@@ -26,11 +27,15 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
 
   //srand(time(0)); //Initializing the random number generator 
 
+  default_random_engine re{(unsigned)time(nullptr)};
+
+  uniform_real_distribution<double> dist(0.0, 1.0);
+
   //MOAED parameters 
   double input_cross_prob = 0.8;
   double input_mutation_prob = 0.4;
   int number_of_neighbors = 5;
-  int max_generations = 3;
+  int max_generations = 15;
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 
@@ -110,46 +115,27 @@ vector<Solution> moead(vector<Solution>& population, int size_population){
       // Generate new solution y using genetic operators
 
       //Crossover
-      double random_cross_prob = (double) rand() / RAND_MAX;
+      double random_cross_prob = dist(re);
 
       if(random_cross_prob < input_cross_prob){
-
-        cout << "xxxxxxxxxxxxxxxx CROSSOVER xxxxxxxxxxxxxxxxxxxx" << endl;
-
-        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
-        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
 
         child1 = crossover(population[k], population[l]);
         child2 = crossover(population[l], population[k]);
 
-        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
-        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
       }
       else{
-        cout << "xxxxxxxxxx SEM CROSSOVER (FILHOS IGUAIS AOS PAIS) xxxxxxxxxx" << endl;
-        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
-        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
         child1 = population[k];
         child2 = population[l];
 
-        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
-        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
       }
       
-      cout << endl;
 
       //Mutation
-      double random_mutation_prob = (double) rand() / RAND_MAX;
+      double random_mutation_prob = dist(re);
 
       if(random_mutation_prob < input_mutation_prob){
-        cout << "xxxxxxxxxxxxxxxx MUTATION xxxxxxxxxxxxxxxxxxxx" << endl;
-        cout << "PAI 1 : <" << population[k].fitness.first << ", " << population[k].fitness.second << ">, " << "num_turb: " << population[k].turbines.size() << endl;
-        cout << "PAI 2 : <" << population[l].fitness.first << ", " << population[l].fitness.second << ">, " << "num_turb: " << population[l].turbines.size() << endl;
         mutation(child1);
         mutation(child2);
-        cout << "FILHO 1 : <" << child1.fitness.first << ", " << child1.fitness.second << ">, " << "num_turb: " << child1.turbines.size() << endl;
-        cout << "FILHO 2 : <" << child2.fitness.first << ", " << child2.fitness.second << ">, " << "num_turb: " << child2.turbines.size() << endl;
-        cout << endl;
       }
 
       // Step 2.3: Update of z point

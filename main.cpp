@@ -1,12 +1,12 @@
 #include "./modules/generate_initial_population/generate_random_solution/generate_rSolution.cpp"
 #include "./modules/generate_initial_population/generate_population/population.cpp"
-// #include "modules/genetic_operators/mutation/mutation.cpp"
-// #include "modules/genetic_operators/crossover/crossover.cpp"
-// #include "metaheuristics/moead/moead.cpp"
-// #include "./modules/moead/generate_weight_vectors.cpp"
-// #include "./modules/moead/generate_neighborhood.cpp"
-// #include "./modules/moead/get_best_z_point.cpp"
-// #include "./modules/moead/tchebycheff.cpp"
+#include "modules/genetic_operators/mutation/mutation.cpp"
+#include "modules/genetic_operators/crossover/crossover.cpp"
+#include "metaheuristics/moead/moead.cpp"
+#include "./modules/moead/generate_weight_vectors.cpp"
+#include "./modules/moead/generate_neighborhood.cpp"
+#include "./modules/moead/get_best_z_point.cpp"
+#include "./modules/moead/tchebycheff.cpp"
 #include <iomanip>
 #include <fstream>
 #include <iostream>
@@ -50,7 +50,8 @@ int main(int argc, char* argv[]){
     string strWind = "0.0";
     string strPow, strTC;
 
-    if(argc == 2){
+    if(argc == 1);
+    else if(argc == 2){
         num_turb = atoi(argv[1]);
     } else if(argc >= 5){
         num_turb = atoi(argv[1]);
@@ -149,40 +150,56 @@ int main(int argc, char* argv[]){
 
     file.close();
 
-    Solution sol = generate_solution(num_turb);
+    // Solution sol1 = generate_solution(num_turb);
 
-    for(int i = 0; i < num_zones; i++){
-        for(int j = 0; j < sol.turbines[i].size(); j++){
-            cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
-        }
-    }
+    // for(int z = 0; z < num_zones; z++){
+    //     for(int i = 0; i < sol1.turbines[z].size(); i++){
+    //         cout << sol1.turbines[z][i].x << " " << sol1.turbines[z][i].y << endl;
+    //     }
+    // } cout << endl;
 
-    for(int i = 0; i < fixd.size(); i++){
-        cout << fixd[i].x << " " << fixd[i].y << endl;
-    }cout << endl;
+    // mutation(sol1);
 
-    cout << sol.fitness.first << " " << sol.fitness.second << endl;
+    // for(int z = 0; z < num_zones; z++){
+    //     for(int i = 0; i < sol1.turbines[z].size(); i++){
+    //         cout << sol1.turbines[z][i].x << " " << sol1.turbines[z][i].y << endl;
+    //     }
+    // } cout << endl;
 
-    // vector<Solution> population = create_initial_population(9, num_turb);
 
-    // for(Solution sol : population){
-    //     cout << sol.turbines[0].size() << endl;
-    //     cout << sol.turbines[1].size() << endl;
-    //     cout << sol.turbines[2].size() << endl;
+    // Solution sol2 = generate_solution(num_turb);
 
-    //     for (int i = 0; i < sol.turbines[0].size(); i++){
-    //         cout << sol.turbines[0][i].x << " " << sol.turbines[0][i].y << endl;
+    // Solution filho = crossover(sol1, sol2);
+    
+
+    // for(int z = 0; z < num_zones; z++){
+    //     for(int i = 0; i < sol2.turbines[z].size(); i++){
+    //         cout << sol2.turbines[z][i].x << " " << sol2.turbines[z][i].y << endl;
+    //     }
+    // } cout << endl;
+
+    // for(int z = 0; z < num_zones; z++){
+    //     for(int i = 0; i < filho.turbines[z].size(); i++){
+    //         cout << filho.turbines[z][i].x << " " << filho.turbines[z][i].y << endl;
+    //     }
+    // } cout << endl;
+    
+    vector<Solution> population = create_initial_population(200, num_turb);
+
+    vector<Solution> moeadResult = moead(population, population.size());
+
+    // for(Solution sol: population){
+    //     for(int i = 0; i < num_zones; i++){
+    //         for(int j = 0; j < sol.turbines[i].size(); j++){
+    //             cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
+    //         }
     //     }
 
-    //     for (int i = 0; i < sol.turbines[1].size(); i++){
-    //         cout << sol.turbines[1][i].x << " " << sol.turbines[1][i].y << endl;
-    //     }
-
-    //     for (int i = 0; i < sol.turbines[2].size(); i++){
-    //         cout << sol.turbines[2][i].x << " " << sol.turbines[2][i].y << endl;
-    //     }
-    //     // cout << sol.fitness.first << " " << sol.fitness.second << endl;
-    //     cout << endl;
+    //     for(int i = 0; i < fixd.size(); i++){
+    //         cout << fixd[i].x << " " << fixd[i].y << endl;
+    //     }cout << endl;
     // }
+
+
 
 }
