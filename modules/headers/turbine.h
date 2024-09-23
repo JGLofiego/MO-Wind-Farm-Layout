@@ -10,7 +10,8 @@ struct Turbine {
     double y;
     float power;
     float thrust_coef;
-    int diameter = 179;
+    int diameter;
+    int zone;
 };
 
 // Wind Turbine Formula = 0.5 * air_density * swept_area * pow_coef * (wind_spd ** 3)
