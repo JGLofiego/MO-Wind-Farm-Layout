@@ -71,9 +71,9 @@ vector<Solution> crowding_distance(vector<Solution> &population){
     sort(final.begin(), final.end(), cmp_cd);
 
     // Funcao pra printar os valores das funcoes e o cd, como forma de debugar
-    // for( int i = 0; i < final.size(); i++) {
-    //     cout << population[final[i].first].fitness.first << " " << population[final[i].first].fitness.second << " " << final[i].second << endl;
-    // }
+    for( int i = 0; i < final.size(); i++) {
+        cout << population[final[i].first].fitness.first << " " << population[final[i].first].fitness.second << " " << final[i].second << endl;
+    }
 
     //Pega o o valor do índice correto na ordenação e copia para os elementos de population
     for(int i = 0; i < num; i++) {
@@ -84,59 +84,54 @@ vector<Solution> crowding_distance(vector<Solution> &population){
 }
 
 // Teste do algorítmo
-int main(){
-    vector<Solution> v;
-    vector<int> grid;
-    vector<int> v1, v2;
-    Solution sol0 = {
-        grid,
-        v1,
-        v2,
-        make_pair(20, 70)
-    };
-    Solution sol1 = {
-        grid,
-        v1,
-        v2,
-        make_pair(25, 80)
-    };
-    Solution sol2 = {
-        grid,
-        v1,
-        v2,
-        make_pair(10, 30)
-    };
-    Solution sol3 = {
-        grid,
-        v1,
-        v2,
-        make_pair(9, 25)
-    };
-    Solution sol4 = {
-        grid,
-        v1,
-        v2,
-        make_pair(18, 40)
-    };
-    Solution sol5 = {
-        grid,
-        v1,
-        v2,
-        make_pair(19, 41)
-    };
+// int main(){
+//     vector<Solution> v;
+//     vector<vector<int>> grid;
+//     vector<vector<Turbine>> turb;
 
-    v.push_back(sol0);
-    v.push_back(sol1);
-    v.push_back(sol2);
-    v.push_back(sol3);
-    v.push_back(sol4);
-    v.push_back(sol5);
+//     Solution sol0 = {
+//         grid,
+//         turb,
+//         make_pair(-20, 70)
+//     };
+//     Solution sol1 = {
+//         grid,
+//         turb,
+//         make_pair(-25, 80)
+//     };
+//     Solution sol2 = {
+//         grid,
+//         turb,
+//         make_pair(-10, 30)
+//     };
+//     Solution sol3 = {
+//         grid,
+//         turb,
+//         make_pair(-9, 25)
+//     };
+//     Solution sol4 = {
+//         grid,
+//         turb,
+//         make_pair(-18, 40)
+//     };
+//     Solution sol5 = {
+//         grid,
+//         turb,
+//         make_pair(-19, 41)
+//     };
 
-    crowding_distance(v);
+//     v.push_back(sol0);
+//     v.push_back(sol1);
+//     v.push_back(sol2);
+//     v.push_back(sol3);
+//     v.push_back(sol4);
+//     v.push_back(sol5);
 
-    cout << "RESULTADO FINAL:\n";
-    for(int i = 0; i < v.size(); i++){
-        cout << v[i].fitness.first << " " << v[i].fitness.second << endl;
-    }
-}
+//     crowding_distance(v);
+
+//     cout << "RESULTADO FINAL:\n";
+//     for(int i = 0; i < v.size(); i++){
+//         cout << v[i].fitness.first << " " << v[i].fitness.second << endl;
+//     }
+// }
 
