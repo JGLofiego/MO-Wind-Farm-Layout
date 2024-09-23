@@ -184,21 +184,28 @@ int main(int argc, char* argv[]){
     //     }
     // } cout << endl;
     
-    vector<Solution> population = create_initial_population(400, 20);
+    // vector<Solution> population = create_initial_population(400, 20);
 
-    vector<Solution> moeadResult = moead(population);
+    // vector<Solution> moeadResult = moead(population);
+    vector<Solution> population = create_initial_population(10, num_turb);
 
-    // for(Solution sol: population){
-    //     for(int i = 0; i < num_zones; i++){
-    //         for(int j = 0; j < sol.turbines[i].size(); j++){
-    //             cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
-    //         }
-    //     }
+    // vector<Solution> moeadResult = moead(population, population.size());
 
-    //     for(int i = 0; i < fixd.size(); i++){
-    //         cout << fixd[i].x << " " << fixd[i].y << endl;
-    //     }cout << endl;
-    // }
+    for(Solution sol: population){
+        for(int i = 0; i < num_zones; i++){
+            for(int j = 0; j < sol.turbines[i].size(); j++){
+                cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
+            }
+        }
+
+        for(int i = 0; i < fixd.size(); i++){
+            cout << fixd[i].x << " " << fixd[i].y << endl;
+        }
+        
+        cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
+
+        cout << endl;
+    }
 
 
 
