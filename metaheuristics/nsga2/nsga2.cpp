@@ -7,52 +7,45 @@
 #include "../../modules/headers/generate_rSolution.h"
 #include "../../modules/headers/mutation.h"
 #include "../../modules/headers/crossover.h"
-#include "../../modules/headers/binary_tournament.h"
-#include "../../modules/headers/crowding_distance.h"
-#include "../../modules/headers/non_dominated_sorting.h"
+#include "../../modules/nsga2/binary_tournament.cpp"
+#include "../../modules/nsga2/crowding_distance.cpp"
+#include "../../modules/nsga2/non_dominated_sorting.cpp"
 
 using namespace std;
 
-int main(){
+vector<Solution> nsga2(vector<Solution>& population){
 
   //Initializing the random number generator 
   default_random_engine re{(unsigned)time(nullptr)};
   uniform_real_distribution<double> dist(0.0, 1.0);
 
-  //Information that must be extracted from each instance
-  int num_turb = 3;
-
   //NGSAII paramets 
-  int size_population = 10; //Size of the population
+  int size_population = population.size(); //Size of the population
   double cross_prob = 0.8;
   double mutation_prob = 0.4;
   int max_generations = 3;
 
-  //Initial population
-  vector<Solution> population = create_initial_population(size_population, num_turb); 
-
   cout << endl;
-  cout << "------------Initial population ------------ " << endl;
+  cout << "------------INITIAL POPULATION ------------ " << endl;
   for(auto& i : population){
     cout << "<" << i.fitness.first << ", " << i.fitness.second << ">" << endl;
   }
   cout << "------------------------------------------- " << endl << endl;
 
+  cout << "SIZE OF INITIAL POPULATION: " << population.size() << endl << endl;
+
   int generation = 0;
 
   while(generation < max_generations){
 
-    cout << "======================= GENERATION: " << generation << "=======================" << endl;
+    cout << "======================= GENERATION: " << generation << "=======================" << endl << endl;
 
     vector<Solution> offspring_population;
 
     for(int i = 0; i < size_population; i++){
       //Parent selection
       pair<Solution, Solution> parents = binary_tornament(population);
-      cout << endl;
-      cout << "Parent 1: " << parents.first.fitness.first << " " << parents.first.fitness.second << endl;
-      cout << "Parent 2: " << parents.second.fitness.first << " " << parents.second.fitness.second << endl;
-      
+  
       //Crossover
       Solution child1, child2;
       double k = (double) rand() / RAND_MAX;
@@ -82,27 +75,60 @@ int main(){
     //Adding the offspring_population at the end of the 'population' in 'total_population'
     vector<Solution> total_population = population;
     total_population.insert(total_population.end(), offspring_population.begin(), offspring_population.end()); 
+    cout << "SIZE OF TOTAL POPULATION: " << total_population.size() << endl << endl;
 
     //Non dominated sorting
     vector<vector<Solution>> fronts = non_dominated_sorting(total_population);
 
-    population.clear(); //Cleaning the population to generates the next generation
+    cout << "========================== FRONTS ==========================" << endl << endl;
+    for(int i = 0; i < fronts.size(); i++){
+      cout << "----------------------- FRONT: "<< i << " -----------------------" << endl;
+      for(int j = 0; j < fronts[i].size(); j++){
+        cout << "<" << fronts[i][j].fitness.first << ", " << fronts[i][j].fitness.second << ">"<< endl;
+      }
+    } cout << endl;
 
+    population.clear(); //Cleaning the population to generates the next generation
+    
+    int k = 0;
     for (auto& front : fronts) {
-      if(population.size() + front.size() <=size_population){
-        for(auto& solution : front){
+      if (population.size() + front.size() <= size_population) {
+        // Add the entire front if it fits in the population
+        cout << "ADDING THE WHOLE FRONT " << k << endl;
+        for (auto& solution : front) {
           population.push_back(solution);
         }
-      }
-      else{
+      } 
+      else {
+        // If the front doesn't fit all the way, sort by crowding distance and add the missing solutions
         auto front_sorted = crowding_distance(front);
-        for(int i = 0; i < size_population - population.size(); i++){
+        cout << "ADDING PART OF FRONT " << k << " (crowding distance)" << endl;
+        
+        // Calculate how many solutions are missing to complete the population
+        int remaining_spots = size_population - population.size();
+        
+        // Add missing solutions
+        for (int i = 0; i < remaining_spots; i++) {
           population.push_back(front_sorted[i]);
         }
+        
+        // The population is complete, we can exit the loop
         break;
       }
+      k++;
     }
+
     generation++;
   }
-  
+
+  cout << endl;
+  cout << "------------FINAL POPULATION ------------ " << endl;
+  for(auto& i : population){
+    cout << "<" << i.fitness.first << ", " << i.fitness.second << ">" << endl;
+  }
+  cout << "------------------------------------------- " << endl << endl;
+
+  cout << "SIZE OF FINAL POPULATION: " << population.size() << endl << endl;
+
+  return population;
 }

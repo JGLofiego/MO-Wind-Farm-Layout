@@ -3,6 +3,7 @@
 #include "modules/genetic_operators/mutation/mutation.cpp"
 #include "modules/genetic_operators/crossover/crossover.cpp"
 #include "metaheuristics/moead/moead.cpp"
+#include "metaheuristics/nsga2/nsga2.cpp"
 #include "./modules/moead/generate_weight_vectors.cpp"
 #include "./modules/moead/generate_neighborhood.cpp"
 #include "./modules/moead/get_best_z_point.cpp"
@@ -184,9 +185,11 @@ int main(int argc, char* argv[]){
     //     }
     // } cout << endl;
     
-    vector<Solution> population = create_initial_population(400, 20);
+    vector<Solution> population = create_initial_population(10, 10);
 
-    vector<Solution> moeadResult = moead(population);
+    // vector<Solution> moeadResult = moead(population);
+    vector<Solution> nsga2Result = nsga2(population);
+
 
     // for(Solution sol: population){
     //     for(int i = 0; i < num_zones; i++){
