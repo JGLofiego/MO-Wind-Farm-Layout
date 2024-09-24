@@ -2,7 +2,7 @@
 #include "../headers/generate_rSolution.h"
 #include "../headers/binary_tournament.h"
 
-pair<Solution, Solution> binary_tornament(vector<Solution>& population){
+pair<Solution, Solution> binary_tournament(vector<Solution>& population){
   pair<Solution, Solution> parents;
 
   //Getting a random index for a solution 

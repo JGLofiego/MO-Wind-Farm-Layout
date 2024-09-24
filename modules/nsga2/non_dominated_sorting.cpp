@@ -2,9 +2,10 @@
 #include <utility>
 #include <iostream>
 #include "../headers/non_dominated_sorting.h"
+#include "../headers/dominates.h"
 
 //Check if a SolutionA dominates a SolutionB
-bool dominates2(Solution solutionA, Solution solutionB){
+bool dominates(Solution solutionA, Solution solutionB){
   return (solutionA.fitness.first >= solutionB.fitness.first && solutionA.fitness.second >= solutionB.fitness.second) && (solutionA.fitness.first > solutionB.fitness.first || solutionA.fitness.second > solutionB.fitness.second);
 }
 
@@ -27,10 +28,10 @@ vector<vector<Solution>> non_dominated_sorting(vector<Solution>& solutions){
     int domination_count = 0;
     for(int q = 0; q < solutions.size(); q++){
       if(p != q){
-        if(dominates2(solutions[p], solutions[q])){
+        if(dominates(solutions[p], solutions[q])){
           domination_vector[p].push_back(q); // Adding the index of the solution q to domination_vector[p], since solutions[p] domines solutions[q]
         }
-        else if(dominates2(solutions[q], solutions[p])){
+        else if(dominates(solutions[q], solutions[p])){
           domination_count++;
         }
       }

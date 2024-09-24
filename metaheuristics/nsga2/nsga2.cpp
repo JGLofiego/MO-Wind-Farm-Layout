@@ -7,11 +7,50 @@
 #include "../../modules/headers/generate_rSolution.h"
 #include "../../modules/headers/mutation.h"
 #include "../../modules/headers/crossover.h"
-#include "../../modules/nsga2/binary_tournament.cpp"
-#include "../../modules/nsga2/crowding_distance.cpp"
-#include "../../modules/nsga2/non_dominated_sorting.cpp"
+#include "../../modules/headers/binary_tournament.h"
+#include "../../modules/headers/crowding_distance.h"
+#include "../../modules/headers/non_dominated_sorting.h"
+
+#include "../../modules/headers/dominates.h"
+#include "../../modules/headers/isEqual.h"
+#include "../../modules/headers/nsga2.h"
 
 using namespace std;
+
+void updatePopulation(vector<Solution>& population) {
+  // Loop through each solution in the population
+  for (int i = 0; i < population.size(); i++) {
+    bool isDominated = false;
+
+    // Check if the solution is dominated by any other solution in the population
+    for (int j = 0; j < population.size(); j++) {
+      if (i != j && dominates(population[j], population[i])) {
+        isDominated = true;
+        // If the solution is dominated, remove it and adjust the index
+        population.erase(population.begin() + i);
+        i--;
+        break;
+      }
+    }
+
+    // If the solution has not been dominated, check if there are copies of it
+    if (!isDominated) {
+      vector<int> copies;
+      for (int j = 0; j < population.size(); j++) {
+        if (i != j && isEqual(population[j], population[i])) {
+          copies.push_back(j);
+        }
+      }
+
+      // Removes back-to-front copies to avoid indexing issues
+      if (!copies.empty()) {
+        for (int k = copies.size() - 1; k >= 0; k--) {
+          population.erase(population.begin() + copies[k]);
+        }
+      }
+    }
+  }
+}
 
 vector<Solution> nsga2(vector<Solution>& population){
 
@@ -44,7 +83,7 @@ vector<Solution> nsga2(vector<Solution>& population){
 
     for(int i = 0; i < size_population; i++){
       //Parent selection
-      pair<Solution, Solution> parents = binary_tornament(population);
+      pair<Solution, Solution> parents = binary_tournament(population);
   
       //Crossover
       Solution child1, child2;
@@ -59,6 +98,9 @@ vector<Solution> nsga2(vector<Solution>& population){
         child2 = parents.second;
       }
 
+      offspring_population.push_back(child1);
+      offspring_population.push_back(child2);
+
       //Mutation
       k = (double) rand() / RAND_MAX;
 
@@ -71,7 +113,7 @@ vector<Solution> nsga2(vector<Solution>& population){
       offspring_population.push_back(child2);
     }
 
-    //Mergin 'population' (size: N) + 'offspring_population' (size: 2N) = 'total_population' (size: 3N)
+    //Mergin 'population' (size: N) + 'offspring_population' (size: 4N) = 'total_population' (size: 5N)
     //Adding the offspring_population at the end of the 'population' in 'total_population'
     vector<Solution> total_population = population;
     total_population.insert(total_population.end(), offspring_population.begin(), offspring_population.end()); 
@@ -121,6 +163,9 @@ vector<Solution> nsga2(vector<Solution>& population){
     generation++;
   }
 
+
+  updatePopulation(population);
+  
   cout << endl;
   cout << "------------FINAL POPULATION ------------ " << endl;
   for(auto& i : population){
@@ -129,6 +174,6 @@ vector<Solution> nsga2(vector<Solution>& population){
   cout << "------------------------------------------- " << endl << endl;
 
   cout << "SIZE OF FINAL POPULATION: " << population.size() << endl << endl;
-
+  
   return population;
 }

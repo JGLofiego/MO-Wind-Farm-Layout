@@ -5,6 +5,6 @@
 #include <utility>
 using namespace std;
 
-pair<Solution, Solution> binary_tornament(vector<Solution>& population);
+pair<Solution, Solution> binary_tournament(vector<Solution>& population);
 
 #endif 

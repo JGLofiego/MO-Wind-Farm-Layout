@@ -12,17 +12,11 @@
 #include "../../modules/headers/tchebycheff.h"
 #include "../../modules/headers/mutation.h"
 #include "../../modules/headers/crossover.h"
-#include "../../modules/solution_validator.cpp"
+
+#include "../../modules/headers/dominates.h"
+#include "../../modules/headers/isEqual.h"
 
 using namespace std;
-
-bool dominates(Solution solutionA, Solution solutionB){
-  return (solutionA.fitness.first >= solutionB.fitness.first && solutionA.fitness.second >= solutionB.fitness.second) && (solutionA.fitness.first > solutionB.fitness.first || solutionA.fitness.second > solutionB.fitness.second);
-}
-
-bool is_equal(Solution solutionA, Solution solutionB) {
-  return (solutionA.fitness.first == solutionB.fitness.first) && (solutionA.fitness.second == solutionB.fitness.second);
-}
 
 vector<Solution> initializeEP(vector<Solution>& population){
   // Step 1.1: Initialize EP (External Population)
@@ -45,7 +39,7 @@ vector<Solution> initializeEP(vector<Solution>& population){
       bool alreadyInEP = false;
       
       for (const auto& sol : EP) {
-        if (is_equal(sol, population[i])) {
+        if (isEqual(sol, population[i])) {
           alreadyInEP = true;
           break;
         }
@@ -82,7 +76,7 @@ void updateEP(vector<Solution> &EP, Solution &child1, Solution &child2){
   // Check if child1 is already present in EP
   bool already_exists1 = false;
   for (const auto& sol : EP) {
-    if (is_equal(child1, sol)) {
+    if (isEqual(child1, sol)) {
       already_exists1 = true;
       break;
     }
@@ -112,7 +106,7 @@ void updateEP(vector<Solution> &EP, Solution &child1, Solution &child2){
   // Check if child2 is already present in EP
   bool already_exists2 = false;
   for (const auto& sol : EP) {
-    if (is_equal(child2, sol)) {
+    if (isEqual(child2, sol)) {
       already_exists2 = true;
       break;
     }
@@ -134,8 +128,8 @@ vector<Solution> moead(vector<Solution>& population){
   int size_population = population.size();
   double input_cross_prob = 0.8;
   double input_mutation_prob = 0.4;
-  int number_of_neighbors = 50;
-  int max_generations = 500;
+  int number_of_neighbors = 5;
+  int max_generations = 3;
 
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
