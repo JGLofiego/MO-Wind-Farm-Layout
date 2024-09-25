@@ -71,9 +71,9 @@ vector<Solution> crowding_distance(vector<Solution> &population){
     sort(final.begin(), final.end(), cmp_cd);
 
     // Funcao pra printar os valores das funcoes e o cd, como forma de debugar
-    for( int i = 0; i < final.size(); i++) {
-        cout << population[final[i].first].fitness.first << " " << population[final[i].first].fitness.second << " " << final[i].second << endl;
-    }
+    // for( int i = 0; i < final.size(); i++) {
+    //     cout << population[final[i].first].fitness.first << " " << population[final[i].first].fitness.second << " " << final[i].second << endl;
+    // }
 
     //Pega o o valor do índice correto na ordenação e copia para os elementos de population
     for(int i = 0; i < num; i++) {
