@@ -7,6 +7,7 @@
 #include "./modules/nsga2/crowding_distance.cpp"
 #include "./modules/nsga2/non_dominated_sorting.cpp"
 #include "metaheuristics/general_modules/isEqual.cpp"
+#include "metaheuristics/general_modules/solution_validator.cpp"
 #include "metaheuristics/nsga2/nsga2.cpp"
 
 
@@ -164,10 +165,22 @@ int main(int argc, char* argv[]){
     //     cout << fixd[i].id << " " << fixd[i].x << " " << fixd[i].y << endl;
     // }
     
-    vector<Solution> population = create_initial_population(10, 10);
+    vector<Solution> population = create_initial_population(100, num_turb);
+
+    vector<Solution> filhos;
+
+    for(int i = 0; i < population.size() - 1; i++){
+        filhos.push_back(crossover(population[i], population[i + 1]));
+    }
+
+    for(Solution s : filhos){
+        if(!isValid(s, num_turb)){
+            return 1;
+        }
+    }
 
     // vector<Solution> moeadResult = moead(population);
-    vector<Solution> nsga2Result = nsga2(population);
+    // vector<Solution> nsga2Result = nsga2(population);
 
 
     // for(Solution sol: population){
