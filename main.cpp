@@ -164,7 +164,7 @@ int main(int argc, char* argv[]){
     //     cout << fixd[i].id << " " << fixd[i].x << " " << fixd[i].y << endl;
     // }
     
-    // vector<Solution> population = create_initial_population(10, 10);
+    vector<Solution> population = create_initial_population(10, 10);
 
     // vector<Solution> moeadResult = moead(population);
     vector<Solution> nsga2Result = nsga2(population);
@@ -178,26 +178,26 @@ int main(int argc, char* argv[]){
     //     }
     // vector<Solution> moeadResult = moead(population);
 
-    vector<Solution> population = create_initial_population(16, num_turb);
+    // vector<Solution> population = create_initial_population(16, num_turb);
 
     // vector<Solution> moeadResult = moead(population, population.size());
 
 
-    cout  << angle << " " << wind << endl;
-    for(Solution sol: population){
-        for(int i = 0; i < num_zones; i++){
-            for(int j = 0; j < sol.turbines[i].size(); j++){
-                cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
-            }
-        }
+    // cout  << angle << " " << wind << endl;
+    // for(Solution sol: population){
+    //     for(int i = 0; i < num_zones; i++){
+    //         for(int j = 0; j < sol.turbines[i].size(); j++){
+    //             cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
+    //         }
+    //     }
 
-        for(int i = 0; i < fixd.size(); i++){
-            cout << fixd[i].x << " " << fixd[i].y << endl;
-        }
+    //     for(int i = 0; i < fixd.size(); i++){
+    //         cout << fixd[i].x << " " << fixd[i].y << endl;
+    //     }
         
-        cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
+    //     cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
 
-        cout << endl;
-    }
+    //     cout << endl;
+    // }
 
 }
