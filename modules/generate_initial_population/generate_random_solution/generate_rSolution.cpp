@@ -96,13 +96,13 @@ double calculate_power(Solution& sol){
 
             for(int j = 0; j < num_zones; j++){
                 for(int k = 0; k < sol.turbines[z].size(); k++){
-                    result = calculate_interference(sol.turbines[z][i], sol.turbines[j][k]);
+                    result = calculate_interference(sol.turbines[j][k], sol.turbines[z][i]);
                     deficit += result * result;
                 }
             }
 
             for( Turbine turbina: fixd){
-                result = calculate_interference(sol.turbines[z][i], turbina);
+                result = calculate_interference(turbina, sol.turbines[z][i]);
                 deficit += result * result;
             }
 
@@ -120,13 +120,13 @@ double calculate_power(Solution& sol){
         deficit = 0.0;
 
         for(int j = 0; j < fixd.size(); j++){
-            result = calculate_interference(fixd[i], fixd[j]);
+            result = calculate_interference(fixd[j], fixd[i]);
             deficit += result * result;
         }
 
         for(int j = 0; j < num_zones; j++){
             for(int k = 0; k < num_zones; k++){
-                result = calculate_interference(fixd[i], sol.turbines[j][k]);
+                result = calculate_interference(sol.turbines[j][k], fixd[i]);
                 deficit += result * result;
             }
         }
@@ -197,6 +197,7 @@ Solution generate_solution(int num_turb){
             t.thrust_coef = thrust_coef;
             t.zone = z;
             turbines[z][i] = t;
+            // cout << t.id << " " << t.x << " " << t.y << endl;
 
             // // apaga o elemento do array de posições disponíveis, evitando possíveis repetições
             pos[z].erase(pos[z].begin() + rand_int);

@@ -156,46 +156,18 @@ int main(int argc, char* argv[]){
         id++;
     }
 
+    fixd.pop_back();
+
     file.close();
 
-    // Solution sol1 = generate_solution(num_turb);
-
-    // for(int z = 0; z < num_zones; z++){
-    //     for(int i = 0; i < sol1.turbines[z].size(); i++){
-    //         cout << sol1.turbines[z][i].x << " " << sol1.turbines[z][i].y << endl;
-    //     }
-    // } cout << endl;
-
-    // mutation(sol1);
-
-    // for(int z = 0; z < num_zones; z++){
-    //     for(int i = 0; i < sol1.turbines[z].size(); i++){
-    //         cout << sol1.turbines[z][i].x << " " << sol1.turbines[z][i].y << endl;
-    //     }
-    // } cout << endl;
-
-
-    // Solution sol2 = generate_solution(num_turb);
-
-    // Solution filho = crossover(sol1, sol2);
+    // for(int i = 0; i < fixd.size(); i++){
+    //     cout << fixd[i].id << " " << fixd[i].x << " " << fixd[i].y << endl;
+    // }
     
+    // vector<Solution> population = create_initial_population(10, 10);
 
-    // for(int z = 0; z < num_zones; z++){
-    //     for(int i = 0; i < sol2.turbines[z].size(); i++){
-    //         cout << sol2.turbines[z][i].x << " " << sol2.turbines[z][i].y << endl;
-    //     }
-    // } cout << endl;
-
-    // for(int z = 0; z < num_zones; z++){
-    //     for(int i = 0; i < filho.turbines[z].size(); i++){
-    //         cout << filho.turbines[z][i].x << " " << filho.turbines[z][i].y << endl;
-    //     }
-    // } cout << endl;
-    
-    vector<Solution> population = create_initial_population(10, 10);
-
-    vector<Solution> moeadResult = moead(population);
-    // vector<Solution> nsga2Result = nsga2(population);
+    // vector<Solution> moeadResult = moead(population);
+    vector<Solution> nsga2Result = nsga2(population);
 
 
     // for(Solution sol: population){
@@ -204,12 +176,28 @@ int main(int argc, char* argv[]){
     //             cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
     //         }
     //     }
+    // vector<Solution> moeadResult = moead(population);
 
-    //     for(int i = 0; i < fixd.size(); i++){
-    //         cout << fixd[i].x << " " << fixd[i].y << endl;
-    //     }cout << endl;
-    // }
+    vector<Solution> population = create_initial_population(16, num_turb);
+
+    // vector<Solution> moeadResult = moead(population, population.size());
 
 
+    cout  << angle << " " << wind << endl;
+    for(Solution sol: population){
+        for(int i = 0; i < num_zones; i++){
+            for(int j = 0; j < sol.turbines[i].size(); j++){
+                cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
+            }
+        }
+
+        for(int i = 0; i < fixd.size(); i++){
+            cout << fixd[i].x << " " << fixd[i].y << endl;
+        }
+        
+        cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
+
+        cout << endl;
+    }
 
 }
