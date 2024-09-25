@@ -12,6 +12,7 @@ has not already been added to the offspring, we add that turbine to the offsprin
 
 PS: THIS IS DONE FOR ALL ZONES i SUCH AS i < num_zones.*/
 
+extern int num_turb;
 
 //Function to find the index of a turbine (searching for its id) within of a vector of turbines in zone i.
 int find_turbine(vector<Turbine> &vec, int value){
@@ -24,9 +25,9 @@ int find_turbine(vector<Turbine> &vec, int value){
 }
 
 // Function to check if a turbine_id is in the grid vector of the offspring solution
-bool notInOffspring(int turbine_id, const vector<int> &grid) {
-  for (int id : grid) {
-    if (id == turbine_id) {
+bool notInOffspring(int turbine_index, const vector<Turbine> &turbines) {
+  for (Turbine turb : turbines) {
+    if (turbine_index == turb.index) {
       return false;
     }
   }
@@ -39,30 +40,45 @@ void crossoverAux(Solution &parent_solutionA, Solution &parent_solutionB, Soluti
   int rand_int = rand() % parent_solutionA.grid[zone].size();
   int index = -1;
   int lastIndex = 0;
+  int id_new = fixd.size();
+  Turbine turbina;
 
   // First part of crossover with parent_solutionA
   for(int i = 0; i <= rand_int; i++){
-    offspring_solution.grid[zone][i] = parent_solutionA.grid[zone][i];
-
     if(parent_solutionA.grid[zone][i] != 0){
+      offspring_solution.grid[zone][i] = id_new;
       index = find_turbine(parent_solutionA.turbines[zone], parent_solutionA.grid[zone][i]);
-      offspring_solution.turbines[zone].push_back(parent_solutionA.turbines[zone][index]);
+      turbina = parent_solutionA.turbines[zone][index];
+      turbina.id = id_new;
+      offspring_solution.turbines[zone].push_back(turbina);
+      id_new++;
     }
 
-    lastIndex = i;
   }
 
   // Second part of crossover with parent_solutionB
   
-  for(int i = 0; i < parent_solutionB.grid[zone].size(); i++){
+  for(int i = parent_solutionB.grid[zone].size() - 1; i >= 0; i--){
     if(parent_solutionB.grid[zone][i] != 0){
-      if(notInOffspring(parent_solutionB.grid[zone][i], offspring_solution.grid[zone])){
-        offspring_solution.grid[zone][lastIndex + 1] = parent_solutionB.grid[zone][i];
-        lastIndex++;
 
-        index = find_turbine(parent_solutionB.turbines[zone], parent_solutionB.grid[zone][i]);
-        offspring_solution.turbines[zone].push_back(parent_solutionB.turbines[zone][index]);
+      if(offspring_solution.turbines[zone].size() >= num_turb){
+        return;
       }
+
+      if(parent_solutionB.grid[zone][i] != 0){
+
+        if(!notInOffspring(i, offspring_solution.turbines[zone])){
+          continue;
+        }
+
+        offspring_solution.grid[zone][i] = id_new;
+        index = find_turbine(parent_solutionB.turbines[zone], parent_solutionB.grid[zone][i]);
+        turbina = parent_solutionB.turbines[zone][index];
+        turbina.id = id_new;
+        offspring_solution.turbines[zone].push_back(turbina);
+        id_new++;
+      }
+
     }
   }
 }

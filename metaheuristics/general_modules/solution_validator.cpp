@@ -10,16 +10,16 @@ bool isValid(Solution &solution, int num_turb = 10){
 
     //Checking if each turbine in the grid is correct (according to foundations)
 
-    // for(int i = 0; i < solution.turbines[zone].size(); i++){
-    //   int index_foundation = solution.turbines[zone][i].index;
-    //   int turbine_id_grid = solution.grid[zone][index_foundation];
-    //   int turbine_id = solution.turbines[zone][i].id;
-    //   if(!(turbine_id_grid == turbine_id)){
-    //     cout << turbine_id << " " << turbine_id_grid << endl;
-    //     cout << "Grid diferente da posicao da turbina" << endl;
-    //     return false;
-    //   }
-    // }
+    for(int i = 0; i < solution.turbines[zone].size(); i++){
+      int index_foundation = solution.turbines[zone][i].index;
+      int turbine_id_grid = solution.grid[zone][index_foundation];
+      int turbine_id = solution.turbines[zone][i].id;
+      if(!(turbine_id_grid == turbine_id)){
+        cout << turbine_id << " " << turbine_id_grid << endl;
+        cout << "Grid diferente da posicao da turbina" << endl;
+        return false;
+      }
+    }
 
     // Checking if there are two turbines in the same position (x, y)
     for(int i = 0; i < solution.turbines[zone].size(); i++){

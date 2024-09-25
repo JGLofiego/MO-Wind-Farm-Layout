@@ -36,6 +36,7 @@ float power, powerFxd;
 float thrust_coef = 1.0;
 float tcFxd = 1.0;
 float angle;
+int num_turb = 10;
 
 int main(int argc, char* argv[]){
     cout << fixed << setprecision(12);
@@ -46,7 +47,6 @@ int main(int argc, char* argv[]){
 
     srand(time(nullptr));
 
-    int num_turb = 10;
     string pathSite = "../site/A/";
     string pathWtg = "../wtg/";
     string pathWind = "../wind/RVO_HKN.txt";
@@ -167,22 +167,18 @@ int main(int argc, char* argv[]){
     //     cout << fixd[i].id << " " << fixd[i].x << " " << fixd[i].y << endl;
     // }
     
+    vector<Solution> population = create_initial_population(2, num_turb);
 
-    // vector<Solution> filhos;
+    vector<Solution> filhos;
 
-    // for(int i = 0; i < population.size() - 1; i++){
-    //     filhos.push_back(crossover(population[i], population[i + 1]));
-    // }
+    Solution filho1 = crossover(population[0], population[1]);
+    Solution filho2 = crossover(population[1], population[0]);
 
-    // for(Solution s : filhos){
-    //     if(!isValid(s, num_turb)){
-    //         return 1;
-    //     }
-    // }
+    filhos.push_back(filho1);
+    filhos.push_back(filho2);
 
 
-    vector<Solution> population = create_initial_population(10, num_turb);
-    vector<Solution> moeadResult = moead(population);
+    // vector<Solution> moeadResult = moead(population);
     // vector<Solution> nsga2Result = nsga2(population);
 
 
@@ -199,21 +195,37 @@ int main(int argc, char* argv[]){
     // vector<Solution> moeadResult = moead(population, population.size());
 
 
-    // cout  << angle << " " << wind << endl;
-    // for(Solution sol: population){
-    //     for(int i = 0; i < num_zones; i++){
-    //         for(int j = 0; j < sol.turbines[i].size(); j++){
-    //             cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
-    //         }
-    //     }
+    cout  << angle << " " << wind << endl;
+    for(Solution sol: population){
+        for(int i = 0; i < num_zones; i++){
+            for(int j = 0; j < sol.turbines[i].size(); j++){
+                cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
+            }
+        }
 
-    //     for(int i = 0; i < fixd.size(); i++){
-    //         cout << fixd[i].x << " " << fixd[i].y << endl;
-    //     }
+        for(int i = 0; i < fixd.size(); i++){
+            cout << fixd[i].x << " " << fixd[i].y << endl;
+        }
         
-    //     cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
+        cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
 
-    //     cout << endl;
-    // }
+        cout << endl;
+    }
+
+    for(Solution sol: filhos){
+        for(int i = 0; i < num_zones; i++){
+            for(int j = 0; j < sol.turbines[i].size(); j++){
+                cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
+            }
+        }
+
+        for(int i = 0; i < fixd.size(); i++){
+            cout << fixd[i].x << " " << fixd[i].y << endl;
+        }
+        
+        cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
+
+        cout << endl;
+    }
 
 }
