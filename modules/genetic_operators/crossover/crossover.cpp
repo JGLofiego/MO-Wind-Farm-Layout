@@ -24,14 +24,10 @@ int find_turbine(vector<Turbine> &vec, int value){
   return -1;
 }
 
+// ALTERAR FUNÇÃO PARA PROCESSAMENTO
 // Function to check if a turbine_id is in the grid vector of the offspring solution
-bool notInOffspring(int turbine_index, const vector<Turbine> &turbines) {
-  for (Turbine turb : turbines) {
-    if (turbine_index == turb.index) {
-      return false;
-    }
-  }
-  return true;
+bool InOffspring(int turbine_index, const vector<int> &grid) {
+  return grid[turbine_index] != 0;
 }
 
 void crossoverAux(Solution &parent_solutionA, Solution &parent_solutionB, Solution &offspring_solution, int zone){
@@ -67,7 +63,7 @@ void crossoverAux(Solution &parent_solutionA, Solution &parent_solutionB, Soluti
 
       if(parent_solutionB.grid[zone][i] != 0){
 
-        if(!notInOffspring(i, offspring_solution.turbines[zone])){
+        if(InOffspring(i, offspring_solution.grid[zone])){
           continue;
         }
 
