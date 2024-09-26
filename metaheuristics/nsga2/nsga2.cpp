@@ -87,7 +87,7 @@ vector<Solution> nsga2(vector<Solution>& population){
   
       //Crossover
       Solution child1, child2;
-      double k = (double) rand() / RAND_MAX;
+      double k = dist(re);
 
       if(k < cross_prob){
         child1 = crossover(parents.first, parents.second);
@@ -102,7 +102,7 @@ vector<Solution> nsga2(vector<Solution>& population){
       offspring_population.push_back(child2);
 
       //Mutation
-      k = (double) rand() / RAND_MAX;
+      k = dist(re);
 
       if(k < mutation_prob){
         mutation(child1);

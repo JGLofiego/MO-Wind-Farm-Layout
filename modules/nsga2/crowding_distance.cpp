@@ -5,11 +5,11 @@
 #include "../../modules/headers/main.h"
 using namespace std;
 
-bool cmp_second(pair<int, double>& a, pair<int, double>& b){
+bool cmp_second(const pair<int, double>& a, const pair<int, double>& b){
     return a.second < b.second;
 }
 
-bool cmp_cd(pair<int, double>& a, pair<int, double>&b){
+bool cmp_cd(const pair<int, double>&a, const pair<int, double>&b){
     return a.second >= b.second;
 }
 
@@ -41,8 +41,8 @@ vector<Solution> crowding_distance(vector<Solution> &population){
     }
 
     //Ordena os vetores baseados no second
-    sort(byF1.begin(), byF1.end(), cmp_second);
-    sort(byF2.begin(), byF2.end(), cmp_second);
+    stable_sort(byF1.begin(), byF1.end(), cmp_second);
+    stable_sort(byF2.begin(), byF2.end(), cmp_second);
 
     //Inicializa outros dois vetores de pares para armazenar os resultados do crowding distance de cada uma das funções 
     vector<pair<int, double>> distancesF1, distancesF2;
@@ -68,7 +68,7 @@ vector<Solution> crowding_distance(vector<Solution> &population){
     }
 
     //Ordena o vetor de forma decrescente em relação ao second
-    sort(final.begin(), final.end(), cmp_cd);
+    stable_sort(final.begin(), final.end(), cmp_cd);
 
     // Funcao pra printar os valores das funcoes e o cd, como forma de debugar
     // for( int i = 0; i < final.size(); i++) {
