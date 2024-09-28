@@ -24,6 +24,7 @@
 #include <string>
 #include <time.h>
 #include <random>
+#include <chrono>
 using namespace std;
 
 vector<vector<Foundation>> foundations(3);
@@ -166,20 +167,29 @@ int main(int argc, char* argv[]){
     // for(int i = 0; i < fixd.size(); i++){
     //     cout << fixd[i].id << " " << fixd[i].x << " " << fixd[i].y << endl;
     // }
+
+    auto start = chrono::high_resolution_clock::now();    
+
+    vector<Solution> population = create_initial_population(500, num_turb);
+    vector<Solution> moeadResult = moead(population);
     
-    vector<Solution> population = create_initial_population(2, num_turb);
+    auto end = chrono::high_resolution_clock::now();
 
-    vector<Solution> filhos;
+    auto duration = chrono::duration_cast<chrono::minutes>(end - start);
 
-    Solution filho1 = crossover(population[0], population[1]);
-    Solution filho2 = crossover(population[1], population[0]);
+    cout << "Run time: " << duration.count() << " minutos" << endl;
 
-    filhos.push_back(filho1);
-    filhos.push_back(filho2);
-
-
-    // vector<Solution> moeadResult = moead(population);
     // vector<Solution> nsga2Result = nsga2(population);
+
+    // vector<Solution> filhos;
+
+    // Solution filho1 = crossover(population[0], population[1]);
+    // Solution filho2 = crossover(population[1], population[0]);
+
+    // filhos.push_back(filho1);
+    // filhos.push_back(filho2);
+
+
 
 
     // for(Solution sol: population){
@@ -195,37 +205,37 @@ int main(int argc, char* argv[]){
     // vector<Solution> moeadResult = moead(population, population.size());
 
 
-    cout  << angle << " " << wind << endl;
-    for(Solution sol: population){
-        for(int i = 0; i < num_zones; i++){
-            for(int j = 0; j < sol.turbines[i].size(); j++){
-                cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
-            }
-        }
+    // cout  << angle << " " << wind << endl;
+    // for(Solution sol: population){
+    //     for(int i = 0; i < num_zones; i++){
+    //         for(int j = 0; j < sol.turbines[i].size(); j++){
+    //             cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
+    //         }
+    //     }
 
-        for(int i = 0; i < fixd.size(); i++){
-            cout << fixd[i].x << " " << fixd[i].y << endl;
-        }
+    //     for(int i = 0; i < fixd.size(); i++){
+    //         cout << fixd[i].x << " " << fixd[i].y << endl;
+    //     }
         
-        cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
+    //     cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
 
-        cout << endl;
-    }
+    //     cout << endl;
+    // }
 
-    for(Solution sol: filhos){
-        for(int i = 0; i < num_zones; i++){
-            for(int j = 0; j < sol.turbines[i].size(); j++){
-                cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
-            }
-        }
+    // for(Solution sol: filhos){
+    //     for(int i = 0; i < num_zones; i++){
+    //         for(int j = 0; j < sol.turbines[i].size(); j++){
+    //             cout << sol.turbines[i][j].x << " " << sol.turbines[i][j].y << endl;
+    //         }
+    //     }
 
-        for(int i = 0; i < fixd.size(); i++){
-            cout << fixd[i].x << " " << fixd[i].y << endl;
-        }
+    //     for(int i = 0; i < fixd.size(); i++){
+    //         cout << fixd[i].x << " " << fixd[i].y << endl;
+    //     }
         
-        cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
+    //     cout << "cost_and_power " << sol.fitness.first << " " << sol.fitness.second << endl;
 
-        cout << endl;
-    }
+    //     cout << endl;
+    // }
 
 }

@@ -128,8 +128,8 @@ vector<Solution> moead(vector<Solution>& population){
   int size_population = population.size();
   double input_cross_prob = 0.8;
   double input_mutation_prob = 0.4;
-  int number_of_neighbors = 5;
-  int max_generations = 3;
+  int number_of_neighbors = 150;
+  int max_generations = 500;
 
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
