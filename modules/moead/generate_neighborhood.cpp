@@ -27,11 +27,9 @@ vector<vector<int>> build_neighborhood(int number_of_neighbors, vector<pair<doub
   for (int i = 0; i < lambda_vector.size(); i++) {
     vector<pair<double, int>> distances; 
 
-    distances.push_back(make_pair(0.0, i)); //The distance from a vector to itself is 0. ie, a vector 'i' is neighbor of itself. 
-
     // Calculate the distance from the weight vector i to all other vectors
     for (int j = 0; j < lambda_vector.size(); j++) {
-      if (i != j) {  // Avoid calculating the distance from a vector to itself (already done --> line 30)
+      if (i != j) {  // Avoid calculating the distance from a vector to itself
         double distance = euclidean_distance(lambda_vector[i], lambda_vector[j]);
         distances.push_back(make_pair(distance, j));
       }

@@ -55,66 +55,32 @@ vector<Solution> initializeEP(vector<Solution>& population){
   return EP;
 }
 
-void updateEP(vector<Solution> &EP, Solution &child1, Solution &child2){
+void updateEP(vector<Solution> &EP, Solution &child){
   // Step 2.5: Update EP for child1
-  // Remove dominated solutions from EP and add the new solutions (child1 e child2) if it's not dominated
-  auto it = EP.begin();
-  bool flag1 = true;
+  // Remove dominated solutions from EP and add the new solutions (child) if it's not dominated
+  
+  // Remove solutions dominated by child
+  EP.erase(remove_if(EP.begin(), EP.end(), [&](const Solution &sol) {
+    return dominates(child, sol);
+  }), EP.end());
 
-  while (it != EP.end()) {
-    if (dominates(child1, *it)) {
-      it = EP.erase(it);  // Remove solutions dominated by child1
-    } 
-    else {
-      if (dominates(*it, child1)) {
-        flag1 = false;  // Mark that child1 is dominated, keep checking
-      }
-      ++it;
-    }
-  }
+  // Check if the new child is dominated by any solution in EP or if it's already in EP
+  bool is_dominated = false;
+  bool already_exists = false;
 
-  // Check if child1 is already present in EP
-  bool already_exists1 = false;
   for (const auto& sol : EP) {
-    if (isEqual(child1, sol)) {
-      already_exists1 = true;
+    if (dominates(sol, child)) {
+      is_dominated = true;
       break;
     }
-  }
-
-  // Add child1 to EP if it is not dominated (flag1) and not duplicated (!already_exists1)
-  if (flag1 && !already_exists1) {
-    EP.push_back(child1);
-  }
-
-  // Step 2.5: Update EP for child2
-  it = EP.begin();
-  bool flag2 = true;
-
-  while (it != EP.end()) {
-    if (dominates(child2, *it)) {
-      it = EP.erase(it);  // Remove solutions dominated by child2
-    } 
-    else {
-      if (dominates(*it, child2)) {
-        flag2 = false;  // Mark that child2 is dominated, keep checking
-      }
-      ++it;
-    }
-  }
-
-  // Check if child2 is already present in EP
-  bool already_exists2 = false;
-  for (const auto& sol : EP) {
-    if (isEqual(child2, sol)) {
-      already_exists2 = true;
+    if (isEqual(sol, child)) {
+      already_exists = true;
       break;
     }
-  }
+  }  
 
-  // Add child2 to EP if it is not dominated (flag2) and not duplicated (!already_exists2)
-  if (flag2 && !already_exists2) {
-    EP.push_back(child2);
+  if (!is_dominated && !already_exists) {
+    EP.push_back(child);
   }
 }
 
@@ -196,7 +162,8 @@ vector<Solution> moead(vector<Solution>& population){
 
       // Step 2.5: Update EP after crossover
       // Remove dominated solutions from EP and add the new solutions (child1 e child2) if it's not dominated
-      updateEP(EP, child1, child2);
+      updateEP(EP, child1);
+      updateEP(EP, child2);
       
       //Mutation
       double random_mutation_prob = dist(re);
@@ -208,7 +175,8 @@ vector<Solution> moead(vector<Solution>& population){
 
       // Step 2.5: Update EP after mutation
       // Remove dominated solutions from EP and add the new solutions (child1 e child2) if it's not dominated
-      updateEP(EP, child1, child2);
+      updateEP(EP, child1);
+      updateEP(EP, child2);
 
       // Step 2.3: Update of z point
       z_point.first = max(z_point.first, max(child1.fitness.first, child2.fitness.first));
