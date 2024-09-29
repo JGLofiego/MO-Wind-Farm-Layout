@@ -18,43 +18,6 @@
 
 using namespace std;
 
-vector<Solution> initializeEP(vector<Solution>& population){
-  // Step 1.1: Initialize EP (External Population)
-  //The EP vector will contain only the non-dominated and not equal solutions from the initial population
-  vector<Solution> EP;
-
-  for (int i = 0; i < population.size(); i++) {
-    bool isDominated = false;
-        
-    // Check if the solution is dominated by any other solution
-    for (int j = 0; j < population.size(); j++) {
-      if (i != j && dominates(population[j], population[i])) {
-        isDominated = true;
-        break;
-      }
-    }
-
-    // If the solution is not dominated, check if it is already in EP
-    if (!isDominated) {
-      bool alreadyInEP = false;
-      
-      for (const auto& sol : EP) {
-        if (isEqual(sol, population[i])) {
-          alreadyInEP = true;
-          break;
-        }
-      }
-
-      // Only add the solution if it's not already in EP
-      if (!alreadyInEP) {
-        EP.push_back(population[i]);
-      }
-    }
-  }
-
-  return EP;
-}
-
 void updateEP(vector<Solution> &EP, Solution &child){
   // Step 2.5: Update EP for child1
   // Remove dominated solutions from EP and add the new solutions (child) if it's not dominated
@@ -99,7 +62,10 @@ vector<Solution> moead(vector<Solution>& population){
 
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
-  vector<Solution> EP = initializeEP(population);
+  vector<Solution> EP;
+  for(auto& sol : population){
+    updateEP(EP, sol);
+  }
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 
