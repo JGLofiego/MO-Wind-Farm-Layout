@@ -49,6 +49,5 @@ bool isValid(Solution &solution, int num_turb = 10){
 
   }
 
-  cout << "Passou no teste" << endl;
   return true;
 }

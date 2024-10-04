@@ -2,16 +2,18 @@
 #include "./modules/generate_initial_population/generate_population/population.cpp"
 
 #include "modules/genetic_operators/mutation/mutation.cpp"
+// #include "modules/genetic_operators/mutation/mutation2.cpp"
 #include "modules/genetic_operators/crossover/crossover.cpp"
 
 #include "metaheuristics/general_modules/isEqual.cpp"
 #include "metaheuristics/general_modules/solution_validator.cpp"
 
-#include "metaheuristics/moead/moead.cpp"
+#include "metaheuristics/moead/moeadOriginal.cpp"
 #include "./modules/moead/generate_weight_vectors.cpp"
 #include "./modules/moead/generate_neighborhood.cpp"
 #include "./modules/moead/get_best_z_point.cpp"
 #include "./modules/moead/tchebycheff.cpp"
+#include "./modules/moead/updateEP.cpp"
 
 #include "metaheuristics/nsga2/nsga2.cpp"
 #include "./modules/nsga2/binary_tournament.cpp"
@@ -43,12 +45,11 @@ int main(int argc, char* argv[]){
     cout << fixed << setprecision(12);
 
     default_random_engine re{(unsigned)time(nullptr)};
-
     uniform_real_distribution<double> dist(0.0, 1.0);
 
     srand(time(nullptr));
 
-    string pathSite = "../site/A/";
+    string pathSite = "../site/G/";
     string pathWtg = "../wtg/";
     string pathWind = "../wind/RVO_HKN.txt";
 
@@ -168,16 +169,24 @@ int main(int argc, char* argv[]){
     //     cout << fixd[i].id << " " << fixd[i].x << " " << fixd[i].y << endl;
     // }
 
-    auto start = chrono::high_resolution_clock::now();    
+    // auto start = chrono::high_resolution_clock::now();   
+    wind = 12;
+    angle = 0.0;
+    vector<Solution> population = create_initial_population(500, 140);
+    vector<Solution> moeadResult = moeadOriginal(population);
 
-    vector<Solution> population = create_initial_population(500, num_turb);
-    vector<Solution> moeadResult = moead(population);
-    
-    auto end = chrono::high_resolution_clock::now();
+    for(auto i : moeadResult){
+        if(!isValid(i)){
+            cout << "ERRO" << endl;
+            break;
+        }
+    }
 
-    auto duration = chrono::duration_cast<chrono::minutes>(end - start);
+    // auto end = chrono::high_resolution_clock::now();
 
-    cout << "Run time: " << duration.count() << " minutos" << endl;
+    // auto duration = chrono::duration_cast<chrono::minutes>(end - start);
+
+    // cout << "Run time: " << duration.count() << " minutos" << endl;
 
     // vector<Solution> nsga2Result = nsga2(population);
 
@@ -188,9 +197,6 @@ int main(int argc, char* argv[]){
 
     // filhos.push_back(filho1);
     // filhos.push_back(filho2);
-
-
-
 
     // for(Solution sol: population){
     //     for(int i = 0; i < num_zones; i++){

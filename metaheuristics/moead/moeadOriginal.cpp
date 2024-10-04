@@ -10,10 +10,8 @@
 #include "../../modules/headers/generate_neighborhood.h"
 #include "../../modules/headers/get_best_z_point.h"
 #include "../../modules/headers/tchebycheff.h"
-// #include "../../modules/headers/mutation.h"
-#include "../../modules/headers/mutation2.h"
+#include "../../modules/headers/mutation.h"
 #include "../../modules/headers/crossover.h"
-
 
 #include "../../modules/headers/dominates.h"
 #include "../../modules/headers/isEqual.h"
@@ -22,11 +20,11 @@
 
 using namespace std;
 
-vector<Solution> moead(vector<Solution>& population){
+vector<Solution> moeadOriginal(vector<Solution>& population){
 
   //Initializing the random number generator 
-  random_device rd;
-  mt19937 gen(rd());
+  default_random_engine re{(unsigned)time(nullptr)};
+  uniform_real_distribution<double> dist(0.0, 1.0);
 
   //MOAED parameters 
   int size_population = population.size();
@@ -59,6 +57,8 @@ vector<Solution> moead(vector<Solution>& population){
     tch_vector[i] = calculate_gte(population[i].fitness, lambda_vector[i], z_point);
   }
   
+  cout << endl;
+
   //Step 2: Update
 
   int generation = 0;
@@ -71,53 +71,58 @@ vector<Solution> moead(vector<Solution>& population){
 
       // Step 2.1: Reproduction
       // Randomly select two indices k and l from the neighborhood B(i)
-      uniform_int_distribution<> dis(0, number_of_neighbors - 1);
-      int k = neighborhood[i][dis(gen)];
-      int l = neighborhood[i][dis(gen)];
-
-      while (k == l) {
-        l = neighborhood[i][dis(gen)];
-      }
-
-      Solution parentA = population[k];
-      Solution parentB = population[l];
-      child1 = parentA;
-      child2 = parentB;
+      int k = neighborhood[i][rand() % neighborhood[i].size()];
+      int l = neighborhood[i][rand() % neighborhood[i].size()];
 
       // Generate new solution y using genetic operators
 
       //Crossover
+      double random_cross_prob = dist(re);
 
-      if((static_cast<double>(rand()) / RAND_MAX) < input_cross_prob){ 
-        child1 = crossover(parentA, parentB);
-        child2 = crossover(parentB, parentA);
+      if(random_cross_prob < input_cross_prob){ 
+        child1 = crossover(population[k], population[l]);
+        child2 = crossover(population[l], population[k]);
       }
       else{
-        mutation2(child1, input_mutation_prob);
-        mutation2(child2, input_mutation_prob);
+        child1 = population[k];
+        child2 = population[l];
       }
 
+      // Step 2.5: Update EP after crossover
+      // Remove dominated solutions from EP and add the new solutions (child1 e child2) if it's not dominated
       updateEP(EP, child1);
       updateEP(EP, child2);
       
-      // Step 2.3: Update of z point
-      for(const auto& sol : EP){
-        z_point.first = max(z_point.first, sol.fitness.first);
-        z_point.second = max(z_point.second, sol.fitness.second);
+      //Mutation
+      double random_mutation_prob = dist(re);
+
+      if(random_mutation_prob < input_mutation_prob){
+        mutation(child1);
+        mutation(child2);
       }
+
+      // Step 2.5: Update EP after mutation
+      // Remove dominated solutions from EP and add the new solutions (child1 e child2) if it's not dominated
+      updateEP(EP, child1);
+      updateEP(EP, child2);
+
+      // Step 2.3: Update of z point
+      z_point.first = max(z_point.first, max(child1.fitness.first, child2.fitness.first));
+      z_point.second = max(z_point.second, max(child1.fitness.second, child2.fitness.second));
 
       // Step 2.4: Neighboring solutions update
       for (int j : neighborhood[i]) {
         double child1_tch = calculate_gte(child1.fitness, lambda_vector[j], z_point);
-        double sol1_pop = calculate_gte(population[j].fitness, lambda_vector[j], z_point);
-        if (child1_tch <= sol1_pop) {
+        if (child1_tch <= tch_vector[j]) {
           population[j] = child1;
+
+          tch_vector[j] = child1_tch;
         }
         
         double child2_tch = calculate_gte(child2.fitness, lambda_vector[j], z_point);
-        double sol2_pop = calculate_gte(population[j].fitness, lambda_vector[j], z_point);
-        if (child2_tch <= sol2_pop) {
+        if (child2_tch <= tch_vector[j]) {
           population[j] = child2;
+          tch_vector[j] = child2_tch;
         }
       }
     }
@@ -127,8 +132,6 @@ vector<Solution> moead(vector<Solution>& population){
   for(auto& i : EP){
     cout << i.fitness.first * (-1) << " " << i.fitness.second << endl;
   }
-  
-  cout << endl;
 
   return EP;
 }
