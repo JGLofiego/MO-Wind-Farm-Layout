@@ -2,13 +2,13 @@
 #include "./modules/generate_initial_population/generate_population/population.cpp"
 
 #include "modules/genetic_operators/mutation/mutation.cpp"
-// #include "modules/genetic_operators/mutation/mutation2.cpp"
+#include "modules/genetic_operators/mutation/mutation2.cpp"
 #include "modules/genetic_operators/crossover/crossover.cpp"
 
 #include "metaheuristics/general_modules/isEqual.cpp"
 #include "metaheuristics/general_modules/solution_validator.cpp"
 
-#include "metaheuristics/moead/moeadOriginal.cpp"
+#include "metaheuristics/moead/moead.cpp"
 #include "./modules/moead/generate_weight_vectors.cpp"
 #include "./modules/moead/generate_neighborhood.cpp"
 #include "./modules/moead/get_best_z_point.cpp"
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]){
 
     srand(time(nullptr));
 
-    string pathSite = "../site/G/";
+    string pathSite = "../site/I/";
     string pathWtg = "../wtg/";
     string pathWind = "../wind/RVO_HKN.txt";
 
@@ -172,8 +172,8 @@ int main(int argc, char* argv[]){
     // auto start = chrono::high_resolution_clock::now();   
     wind = 12;
     angle = 0.0;
-    vector<Solution> population = create_initial_population(500, 140);
-    vector<Solution> moeadResult = moeadOriginal(population);
+    vector<Solution> population = create_initial_population(500, 313);
+    vector<Solution> moeadResult = moead(population);
 
     for(auto i : moeadResult){
         if(!isValid(i)){

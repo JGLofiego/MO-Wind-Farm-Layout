@@ -93,8 +93,8 @@ vector<Solution> moead(vector<Solution>& population){
         child2 = crossover(parentB, parentA);
       }
       else{
-        mutation2(child1, input_mutation_prob);
-        mutation2(child2, input_mutation_prob);
+        mutation2(child1, input_mutation_prob, EP);
+        mutation2(child2, input_mutation_prob, EP);
       }
 
       updateEP(EP, child1);
