@@ -12,7 +12,7 @@ has not already been added to the offspring, we add that turbine to the offsprin
 
 PS: THIS IS DONE FOR ALL ZONES i SUCH AS i < num_zones.*/
 
-extern int num_turb;
+extern vector<int> turbines_per_zone;
 
 //Function to find the index of a turbine (searching for its id) within of a vector of turbines in zone i.
 int find_turbine(vector<Turbine> &vec, int value){
@@ -57,7 +57,7 @@ void crossoverAux(Solution &parent_solutionA, Solution &parent_solutionB, Soluti
   for(int i = parent_solutionB.grid[zone].size() - 1; i >= 0; i--){
     if(parent_solutionB.grid[zone][i] != 0){
 
-      if(offspring_solution.turbines[zone].size() >= num_turb){
+      if(offspring_solution.turbines[zone].size() >= turbines_per_zone[zone]){
         return;
       }
 

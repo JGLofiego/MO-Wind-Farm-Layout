@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-bool isValid(Solution &solution, int num_turb = 10){
+bool isValid(Solution &solution){
 
   for(int zone = 0; zone < num_zones; zone++){
 

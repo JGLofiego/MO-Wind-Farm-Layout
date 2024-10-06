@@ -19,7 +19,7 @@
 
 using namespace std;
 
-vector<Solution> moeadIslame(vector<Solution>& population, int num_turb){
+vector<Solution> moeadIslame(vector<Solution>& population){
 
   //Initializing the random number generator 
   default_random_engine re{(unsigned)time(nullptr)};
@@ -101,7 +101,7 @@ vector<Solution> moeadIslame(vector<Solution>& population, int num_turb){
       }
 
       if(random_cross_prob>=input_cross_prob && random_mutation_prob>=input_mutation_prob){
-        auto children = create_initial_population(2, num_turb);
+        auto children = create_initial_population(2);
         child1 = children[0];
         child2 = children[1];
         

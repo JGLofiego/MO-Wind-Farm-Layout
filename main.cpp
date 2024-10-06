@@ -27,6 +27,7 @@
 #include <time.h>
 #include <random>
 #include <chrono>
+#include <map>
 using namespace std;
 
 vector<vector<Foundation>> foundations(3);
@@ -39,7 +40,21 @@ float power, powerFxd;
 float thrust_coef = 1.0;
 float tcFxd = 1.0;
 float angle;
-int num_turb = 10;
+
+map<string, vector<int>> turbines_instace = {
+    {"A", {26, 8}},
+    {"B", {99}},
+    {"C", {60, 30}},
+    {"D", {170}},
+    {"E", {7, 94, 36}},
+    {"F", {132, 26}},
+    {"G", {140}},
+    {"H", {158, 30}},
+    {"I", {313}},
+    {"J", {136, 74, 25}}
+};
+
+vector<int> turbines_per_zone;
 
 int main(int argc, char* argv[]){
     cout << fixed << setprecision(12);
@@ -48,10 +63,10 @@ int main(int argc, char* argv[]){
     uniform_real_distribution<double> dist(0.0, 1.0);
 
     srand(time(nullptr));
-
-    string pathSite = "../site/I/";
-    string pathWtg = "../wtg/";
-    string pathWind = "../wind/RVO_HKN.txt";
+    
+    string instance = "A";
+    string pathFolders = "..";
+    string windFile = "RVO_HKN.txt";
 
     ifstream file;
     Foundation t;
@@ -63,20 +78,25 @@ int main(int argc, char* argv[]){
     string strWind = "0.0";
     string strPow, strTC;
 
-    if(argc == 1);
-    else if(argc == 2){
-        num_turb = atoi(argv[1]);
-    } else if(argc >= 5){
-        num_turb = atoi(argv[1]);
-        pathSite = (string) argv[2];
-        pathWtg = (string) argv[3];
-        pathWind = (string) argv[4];
-    } else {
-        cout << "Invalid Number of Parameters" << endl;
+    if(argc == 2){
+        instance = (string) argv[1];
+    } else if(argc > 2){
+        instance = (string) argv[1];
+        pathFolders = (string) argv[2];
+    } else if(argc > 3){
+        instance = (string) argv[1];
+        pathFolders = (string) argv[2];
+        windFile = (string) argv[3];
+    };
+
+    turbines_per_zone = turbines_instace[instance];
+
+    file.open(pathFolders + "/wind/" + windFile);
+
+    if(file.fail()){
+        cout << "ERROR: Invalid wind file" << endl;
         return 1;
     }
-
-    file.open(pathWind);
 
     double rand_double = dist(re);
     double accChance = 0.0;
@@ -92,7 +112,12 @@ int main(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathSite + "availablePositions.txt");
+    file.open(pathFolders + "/site/" + instance + "/availablePositions.txt");
+
+    if(file.fail()){
+        cout << "ERROR: Invalid instance" << endl;
+        return 1;
+    }
 
     while(file.good() ){
         file >> strX >> strY >> _ >> strCost >> zone;
@@ -109,7 +134,12 @@ int main(int argc, char* argv[]){
 
     foundations.pop_back();
 
-    file.open(pathWtg + "NREL-10-179.txt");
+    file.open(pathFolders + "/wtg/" + "NREL-10-179.txt");
+
+    if(file.fail()){
+        cout << "ERROR: '/wtg' not found" << endl;
+        return 1;
+    }
 
     while(file.good() && stof(strWind) != wind){
         file >> strWind >> strPow >> strTC;
@@ -126,7 +156,7 @@ int main(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathWtg + "NREL-15-240.txt");
+    file.open(pathFolders + "/wtg/" + "NREL-15-240.txt");
 
     strWind = "0.0";
 
@@ -145,7 +175,7 @@ int main(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathSite + "fixed_wf.txt");
+    file.open(pathFolders + "/site/" + instance + "/fixed_wf.txt");
 
     turb.diameter = 179;
     turb.power = powerFxd;
@@ -172,15 +202,30 @@ int main(int argc, char* argv[]){
     // auto start = chrono::high_resolution_clock::now();   
     wind = 12;
     angle = 0.0;
-    vector<Solution> population = create_initial_population(500, 313);
-    vector<Solution> moeadResult = moead(population);
 
-    for(auto i : moeadResult){
-        if(!isValid(i)){
-            cout << "ERRO" << endl;
-            break;
-        }
+    Solution sol = generate_solution();
+
+    cout << "Fitness: " << sol.fitness.first << " " << sol.fitness.second << endl;
+
+    cout << "num_zones: " << num_zones << endl;
+
+    for(int i = 0; i < num_zones; i++){
+        cout << "zone " << i + 1 << ": " << sol.turbines[i].size() << endl;
     }
+
+    // for (int i = 0; i < num_zones; i++){
+    //     cout << sol.turbines[i].size() << endl;
+    // }
+
+    // vector<Solution> population = create_initial_population(500, 313);
+    // vector<Solution> moeadResult = moead(population);
+
+    // for(auto i : moeadResult){
+    //     if(!isValid(i)){
+    //         cout << "ERRO" << endl;
+    //         break;
+    //     }
+    // }
 
     // auto end = chrono::high_resolution_clock::now();
 
@@ -205,8 +250,6 @@ int main(int argc, char* argv[]){
     //         }
     //     }
     // vector<Solution> moeadResult = moead(population);
-
-    // vector<Solution> population = create_initial_population(16, num_turb);
 
     // vector<Solution> moeadResult = moead(population, population.size());
 

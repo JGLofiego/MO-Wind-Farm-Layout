@@ -5,6 +5,6 @@
 #include "generate_rSolution.h"
 using namespace std;
 
-vector<Solution> create_initial_population(int size_population, int num_turb);
+vector<Solution> create_initial_population(int size_population);
 
 #endif 
