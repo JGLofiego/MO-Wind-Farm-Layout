@@ -20,6 +20,12 @@
 #include "./modules/nsga2/crowding_distance.cpp"
 #include "./modules/nsga2/non_dominated_sorting.cpp"
 
+#include "./metafeatures/metafeatures.cpp"
+#include "./metafeatures/modules/get_best_z_point.cpp"
+#include "./metafeatures/modules/tchebycheff_metafeatures.cpp"
+#include "./metafeatures/modules/weight_vectors_metafeatures.cpp"
+
+
 #include <iomanip>
 #include <fstream>
 #include <iostream>
@@ -170,17 +176,17 @@ int main(int argc, char* argv[]){
     // }
 
     // auto start = chrono::high_resolution_clock::now();   
-    wind = 12;
-    angle = 0.0;
-    vector<Solution> population = create_initial_population(500, 313);
-    vector<Solution> moeadResult = moead(population);
+    // wind = 12;
+    // angle = 0.0;
+    // vector<Solution> population = create_initial_population(500, 313);
+    // vector<Solution> moeadResult = moead(population);
 
-    for(auto i : moeadResult){
-        if(!isValid(i)){
-            cout << "ERRO" << endl;
-            break;
-        }
-    }
+    // for(auto i : moeadResult){
+    //     if(!isValid(i)){
+    //         cout << "ERRO" << endl;
+    //         break;
+    //     }
+    // }
 
     // auto end = chrono::high_resolution_clock::now();
 
@@ -243,5 +249,9 @@ int main(int argc, char* argv[]){
 
     //     cout << endl;
     // }
+
+
+    auto population = create_initial_population(10, 26);
+    metafeatures_extraction(population);
 
 }
