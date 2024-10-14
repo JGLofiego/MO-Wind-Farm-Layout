@@ -1,5 +1,6 @@
 #include <vector>
 #include <random>
+#include <iostream>
 #include "./headers/weight_vectors_metafeatures.h"
 #include "./headers/tchebycheff_metafeatures.h"
 #include "./headers/z_point_metafeatures.h"
@@ -9,19 +10,11 @@
 #include "../modules/headers/isEqual.h"
 #include "../modules/headers/population.h"
 
-// #include "./modules/weight_vectors_metafeatures.cpp"
-// #include "./modules/tchebycheff_metafeatures.cpp"
-// #include "./modules/get_best_z_point.cpp"
-
-// #include "../modules/generate_initial_population/generate_random_solution/generate_rSolution.cpp"
-// #include "../modules/generate_initial_population/generate_population/population.cpp"
-// #include "../modules/genetic_operators/mutation/mutation.cpp"
-// #include "../metaheuristics/general_modules/isEqual.cpp"
 
 struct Landscape {
   vector<double> fitness_values; // Stores the fitness values ​​obtained during the walk
   vector<double> fitness_differences; // Stores the fitness differences between solutions and their neighbors
-  vector<int> improving_neighbors_count; // Number of neighbors that improve the solution
+  vector<int> improving_neighbors_count; // Stores the number of neighbors that improve the solution
 };
 
 bool isEqualNeighborhood(Solution &new_neighbor, vector<Solution> &neighborhood ){
@@ -40,7 +33,7 @@ vector<Solution> get_neighborhood(Solution &currentSolution, int number_of_neigh
   for(int i = 0; i < number_of_neighbors; i++){
  
     mutation(new_neighbor);
-
+    //WARNING: RISK OFF INFINITE LOOP
     while(isEqualNeighborhood(new_neighbor, neighborhood)){
       new_neighbor = currentSolution;
       mutation(new_neighbor);
@@ -62,14 +55,8 @@ void randomWalk(Landscape &landscape, int walk_lenght, int number_of_neighbors, 
     //Getting the value of tchebycheff function for the current solution 
     double currentSolution_fitness = calculate_gte_metafeatures(currentSolution.fitness, lambda, z_point);
 
-    //Z-point update
-    z_point.first = max(z_point.first, max(currentSolution.fitness.first, currentSolution.fitness.first));
-
     //Building the neighborhood of the current solution
     vector<Solution> neighborhood = get_neighborhood(currentSolution, number_of_neighbors);
-
-    //Getting a random neighbor of the neighborhood of the current solution
-    Solution random_neighbor = neighborhood[rand() % neighborhood.size()];
 
     // Storing the fitness value (fv_*) in the landscape
     landscape.fitness_values.push_back(currentSolution_fitness);
@@ -77,20 +64,36 @@ void randomWalk(Landscape &landscape, int walk_lenght, int number_of_neighbors, 
     // Fitness difference (fd_*) and Improving neighbors (in_*) 
     double total_difference = 0.0;
     int improving_neighbors_count = 0;
+    double best_cost,best_power;
 
     for (Solution& neighbor : neighborhood) {
       double neighborSolution_fitness = calculate_gte_metafeatures(neighbor.fitness, lambda, z_point);
       if(neighborSolution_fitness < currentSolution_fitness){
         improving_neighbors_count++; // Improving neighbors (in_*) 
       }
-      total_difference += (currentSolution_fitness - neighborSolution_fitness);
+
+      //Getting the best objective values to update the z_point later
+      best_cost = max(z_point.first, neighbor.fitness.first);
+      best_power = max(z_point.second, neighbor.fitness.second);
+
+      double proportional_difference = abs(currentSolution_fitness - neighborSolution_fitness) / currentSolution_fitness;
+      total_difference += proportional_difference;
     }
 
     double mean_fitness_difference = total_difference / neighborhood.size();
 
-    // Storing the average fitness difference (fd_*) and the count of improved neighbors (in_*) in the landscape
+    // Storing the average fitness difference (fd_*) and the count of improved neighbors (in_*) - already normalized in line 83 - in the landscape
     landscape.fitness_differences.push_back(mean_fitness_difference);
-    landscape.improving_neighbors_count.push_back(improving_neighbors_count);
+
+    double normalized_improving_neighbors = static_cast<double>(improving_neighbors_count) / neighborhood.size();
+    landscape.improving_neighbors_count.push_back(normalized_improving_neighbors);
+
+    //Z-point update
+    z_point.first = best_cost;
+    z_point.second = best_power;
+
+    //Getting a random neighbor of the neighborhood of the current solution
+    Solution random_neighbor = neighborhood[rand() % neighborhood.size()];
 
     currentSolution = random_neighbor;
   }
@@ -138,12 +141,13 @@ void metafeatures_extraction(vector<Solution> population){
     tch_vector[i] = calculate_gte_metafeatures(population[i].fitness, lambda_vector[i], z_point);
   }
 
-  //!!!!!! What defines a subproblem? Is it it's tchebycheff value and weight vector?
 
   //Building a landscape for each subproblem
   vector<Landscape> landscapes(population_size);
 
   for(int i = 0; i < landscapes.size(); i++){
+    //Landscape i refers to the landscape of the subproblem i
+    //lambda_vector i refers to the weight vector of the subproblem i
     randomWalk(landscapes[i], 8, 5, lambda_vector[i], z_point, 26);
   }
 
