@@ -5,17 +5,12 @@
 #include "./headers/tchebycheff_metafeatures.h"
 #include "./headers/z_point_metafeatures.h"
 
-#include "../modules/headers/generate_rSolution.h"
-#include "../modules/headers/mutation.h"
-#include "../modules/headers/isEqual.h"
-#include "../modules/headers/population.h"
+#include "../headers/landscape.h"
 
-
-struct Landscape {
-  vector<double> fitness_values; // Stores the fitness values ​​obtained during the walk
-  vector<double> fitness_differences; // Stores the fitness differences between solutions and their neighbors
-  vector<int> improving_neighbors_count; // Stores the number of neighbors that improve the solution
-};
+#include "../../modules/headers/generate_rSolution.h"
+#include "../../modules/headers/mutation.h"
+#include "../../modules/headers/isEqual.h"
+#include "../../modules/headers/population.h"
 
 bool isEqualNeighborhood(Solution &new_neighbor, vector<Solution> &neighborhood ){
   for(auto &solution : neighborhood){
@@ -54,6 +49,12 @@ void randomWalk(Landscape &landscape, int walk_lenght, int number_of_neighbors, 
   for(int step = 0; step < walk_lenght; step++){
     //Getting the value of tchebycheff function for the current solution 
     double currentSolution_fitness = calculate_gte_metafeatures(currentSolution.fitness, lambda, z_point);
+    if(currentSolution_fitness == 0){
+      cout << "OPA! currentSolution_fitness igual a 0" << endl;
+      cout << "currentSolution_fitness: [" << currentSolution.fitness.first << ", " << currentSolution.fitness.second << "]" << endl;
+      cout << "z_values: [" << z_point.first << ", " << z_point.second << "]" << endl;
+      cout << "lambda: [" << lambda.first << ", " << lambda.second << "]" << endl;
+    }
 
     //Building the neighborhood of the current solution
     vector<Solution> neighborhood = get_neighborhood(currentSolution, number_of_neighbors);
@@ -64,7 +65,7 @@ void randomWalk(Landscape &landscape, int walk_lenght, int number_of_neighbors, 
     // Fitness difference (fd_*) and Improving neighbors (in_*) 
     double total_difference = 0.0;
     int improving_neighbors_count = 0;
-    double best_cost,best_power;
+    double best_cost, best_power;
 
     for (Solution& neighbor : neighborhood) {
       double neighborSolution_fitness = calculate_gte_metafeatures(neighbor.fitness, lambda, z_point);
@@ -99,39 +100,15 @@ void randomWalk(Landscape &landscape, int walk_lenght, int number_of_neighbors, 
   }
 }
 
-void metafeatures_extraction(vector<Solution> population){
-
-  cout << "========================= INITIAL POPULATION =========================" << endl;
-
-  for(int i = 0; i < population.size(); i++){
-    cout << "<" << population[i].fitness.first * (-1) << ", " << population[i].fitness.second << ">" << endl;
-  }
-
-  cout << endl;
-  
-  /* 
-  =================================================================
-  ====== 2.2.1 First Step: Decomposicalculate_gte_metafeaturestion using Weight Vectors ===== 
-  =================================================================  */
+vector<Landscape> landscapes_decomposition(vector<Solution> population){
 
   int population_size = population.size();
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(population_size);
 
-  cout << "========================= WEIGH VECTOR =========================" << endl;
-
-  for(int i = 0; i < lambda_vector.size(); i++){
-    cout << "<" << lambda_vector[i].first << ", " << lambda_vector[i].second << ">" << endl;
-  }
-
-  cout << endl;
-
   //Step 1.4: z_point
   pair<double, double> z_point = get_z_point_metafeatures(population);
-
-  cout << "========================= Z POINT =========================" << endl;
-  cout << "<" << z_point.first *(-1) << ", " << z_point.second << ">" << endl << endl;
 
   /*tch_vector = vector with the value of tchebycheff function to each subproblem (weight vector) i 
   Each index i of tch_vector (to reference the lambda vector i, neighborhood i of a subproblem i) contains the TCH of the subproblem i*/
@@ -140,7 +117,6 @@ void metafeatures_extraction(vector<Solution> population){
   for(int i = 0; i < tch_vector.size(); i++){
     tch_vector[i] = calculate_gte_metafeatures(population[i].fitness, lambda_vector[i], z_point);
   }
-
 
   //Building a landscape for each subproblem
   vector<Landscape> landscapes(population_size);
@@ -151,38 +127,40 @@ void metafeatures_extraction(vector<Solution> population){
     randomWalk(landscapes[i], 8, 5, lambda_vector[i], z_point, 26);
   }
 
-  cout << "========================== LANDSCAPES ==========================" << endl;
+  // cout << "========================== LANDSCAPES ==========================" << endl;
 
-  cout << "------- " << "FITNESS DIFFERENCE " << "-------" << endl;
+  // cout << "------- " << "FITNESS DIFFERENCE " << "-------" << endl;
 
-  for(int i = 0; i < landscapes.size(); i++){
-    cout << "+++++++++ " << "LANDSCAPE " << i << "+++++++++" << endl; 
-    cout << "[";
-    for(int j = 0; j < landscapes[i].fitness_differences.size(); j++){
-      cout << landscapes[i].fitness_differences[j] << ",";
-    }
-    cout << "]" << endl << endl;
-  }
+  // for(int i = 0; i < landscapes.size(); i++){
+  //   cout << "+++++++++ " << "LANDSCAPE " << i << "+++++++++" << endl; 
+  //   cout << "[";
+  //   for(int j = 0; j < landscapes[i].fitness_differences.size(); j++){
+  //     cout << landscapes[i].fitness_differences[j] << ",";
+  //   }
+  //   cout << "]" << endl << endl;
+  // }
 
-  cout << "------- " << "FITNESS VALUES " << "-------" << endl;
+  // cout << "------- " << "FITNESS VALUES " << "-------" << endl;
 
-  for(int i = 0; i < landscapes.size(); i++){
-    cout << "+++++++++ " << "LANDSCAPE " << i << "+++++++++" << endl; 
-    cout << "[";
-    for(int j = 0; j < landscapes[i].fitness_values.size(); j++){
-      cout << landscapes[i].fitness_values[j] << ",";
-    }
-    cout << "]" << endl << endl;
-  }
+  // for(int i = 0; i < landscapes.size(); i++){
+  //   cout << "+++++++++ " << "LANDSCAPE " << i << "+++++++++" << endl; 
+  //   cout << "[";
+  //   for(int j = 0; j < landscapes[i].fitness_values.size(); j++){
+  //     cout << landscapes[i].fitness_values[j] << ",";
+  //   }
+  //   cout << "]" << endl << endl;
+  // }
 
-    cout << "------- " << "IMPROVING NEIGHBORS " << "-------" << endl;
+  //   cout << "------- " << "IMPROVING NEIGHBORS " << "-------" << endl;
 
-  for(int i = 0; i < landscapes.size(); i++){
-    cout << "+++++++++ " << "LANDSCAPE " << i << "+++++++++" << endl; 
-    cout << "[";
-    for(int j = 0; j < landscapes[i].improving_neighbors_count.size(); j++){
-      cout << landscapes[i].improving_neighbors_count[j] << ",";
-    }
-    cout << "]" << endl << endl;
-  }
+  // for(int i = 0; i < landscapes.size(); i++){
+  //   cout << "+++++++++ " << "LANDSCAPE " << i << "+++++++++" << endl; 
+  //   cout << "[";
+  //   for(int j = 0; j < landscapes[i].improving_neighbors_count.size(); j++){
+  //     cout << landscapes[i].improving_neighbors_count[j] << ",";
+  //   }
+  //   cout << "]" << endl << endl;
+  // }
+
+  return landscapes;
 }

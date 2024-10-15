@@ -20,11 +20,12 @@
 #include "./modules/nsga2/crowding_distance.cpp"
 #include "./modules/nsga2/non_dominated_sorting.cpp"
 
-#include "./metafeatures/metafeatures.cpp"
-#include "./metafeatures/modules/get_best_z_point.cpp"
-#include "./metafeatures/modules/tchebycheff_metafeatures.cpp"
-#include "./metafeatures/modules/weight_vectors_metafeatures.cpp"
+#include "./metafeatures/decomposition_based/decomposition.cpp"
+#include "./metafeatures/decomposition_based/modules/get_best_z_point.cpp"
+#include "./metafeatures/decomposition_based/modules/tchebycheff_metafeatures.cpp"
+#include "./metafeatures/decomposition_based/modules/weight_vectors_metafeatures.cpp"
 
+#include "./metafeatures/extraction.cpp"
 
 #include <iomanip>
 #include <fstream>
@@ -55,7 +56,7 @@ int main(int argc, char* argv[]){
 
     srand(time(nullptr));
 
-    string pathSite = "../site/I/";
+    string pathSite = "../site/A/";
     string pathWtg = "../wtg/";
     string pathWind = "../wind/RVO_HKN.txt";
 
@@ -252,6 +253,7 @@ int main(int argc, char* argv[]){
 
 
     auto population = create_initial_population(10, 26);
-    metafeatures_extraction(population);
+    auto landscapes_vector = landscapes_decomposition(population);
 
+    metafeatures_extraction(population, landscapes_vector);
 }
