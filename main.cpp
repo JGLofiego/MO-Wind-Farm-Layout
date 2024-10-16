@@ -3,6 +3,7 @@
 
 #include "modules/genetic_operators/mutation/mutation.cpp"
 #include "modules/genetic_operators/mutation/mutation2.cpp"
+#include "modules/genetic_operators/mutation/mutationFeature.cpp"
 #include "modules/genetic_operators/crossover/crossover.cpp"
 
 #include "metaheuristics/general_modules/isEqual.cpp"
