@@ -253,8 +253,7 @@ int main(int argc, char* argv[]){
     // }
 
 
-    auto population = create_initial_population(10, 26);
-    auto landscapes_vector = landscapes_decomposition(population);
+    auto landscapes_vector = landscapes_decomposition(10);
 
-    metafeatures_extraction(population, landscapes_vector);
+    metafeatures_extraction(landscapes_vector);
 }

@@ -42,21 +42,21 @@ vector<Solution> get_neighborhood(Solution &currentSolution, int number_of_neigh
   return neighborhood;
 } 
 
-void randomWalk(Landscape &landscape, int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, pair<double, double> &z_point, int num_turb){
+void randomWalk(Landscape &landscape, int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, int num_turb){
 
   Solution currentSolution = create_initial_population(1, num_turb)[0];
+
+  //Definition of z_point
+  pair<double, double> z_point;
+  z_point.first = currentSolution.fitness.first;
+  z_point.second = currentSolution.fitness.second;
+
   vector<double> fitness_values;
   vector<double> fitness_differences;
   
   for(int step = 0; step < walk_lenght; step++){
     //Getting the value of tchebycheff function for the current solution 
     double currentSolution_fitness = calculate_gte_metafeatures(currentSolution.fitness, lambda, z_point);
-    if(currentSolution_fitness == 0){
-      cout << "OPA! currentSolution_fitness igual a 0" << endl;
-      cout << "currentSolution_fitness: [" << currentSolution.fitness.first << ", " << currentSolution.fitness.second << "]" << endl;
-      cout << "z_values: [" << z_point.first << ", " << z_point.second << "]" << endl;
-      cout << "lambda: [" << lambda.first << ", " << lambda.second << "]" << endl;
-    }
 
     //Building the neighborhood of the current solution
     vector<Solution> neighborhood = get_neighborhood(currentSolution, number_of_neighbors);
@@ -161,23 +161,10 @@ void adaptiveWalk(Landscape &landscape, int number_of_neighbors, pair<double, do
     }
 }
 
-vector<Landscape> landscapes_decomposition(vector<Solution> population){
-
-  int population_size = population.size();
+vector<Landscape> landscapes_decomposition(int population_size){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(population_size);
-
-  //Step 1.4: z_point
-  pair<double, double> z_point = get_z_point_metafeatures(population);
-
-  /*tch_vector = vector with the value of tchebycheff function to each subproblem (weight vector) i 
-  Each index i of tch_vector (to reference the lambda vector i, neighborhood i of a subproblem i) contains the TCH of the subproblem i*/
-  vector<double> tch_vector(population_size);
-
-  for(int i = 0; i < tch_vector.size(); i++){
-    tch_vector[i] = calculate_gte_metafeatures(population[i].fitness, lambda_vector[i], z_point);
-  }
 
   //Building a landscape for each subproblem
   vector<Landscape> landscapes(population_size);
@@ -185,7 +172,7 @@ vector<Landscape> landscapes_decomposition(vector<Solution> population){
   for(int i = 0; i < landscapes.size(); i++){
     //Landscape i refers to the landscape of the subproblem i
     //lambda_vector i refers to the weight vector of the subproblem i
-    adaptiveWalk(landscapes[i], 5, lambda_vector[i], z_point, 26);
+    randomWalk(landscapes[i], 8, 5, lambda_vector[i], 26);
   }
 
   cout << "========================== LANDSCAPES ==========================" << endl;

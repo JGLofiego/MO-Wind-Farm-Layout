@@ -97,7 +97,7 @@ vector<double> multiobjective_features(vector<Landscape> &landscapes_vector, fun
   return mo_features;
 }
 
-void metafeatures_extraction(vector<Solution> population, vector<Landscape> landscapes_vector){
+void metafeatures_extraction(vector<Landscape> landscapes_vector){
   vector<double> mo_features;
   vector<double> fitness_values;
   vector<double> fitness_differences;

@@ -5,6 +5,6 @@
 #include "../modules/headers/generate_rSolution.h"
 #include "./headers/landscape.h"
 
-void metafeatures_extraction(std::vector<Solution> population, std::vector<Landscape> landscapes_vector);
+void metafeatures_extraction(std::vector<Landscape> landscapes_vector);
 
 #endif 
