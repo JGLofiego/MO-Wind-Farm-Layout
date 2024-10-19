@@ -260,5 +260,5 @@ int main(int argc, char* argv[]){
 
     auto landscapes_vector = landscapes_decomposition(10);
 
-    metafeatures_extraction(landscapes_vector);
+    // metafeatures_extraction(landscapes_vector);
 }

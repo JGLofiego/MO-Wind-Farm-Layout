@@ -1,9 +1,12 @@
 #ifndef RANDOM_WALK_H
 #define RANDOM_WALK_H
 
+#include <vector>
 #include <utility>
+
+#include "../../../headers/features/landscapeElement.h"
 #include "../../../headers/features/landscape.h"
 
-void random_walk(Landscape &landscape, int walk_lenght, int number_of_neighbors, std::pair<double, double> &lambda, int num_turb);
+std::vector<LandscapeElement> random_walk(Landscape &landscape, int walk_lenght, int number_of_neighbors, std::pair<double, double> &lambda, int num_turb);
 
 #endif 
