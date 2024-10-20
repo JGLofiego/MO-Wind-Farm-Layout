@@ -11,6 +11,7 @@
 #include "./headers/adaptative_walk.h"
 
 #include "../../headers/features/landscape.h"
+#include "../../headers/features/normalization.h"
 #include "../../headers/features/landscapeElement.h"
 
 #include "../../modules/headers/generate_rSolution.h"
@@ -32,13 +33,29 @@ vector<vector<LandscapeElement>> landscapes_decomposition(int population_size){
     landscapes[i] = random_walk(8, 5, lambda_vector[i], 26);
   }
 
-  for(int i = 0; i < landscapes.size(); i++){
+  cout << "BEFORE NORMALIZATION" << endl << endl;
+
+  for(int i = 0; i < 1; i++){
     cout << "=============== LANDSCAPE " << i << " ===============" << endl << endl;
-    for(int j = 0; j < landscapes[i].size(); j++){
-      cout << "TCH CURRENT SOLUTION: " << landscapes[i][j].tch_current_solution << endl;
-      for(int k = 0; k < landscapes[i][j].tchebycheff_neighbors.size(); k++){
-        cout << "TCH NEIGHBOR " << k << ": " << landscapes[i][j].tchebycheff_neighbors[k] << endl;
-      }
+    for(int j = 0; j < landscapes[0].size(); j++){
+      cout << "TCH CURRENT SOLUTION: " << landscapes[0][j].tch_current_solution << endl;
+      for(int k = 0; k < landscapes[0][j].tchebycheff_neighbors.size(); k++){
+        cout << "TCH NEIGHBOR " << k << ": " << landscapes[0][j].tchebycheff_neighbors[k] << endl;
+      }cout << endl;
+    } cout << endl;
+  }
+
+  normalization(landscapes);
+
+  cout << "AFTER NORMALIZATION" << endl << endl;
+
+  for(int i = 0; i < 1; i++){
+    cout << "=============== LANDSCAPE " << i << " ===============" << endl << endl;
+    for(int j = 0; j < landscapes[0].size(); j++){
+      cout << "TCH CURRENT SOLUTION: " << landscapes[0][j].tch_current_solution << endl;
+      for(int k = 0; k < landscapes[0][j].tchebycheff_neighbors.size(); k++){
+        cout << "TCH NEIGHBOR " << k << ": " << landscapes[0][j].tchebycheff_neighbors[k] << endl;
+      }cout << endl;
     } cout << endl;
   }
 

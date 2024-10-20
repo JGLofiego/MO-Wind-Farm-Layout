@@ -6,6 +6,7 @@ void normalization(vector<vector<LandscapeElement>>& landscapes){
   double max = numeric_limits<double>::lowest();
   double min = numeric_limits<double>::infinity();
 
+  //Getting the min and max values of all solutions x = {max/min(F(x)) | 'x' in landscapes}
   for(auto& landscape : landscapes){
     for(auto& element : landscape){
       if(element.tch_current_solution < min){
@@ -25,6 +26,8 @@ void normalization(vector<vector<LandscapeElement>>& landscapes){
     }
   }
 
+  //Normalization based in the following formula:
+  // ^F(x) = (F(x) - min(F(x))) / (max(F(x) - min(F(x))
   for(auto& landscape : landscapes){
     for(auto& element : landscape){
       element.tch_current_solution = (element.tch_current_solution - min) / (max - min);

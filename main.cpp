@@ -28,8 +28,7 @@
 #include "./metafeatures/decomposition_based/modules/get_neighborhood.cpp"
 #include "./metafeatures/decomposition_based/modules/random_walk.cpp"
 #include "./metafeatures/decomposition_based/modules/adaptative_walk.cpp"
-
-
+#include "./metafeatures/decomposition_based/modules/normalization.cpp"
 
 #include "./metafeatures/extraction.cpp"
 
