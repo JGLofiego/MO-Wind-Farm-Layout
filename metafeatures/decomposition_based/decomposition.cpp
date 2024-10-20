@@ -18,29 +18,28 @@
 #include "../../modules/headers/isEqual.h"
 #include "../../modules/headers/population.h"
 
-vector<Landscape> landscapes_decomposition(int population_size){
+vector<vector<LandscapeElement>> landscapes_decomposition(int population_size){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(population_size);
 
   //Building a landscape for each subproblem
-  vector<Landscape> landscapes(population_size);
+  vector<vector<LandscapeElement>> landscapes(population_size);
 
-  // for(int i = 0; i < landscapes.size(); i++){
-  //   //Landscape i refers to the landscape of the subproblem i
-  //   //lambda_vector i refers to the weight vector of the subproblem i
-  //   adaptive_walk(landscapes[i], 5, lambda_vector[i], 26);
-  // }
-  auto S = random_walk(10, 5, lambda_vector[0], 26);
+  for(int i = 0; i < landscapes.size(); i++){
+    //Landscape i refers to the landscape of the subproblem i
+    //lambda_vector i refers to the weight vector of the subproblem i
+    landscapes[i] = random_walk(8, 5, lambda_vector[i], 26);
+  }
 
-  cout << S.size() << endl;
-
-  for(int i = 0; i < S.size(); i++){
-    cout << "ELEMENT: " << i << endl;
-    cout << "TCH CURRENT SOLUTION: " << S[i].tch_current_solution << endl;
-    for(int j = 0; j < S[i].tchebycheff_neighbors.size(); j++){
-      cout << "TCH NEIGHBOR " << j << ": " << S[i].tchebycheff_neighbors[j] << endl;
-    }cout << endl;
+  for(int i = 0; i < landscapes.size(); i++){
+    cout << "=============== LANDSCAPE " << i << " ===============" << endl << endl;
+    for(int j = 0; j < landscapes[i].size(); j++){
+      cout << "TCH CURRENT SOLUTION: " << landscapes[i][j].tch_current_solution << endl;
+      for(int k = 0; k < landscapes[i][j].tchebycheff_neighbors.size(); k++){
+        cout << "TCH NEIGHBOR " << k << ": " << landscapes[i][j].tchebycheff_neighbors[k] << endl;
+      }
+    } cout << endl;
   }
 
   // cout << "========================== LANDSCAPES ==========================" << endl;
