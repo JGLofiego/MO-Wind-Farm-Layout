@@ -31,7 +31,17 @@ vector<Landscape> landscapes_decomposition(int population_size){
   //   //lambda_vector i refers to the weight vector of the subproblem i
   //   adaptive_walk(landscapes[i], 5, lambda_vector[i], 26);
   // }
-  auto S = random_walk(landscapes[0], 10, 5, lambda_vector[0], 26);
+  auto S = random_walk(10, 5, lambda_vector[0], 26);
+
+  cout << S.size() << endl;
+
+  for(int i = 0; i < S.size(); i++){
+    cout << "ELEMENT: " << i << endl;
+    cout << "TCH CURRENT SOLUTION: " << S[i].tch_current_solution << endl;
+    for(int j = 0; j < S[i].tchebycheff_neighbors.size(); j++){
+      cout << "TCH NEIGHBOR " << j << ": " << S[i].tchebycheff_neighbors[j] << endl;
+    }cout << endl;
+  }
 
   // cout << "========================== LANDSCAPES ==========================" << endl;
 

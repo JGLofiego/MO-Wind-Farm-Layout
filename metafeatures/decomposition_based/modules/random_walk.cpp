@@ -10,7 +10,7 @@
 
 using namespace std;
 
-vector<LandscapeElement> random_walk(Landscape &landscape, int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, int num_turb){
+vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, int num_turb){
 
   vector<LandscapeElement> S;
 
