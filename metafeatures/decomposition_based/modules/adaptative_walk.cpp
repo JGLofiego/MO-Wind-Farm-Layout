@@ -1,6 +1,5 @@
 #include <vector>
 #include <utility>
-#include <iostream>
 #include "../headers/adaptative_walk.h"
 #include "../../../headers/features/landscapeElement.h"
 #include "../headers/tchebycheff_metafeatures.h"
@@ -22,7 +21,6 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
   while (true) {
     LandscapeElement element;
     element.current_solution = currentSolution;
-    cout << "Z_POINT (INITIAL OF ITERATION): " << z_point.first << ", " << z_point.second << endl;
 
     //Getting the value of tchebycheff function for the current solution 
     double currentSolution_fitness = calculate_gte_metafeatures(currentSolution.fitness, lambda, z_point);
@@ -61,16 +59,12 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
 
     //Z-point update
     if(best_cost > z_point.first){
-      cout << "ATUALIZANDO z_point.first de " << z_point.first << " para " << best_cost << endl;
       z_point.first = best_cost;
     }
     if(best_power > z_point.second){
-      cout << "ATUALIZANDO z_point.second de " << z_point.second << " para " << best_power << endl;
       z_point.second = best_power;
     }
 
-    cout << "Z_POINT (FINAL OF ITERATION): " << z_point.first << ", " << z_point.second << endl << endl;
-    
     if(best_neighbor_fitness < currentSolution_fitness){
       currentSolution = neighborhood[index_best_neighbor];
     } else{
