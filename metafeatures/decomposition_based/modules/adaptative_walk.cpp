@@ -1,74 +1,81 @@
 #include <vector>
 #include <utility>
+#include <iostream>
 #include "../headers/adaptative_walk.h"
-#include "../../../headers/features/landscape.h"
+#include "../../../headers/features/landscapeElement.h"
 #include "../headers/tchebycheff_metafeatures.h"
 #include "../../../modules/headers/population.h"
 #include "../headers/get_neighborhood.h"
 
 using namespace std;
 
-void adaptive_walk(Landscape &landscape, int number_of_neighbors, pair<double, double> &lambda, int num_turb) {
+vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, double> &lambda, int num_turb) {
+  
+  vector<LandscapeElement> S;
   Solution currentSolution = create_initial_population(1, num_turb)[0];
 
   //Definition of z_point
   pair<double, double> z_point;
-  z_point.first = currentSolution.fitness.first;
-  z_point.second = currentSolution.fitness.second;
-
-  vector<double> fitness_values;
-  vector<double> fitness_differences;
-
+  z_point.first = -119586168.719194576144;
+  z_point.second = 20.4;
+  
   while (true) {
+    LandscapeElement element;
+    element.current_solution = currentSolution;
+    cout << "Z_POINT (INITIAL OF ITERATION): " << z_point.first << ", " << z_point.second << endl;
+
+    //Getting the value of tchebycheff function for the current solution 
     double currentSolution_fitness = calculate_gte_metafeatures(currentSolution.fitness, lambda, z_point);
-    // Storing the fitness value (fv_*) in the landscape
-    landscape.fitness_values.push_back(currentSolution_fitness);
+    element.tch_current_solution = currentSolution_fitness;
 
     //Building the neighborhood of the current solution
     vector<Solution> neighborhood = get_neighborhood(currentSolution, number_of_neighbors);
-      
+    element.neighborhod = neighborhood;
+
     //Finding the best neighbor and calculating its fitness
     double best_neighbor_fitness = numeric_limits<double>::infinity();
     int index_best_neighbor;
 
-    // Fitness difference (fd_*) and Improving neighbors (in_*) 
-    double total_difference = 0.0;
-    int improving_neighbors_count = 0;
-    double best_cost, best_power;   
+    double best_cost = currentSolution.fitness.first;
+    double best_power = currentSolution.fitness.second;
 
     for(int i = 0; i < neighborhood.size(); i++){
       double neighborSolution_fitness = calculate_gte_metafeatures(neighborhood[i].fitness, lambda, z_point);
+      element.tchebycheff_neighbors.push_back(neighborSolution_fitness);
+
       if(neighborSolution_fitness < best_neighbor_fitness){
         best_neighbor_fitness = neighborSolution_fitness;
         index_best_neighbor = i;
-        improving_neighbors_count++;
       }
 
       //Getting the best objective values to update the z_point later
-      best_cost = max(z_point.first, neighborhood[i].fitness.first);
-      best_power = max(z_point.second, neighborhood[i].fitness.second);
-
-      double proportional_difference = abs(currentSolution_fitness - neighborSolution_fitness) / currentSolution_fitness;
-      total_difference += proportional_difference;
+      if(neighborhood[i].fitness.first > best_cost){
+        best_cost = neighborhood[i].fitness.first;
+      }
+      if(neighborhood[i].fitness.second > best_power){
+        best_power = neighborhood[i].fitness.second;
+      }
     }
 
-    double mean_fitness_difference = total_difference / neighborhood.size();
-      
-    // Storing the average fitness difference (fd_*) and the count of improved neighbors (in_*) - already normalized in line 83 - in the landscape
-    landscape.fitness_differences.push_back(mean_fitness_difference);
-
-    double normalized_improving_neighbors = static_cast<double>(improving_neighbors_count) / neighborhood.size();
-    landscape.improving_neighbors_count.push_back(normalized_improving_neighbors);
+    S.push_back(element);
 
     //Z-point update
-    z_point.first = best_cost;
-    z_point.second = best_power;
+    if(best_cost > z_point.first){
+      cout << "ATUALIZANDO z_point.first de " << z_point.first << " para " << best_cost << endl;
+      z_point.first = best_cost;
+    }
+    if(best_power > z_point.second){
+      cout << "ATUALIZANDO z_point.second de " << z_point.second << " para " << best_power << endl;
+      z_point.second = best_power;
+    }
 
+    cout << "Z_POINT (FINAL OF ITERATION): " << z_point.first << ", " << z_point.second << endl << endl;
+    
     if(best_neighbor_fitness < currentSolution_fitness){
       currentSolution = neighborhood[index_best_neighbor];
     } else{
       break;
     }
-       
   }
+  return S;
 }

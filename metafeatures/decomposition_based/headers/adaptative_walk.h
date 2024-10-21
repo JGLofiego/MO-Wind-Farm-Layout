@@ -2,8 +2,8 @@
 #define ADAPTATIVE_WALK_H
 
 #include <utility>
-#include "../../../headers/features/landscape.h"
+#include "../../../headers/features/landscapeElement.h"
 
-void adaptive_walk(Landscape &landscape, int number_of_neighbors, std::pair<double, double> &lambda, int num_turb);
+std::vector<LandscapeElement> adaptive_walk(int number_of_neighbors, std::pair<double, double> &lambda, int num_turb);
 
 #endif 
