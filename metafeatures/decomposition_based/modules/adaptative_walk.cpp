@@ -15,8 +15,8 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
 
   //Definition of z_point
   pair<double, double> z_point;
-  z_point.first = -119586168.719194576144;
-  z_point.second = 20.4;
+  z_point.first = current_solution.fitness.first;
+  z_point.second = current_solution.fitness.second;
   
   while (true) {
     LandscapeElement element;
@@ -28,7 +28,7 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
 
     //Building the neighborhood of the current solution
     vector<Solution> neighborhood = get_neighborhood(current_solution, number_of_neighbors);
-    element.neighborhod = neighborhood;
+    element.neighborhod = neighborhood; //Adding the neighborhood of 'current_solution' to S
 
     //Finding the best neighbor and calculating its fitness
     double best_neighbor_fitness = numeric_limits<double>::infinity();
@@ -65,6 +65,7 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
       z_point.second = best_power;
     }
 
+    //Defining the next 'current_solution' of the walk
     if(best_neighbor_fitness < current_solution_fitness){
       current_solution = neighborhood[index_best_neighbor];
     } else{

@@ -1,7 +1,7 @@
 #include <vector>
 #include <utility>
+#include <iostream>
 
-#include "../../../headers/features/landscape.h"
 #include "../../../headers/features/landscapeElement.h"
 #include "../headers/tchebycheff_metafeatures.h"
 #include "../headers/random_walk.h"
@@ -13,7 +13,6 @@ using namespace std;
 vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, int num_turb){
 
   vector<LandscapeElement> S;
-
   Solution current_solution = create_initial_population(1, num_turb)[0];
 
   //Definition of z_point
@@ -31,11 +30,10 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
 
     //Building the neighborhood of the current solution
     vector<Solution> neighborhood = get_neighborhood(current_solution, number_of_neighbors);
-    //Faz a copia na mesma ordem que neighborhood foi criado?
     element.neighborhod = neighborhood; //Adding the neighborhood of 'current_solution' to S
 
-    double best_cost = z_point.first;
-    double best_power = z_point.second;
+    double best_cost = current_solution.fitness.first;
+    double best_power = current_solution.fitness.second;
 
     for (Solution& neighbor : neighborhood) {
       double neighborSolution_fitness = calculate_gte_metafeatures(neighbor.fitness, lambda, z_point);
@@ -53,8 +51,12 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
     S.push_back(element);
 
     //Z-point update
-    z_point.first = best_cost;
-    z_point.second = best_power;
+    if(best_cost > z_point.first){
+      z_point.first = best_cost;
+    }
+    if(best_power > z_point.second){
+      z_point.second = best_power;
+    }
 
     //Getting a random neighbor of the neighborhood of the current solution
     Solution random_neighbor = neighborhood[rand() % neighborhood.size()];

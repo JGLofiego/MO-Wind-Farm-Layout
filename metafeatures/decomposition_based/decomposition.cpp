@@ -33,8 +33,8 @@ vector<vector<LandscapeElement>> landscapes_decomposition(int population_size){
   //   // landscapes[i] = random_walk(8, 5, lambda_vector[i], 26);
   //   landscapes[i] = adaptive_walk(5, lambda_vector[i], 26);
   // }
-  landscapes[0] = adaptive_walk(5, lambda_vector[0], 26);
 
+  landscapes[0] = random_walk(8, 5, lambda_vector[0], 26);
 
   // cout << "BEFORE NORMALIZATION" << endl << endl;
 
