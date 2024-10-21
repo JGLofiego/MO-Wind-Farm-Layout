@@ -11,7 +11,7 @@ using namespace std;
 vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, double> &lambda, int num_turb) {
   
   vector<LandscapeElement> S;
-  Solution currentSolution = create_initial_population(1, num_turb)[0];
+  Solution current_solution = create_initial_population(1, num_turb)[0];
 
   //Definition of z_point
   pair<double, double> z_point;
@@ -20,29 +20,29 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
   
   while (true) {
     LandscapeElement element;
-    element.current_solution = currentSolution;
+    element.current_solution = current_solution;
 
     //Getting the value of tchebycheff function for the current solution 
-    double currentSolution_fitness = calculate_gte_metafeatures(currentSolution.fitness, lambda, z_point);
-    element.tch_current_solution = currentSolution_fitness;
+    double current_solution_fitness = calculate_gte_metafeatures(current_solution.fitness, lambda, z_point);
+    element.tch_current_solution = current_solution_fitness;
 
     //Building the neighborhood of the current solution
-    vector<Solution> neighborhood = get_neighborhood(currentSolution, number_of_neighbors);
+    vector<Solution> neighborhood = get_neighborhood(current_solution, number_of_neighbors);
     element.neighborhod = neighborhood;
 
     //Finding the best neighbor and calculating its fitness
     double best_neighbor_fitness = numeric_limits<double>::infinity();
     int index_best_neighbor;
 
-    double best_cost = currentSolution.fitness.first;
-    double best_power = currentSolution.fitness.second;
+    double best_cost = current_solution.fitness.first;
+    double best_power = current_solution.fitness.second;
 
     for(int i = 0; i < neighborhood.size(); i++){
-      double neighborSolution_fitness = calculate_gte_metafeatures(neighborhood[i].fitness, lambda, z_point);
-      element.tchebycheff_neighbors.push_back(neighborSolution_fitness);
+      double neighbor_solution_fitness = calculate_gte_metafeatures(neighborhood[i].fitness, lambda, z_point);
+      element.tchebycheff_neighbors.push_back(neighbor_solution_fitness);
 
-      if(neighborSolution_fitness < best_neighbor_fitness){
-        best_neighbor_fitness = neighborSolution_fitness;
+      if(neighbor_solution_fitness < best_neighbor_fitness){
+        best_neighbor_fitness = neighbor_solution_fitness;
         index_best_neighbor = i;
       }
 
@@ -65,8 +65,8 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
       z_point.second = best_power;
     }
 
-    if(best_neighbor_fitness < currentSolution_fitness){
-      currentSolution = neighborhood[index_best_neighbor];
+    if(best_neighbor_fitness < current_solution_fitness){
+      current_solution = neighborhood[index_best_neighbor];
     } else{
       break;
     }
