@@ -4,6 +4,6 @@
 #include <vector>
 #include "./landscapeElement.h"
 
-void normalization(std::vector<std::vector<LandscapeElement>>& landscapes);
+void normalization(vector<vector<LandscapeElement>>& landscapes, double &max, double &min);
 
 #endif 

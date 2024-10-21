@@ -10,13 +10,15 @@
 
 using namespace std;
 
-vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, int num_turb){
+vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, int num_turb, double &max, double &min){
 
   vector<LandscapeElement> S;
   Solution current_solution = create_initial_population(1, num_turb)[0];
 
   //Definition of z_point
   pair<double, double> z_point;
+  // z_point.first = -12313123123123;
+  // z_point.second = 30.4;
   z_point.first = current_solution.fitness.first;
   z_point.second = current_solution.fitness.second;
 
@@ -28,6 +30,15 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
     double current_solution_fitness = calculate_gte_metafeatures(current_solution.fitness, lambda, z_point);
     element.tch_current_solution = current_solution_fitness;
 
+    //Getting the min and max values of all solutions x
+    if(current_solution_fitness < min){
+      min = current_solution_fitness;
+    }
+
+    if(current_solution_fitness > max){
+      max = current_solution_fitness;
+    }
+
     //Building the neighborhood of the current solution
     vector<Solution> neighborhood = get_neighborhood(current_solution, number_of_neighbors);
     element.neighborhod = neighborhood; //Adding the neighborhood of 'current_solution' to S
@@ -38,6 +49,14 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
     for (Solution& neighbor : neighborhood) {
       double neighborSolution_fitness = calculate_gte_metafeatures(neighbor.fitness, lambda, z_point);
       element.tchebycheff_neighbors.push_back(neighborSolution_fitness);
+
+      //Getting the min and max values of all solutions x
+      if(neighborSolution_fitness < min){
+        min = neighborSolution_fitness;
+      }
+      if(neighborSolution_fitness > max){
+        max = neighborSolution_fitness;
+      }
 
       //Getting the best objective values to update the z_point later
       if(neighbor.fitness.first > best_cost){

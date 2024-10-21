@@ -19,48 +19,53 @@
 #include "../../modules/headers/isEqual.h"
 #include "../../modules/headers/population.h"
 
-vector<vector<LandscapeElement>> landscapes_decomposition(int population_size){
+pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landscapes_decomposition(int population_size){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(population_size);
 
   //Building a landscape for each subproblem
-  vector<vector<LandscapeElement>> landscapes(population_size);
+  vector<vector<LandscapeElement>> landscapes_random_walk(population_size);
+  vector<vector<LandscapeElement>> landscapes_adaptative_walk(population_size);
 
-  // for(int i = 0; i < landscapes.size(); i++){
-  //   //Landscape i refers to the landscape of the subproblem i
-  //   //lambda_vector i refers to the weight vector of the subproblem i
-  //   // landscapes[i] = random_walk(8, 5, lambda_vector[i], 26);
-  //   landscapes[i] = adaptive_walk(5, lambda_vector[i], 26);
-  // }
+  //Getting the min and max values of all solutions x, ie, {max/min(F(x)) | 'x' in landscapes}
 
-  landscapes[0] = random_walk(8, 5, lambda_vector[0], 26);
+  double max = numeric_limits<double>::lowest();
+  double min = numeric_limits<double>::infinity();
 
-  // cout << "BEFORE NORMALIZATION" << endl << endl;
+  for(int i = 0; i < landscapes_random_walk.size(); i++){
+    //Landscape i refers to the landscape of the subproblem i
+    //lambda_vector i refers to the weight vector of the subproblem i
+    landscapes_random_walk[i] = random_walk(8, 5, lambda_vector[i], 26, max, min);
+    landscapes_adaptative_walk[i] = adaptive_walk(5, lambda_vector[i], 26, max, min);
+  }
+
+  cout << "BEFORE NORMALIZATION" << endl << endl;
 
   for(int i = 0; i < 1; i++){
     cout << "=============== LANDSCAPE " << i << " ===============" << endl << endl;
-    for(int j = 0; j < landscapes[0].size(); j++){
-      cout << "TCH CURRENT SOLUTION: " << landscapes[0][j].tch_current_solution << endl;
-      for(int k = 0; k < landscapes[0][j].tchebycheff_neighbors.size(); k++){
-        cout << "TCH NEIGHBOR " << k << ": " << landscapes[0][j].tchebycheff_neighbors[k] << endl;
+    for(int j = 0; j < landscapes_random_walk[0].size(); j++){
+      cout << "TCH CURRENT SOLUTION: " << landscapes_random_walk[0][j].tch_current_solution << endl;
+      for(int k = 0; k < landscapes_random_walk[0][j].tchebycheff_neighbors.size(); k++){
+        cout << "TCH NEIGHBOR " << k << ": " << landscapes_random_walk[0][j].tchebycheff_neighbors[k] << endl;
       }cout << endl;
     } cout << endl;
   }
 
-  // normalization(landscapes);
+  normalization(landscapes_random_walk, max, min);
+  normalization(landscapes_adaptative_walk, max, min);
 
-  // cout << "AFTER NORMALIZATION" << endl << endl;
+  cout << "AFTER NORMALIZATION" << endl << endl;
 
-  // for(int i = 0; i < 1; i++){
-  //   cout << "=============== LANDSCAPE " << i << " ===============" << endl << endl;
-  //   for(int j = 0; j < landscapes[0].size(); j++){
-  //     cout << "TCH CURRENT SOLUTION: " << landscapes[0][j].tch_current_solution << endl;
-  //     for(int k = 0; k < landscapes[0][j].tchebycheff_neighbors.size(); k++){
-  //       cout << "TCH NEIGHBOR " << k << ": " << landscapes[0][j].tchebycheff_neighbors[k] << endl;
-  //     }cout << endl;
-  //   } cout << endl;
-  // }
+  for(int i = 0; i < 1; i++){
+    cout << "=============== LANDSCAPE " << i << " ===============" << endl << endl;
+    for(int j = 0; j < landscapes_random_walk[0].size(); j++){
+      cout << "TCH CURRENT SOLUTION: " << landscapes_random_walk[0][j].tch_current_solution << endl;
+      for(int k = 0; k < landscapes_random_walk[0][j].tchebycheff_neighbors.size(); k++){
+        cout << "TCH NEIGHBOR " << k << ": " << landscapes_random_walk[0][j].tchebycheff_neighbors[k] << endl;
+      }cout << endl;
+    } cout << endl;
+  }
 
   // for(int i = 0; i < landscapes.size(); i++){
   //   cout << "=============== LANDSCAPE " << i << " ===============" << endl << endl;
@@ -109,6 +114,10 @@ vector<vector<LandscapeElement>> landscapes_decomposition(int population_size){
   //   }
   //   cout << "]" << endl << endl;
   // }
+
+  pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landscapes;
+  landscapes.first = landscapes_random_walk;
+  landscapes.second = landscapes_adaptative_walk;
 
   return landscapes;
 }

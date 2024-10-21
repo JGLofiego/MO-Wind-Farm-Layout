@@ -8,13 +8,15 @@
 
 using namespace std;
 
-vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, double> &lambda, int num_turb) {
+vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, double> &lambda, int num_turb, double &max, double &min) {
   
   vector<LandscapeElement> S;
   Solution current_solution = create_initial_population(1, num_turb)[0];
 
   //Definition of z_point
   pair<double, double> z_point;
+  // z_point.first = -12313123123123;
+  // z_point.second = 30.4;
   z_point.first = current_solution.fitness.first;
   z_point.second = current_solution.fitness.second;
   
@@ -25,6 +27,15 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
     //Getting the value of tchebycheff function for the current solution 
     double current_solution_fitness = calculate_gte_metafeatures(current_solution.fitness, lambda, z_point);
     element.tch_current_solution = current_solution_fitness;
+
+    //Getting the min and max values of all solutions x
+    if(current_solution_fitness < min){
+      min = current_solution_fitness;
+    }
+
+    if(current_solution_fitness > max){
+      max = current_solution_fitness;
+    }
 
     //Building the neighborhood of the current solution
     vector<Solution> neighborhood = get_neighborhood(current_solution, number_of_neighbors);
@@ -40,6 +51,14 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, pair<double, dou
     for(int i = 0; i < neighborhood.size(); i++){
       double neighbor_solution_fitness = calculate_gte_metafeatures(neighborhood[i].fitness, lambda, z_point);
       element.tchebycheff_neighbors.push_back(neighbor_solution_fitness);
+
+      //Getting the min and max values of all solutions x
+      if(neighbor_solution_fitness < min){
+        min = neighbor_solution_fitness;
+      }
+      if(neighbor_solution_fitness > max){
+        max = neighbor_solution_fitness;
+      }
 
       if(neighbor_solution_fitness < best_neighbor_fitness){
         best_neighbor_fitness = neighbor_solution_fitness;
