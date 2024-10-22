@@ -10,10 +10,10 @@
 
 using namespace std;
 
-vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, int num_turb, double &max, double &min){
+vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, double &max, double &min){
 
   vector<LandscapeElement> S;
-  Solution current_solution = create_initial_population(1, num_turb)[0];
+  Solution current_solution = create_initial_population(1)[0];
 
   //Definition of z_point
   pair<double, double> z_point;

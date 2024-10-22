@@ -7,6 +7,6 @@
 #include "../../../headers/features/landscapeElement.h"
 #include "../../../headers/features/landscape.h"
 
-std::vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, std::pair<double, double> &lambda, int num_turb, double &max, double &min);
+std::vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, std::pair<double, double> &lambda, double &max, double &min);
 
 #endif 

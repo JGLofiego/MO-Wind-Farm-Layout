@@ -36,8 +36,8 @@ pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landsca
   for(int i = 0; i < landscapes_random_walk.size(); i++){
     //Landscape i refers to the landscape of the subproblem i
     //lambda_vector i refers to the weight vector of the subproblem i
-    landscapes_random_walk[i] = random_walk(8, 5, lambda_vector[i], 26, max, min);
-    landscapes_adaptative_walk[i] = adaptive_walk(5, lambda_vector[i], 26, max, min);
+    landscapes_random_walk[i] = random_walk(8, 5, lambda_vector[i], max, min);
+    landscapes_adaptative_walk[i] = adaptive_walk(5, lambda_vector[i], max, min);
   }
 
   cout << "BEFORE NORMALIZATION" << endl << endl;
