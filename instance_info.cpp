@@ -1,11 +1,12 @@
 #include <iomanip>
+#include "modules/headers/generate_rSolution.h"
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <time.h>
 #include <random>
 #include <chrono>
-#include "./modules/headers/generate_rSolution.h"
+#include <map>
 using namespace std;
 
 vector<vector<Foundation>> foundations(3);
@@ -18,7 +19,21 @@ float power, powerFxd;
 float thrust_coef = 1.0;
 float tcFxd = 1.0;
 float angle;
-int num_turb = 10;
+
+map<string, vector<int>> turbines_instace = {
+    {"A", {26, 8}},
+    {"B", {99}},
+    {"C", {60, 30}},
+    {"D", {170}},
+    {"E", {7, 94, 36}},
+    {"F", {132, 26}},
+    {"G", {140}},
+    {"H", {158, 30}},
+    {"I", {313}},
+    {"J", {136, 74, 25}}
+};
+
+vector<int> turbines_per_zone;
 
 void get_instance_info(int argc, char* argv[]){
     cout << fixed << setprecision(12);
@@ -27,10 +42,10 @@ void get_instance_info(int argc, char* argv[]){
     uniform_real_distribution<double> dist(0.0, 1.0);
 
     srand(time(nullptr));
-
-    string pathSite = "../site/A/";
-    string pathWtg = "../wtg/";
-    string pathWind = "../wind/RVO_HKN.txt";
+    
+    string instance = "A";
+    string pathFolders = "..";
+    string windFile = "RVO_HKN.txt";
 
     ifstream file;
     Foundation t;
@@ -42,20 +57,25 @@ void get_instance_info(int argc, char* argv[]){
     string strWind = "0.0";
     string strPow, strTC;
 
-    if(argc == 1);
-    else if(argc == 2){
-        num_turb = atoi(argv[1]);
-    } else if(argc >= 5){
-        num_turb = atoi(argv[1]);
-        pathSite = (string) argv[2];
-        pathWtg = (string) argv[3];
-        pathWind = (string) argv[4];
-    } else {
-        throw invalid_argument("Invalid number of arguments");
-        cout << "Invalid Number of Parameters" << endl;
-    }
+    if(argc == 2){
+        instance = (string) argv[1];
+    } else if(argc > 2){
+        instance = (string) argv[1];
+        pathFolders = (string) argv[2];
+    } else if(argc > 3){
+        instance = (string) argv[1];
+        pathFolders = (string) argv[2];
+        windFile = (string) argv[3];
+    };
 
-    file.open(pathWind);
+    turbines_per_zone = turbines_instace[instance];
+
+    file.open(pathFolders + "/wind/" + windFile);
+
+    if(file.fail()){
+        cout << "ERROR: Invalid wind file" << endl;
+        throw invalid_argument("Invalid wind file");
+    }
 
     double rand_double = dist(re);
     double accChance = 0.0;
@@ -71,7 +91,12 @@ void get_instance_info(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathSite + "availablePositions.txt");
+    file.open(pathFolders + "/site/" + instance + "/availablePositions.txt");
+
+    if(file.fail()){
+        cout << "ERROR: Invalid instance" << endl;
+        throw invalid_argument("Invalid instance");
+    }
 
     while(file.good() ){
         file >> strX >> strY >> _ >> strCost >> zone;
@@ -88,7 +113,12 @@ void get_instance_info(int argc, char* argv[]){
 
     foundations.pop_back();
 
-    file.open(pathWtg + "NREL-10-179.txt");
+    file.open(pathFolders + "/wtg/" + "NREL-10-179.txt");
+
+    if(file.fail()){
+        cout << "ERROR: '/wtg' not found" << endl;
+        throw invalid_argument("'/wtg' not found");
+    }
 
     while(file.good() && stof(strWind) != wind){
         file >> strWind >> strPow >> strTC;
@@ -105,7 +135,7 @@ void get_instance_info(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathWtg + "NREL-15-240.txt");
+    file.open(pathFolders + "/wtg/" + "NREL-15-240.txt");
 
     strWind = "0.0";
 
@@ -124,7 +154,7 @@ void get_instance_info(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathSite + "fixed_wf.txt");
+    file.open(pathFolders + "/site/" + instance + "/fixed_wf.txt");
 
     turb.diameter = 179;
     turb.power = powerFxd;
