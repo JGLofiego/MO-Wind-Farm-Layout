@@ -4,12 +4,12 @@
 #include <time.h>
 using namespace std;
 
-vector<Solution> create_initial_population(int size_population, int num_turb) {
+vector<Solution> create_initial_population(int size_population) {
 
   vector<Solution> population;
 
   for (int i = 0; i < size_population; i++) {
-    population.push_back(generate_solution(num_turb));
+    population.push_back(generate_solution());
   }
 
   return population;

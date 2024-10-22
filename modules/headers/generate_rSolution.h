@@ -14,6 +14,7 @@ struct Foundation {
 
 extern vector<vector<Foundation>> foundations;
 extern vector<Turbine> fixd;
+extern vector<int> turbines_per_zone;
 
 extern float wind;
 extern float power;
@@ -28,7 +29,7 @@ struct Solution {
     pair<double, double> fitness;  // The representation of the fitness evaluation, the first one is the cost while the second one is the netpower
 };
 
-Solution generate_solution(int num_turb);
+Solution generate_solution();
 
 double calculate_cost(Solution& sol);
 

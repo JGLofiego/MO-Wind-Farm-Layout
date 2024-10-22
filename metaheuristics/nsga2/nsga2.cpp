@@ -2,6 +2,7 @@
 #include <ctime> 
 #include <cstdlib>
 #include <utility> 
+#include <random>
 #include "../../modules/headers/population.h"
 #include "../../modules/headers/generate_rSolution.h"
 #include "../../modules/headers/mutation.h"
@@ -10,79 +11,85 @@
 #include "../../modules/headers/crowding_distance.h"
 #include "../../modules/headers/non_dominated_sorting.h"
 
+#include "../../modules/headers/dominates.h"
+#include "../../modules/headers/isEqual.h"
+#include "../../modules/headers/nsga2.h"
+
 using namespace std;
 
-int main(){
+void updatePopulation(vector<Solution>& population) {
+  // Loop through each solution in the population
+  for (int i = 0; i < population.size(); i++) {
+    bool isDominated = false;
 
-  srand(time(0)); //Initializing the random number generator 
+    // Check if the solution is dominated by any other solution in the population
+    for (int j = 0; j < population.size(); j++) {
+      if (i != j && dominates(population[j], population[i])) {
+        isDominated = true;
+        // If the solution is dominated, remove it and adjust the index
+        population.erase(population.begin() + i);
+        i--;
+        break;
+      }
+    }
 
-  //Information that must be extracted from each instance
-  int num_turb = 3;
-  int upperBoundX = 3;
-  int upperBoundY = 3;
+    // If the solution has not been dominated, check if there are copies of it
+    if (!isDominated) {
+      vector<int> copies;
+      for (int j = 0; j < population.size(); j++) {
+        if (i != j && isEqual(population[j], population[i])) {
+          copies.push_back(j);
+        }
+      }
+
+      // Removes back-to-front copies to avoid indexing issues
+      if (!copies.empty()) {
+        for (int k = copies.size() - 1; k >= 0; k--) {
+          population.erase(population.begin() + copies[k]);
+        }
+      }
+    }
+  }
+}
+
+vector<Solution> nsga2(vector<Solution>& population){
+
+  //Initializing the random number generator 
+  default_random_engine re{(unsigned)time(nullptr)};
+  uniform_real_distribution<double> dist(0.0, 1.0);
 
   //NGSAII paramets 
-  int size_population = 10; //Size of the population
-  double probCross = 0.8;
-  double probMutacao = 0.4;
+  int size_population = population.size(); //Size of the population
+  double cross_prob = 0.8;
+  double mutation_prob = 0.4;
   int max_generations = 3;
 
-  //Initial population
-  //vector<Solution> population = create_initial_population(size_population, num_turb, upperBoundX, upperBoundY); 
-  vector<Solution> population(10);
-
-  // for (int i = 0; i < 10; i++) {
-  //       population[i].grid = {0, 1, 0, 1, 0};  // Exemplo de grid com 5 posições
-  //       population[i].available_positions = {0, 2, 4};  // Posições disponíveis
-  //       population[i].n_available_positions = {1, 3};  // Posições ocupadas por turbinas
-  //       population[i].fitness = {100.0 + i, 200.0 + i};  // Exemplo de fitness (custo, potência líquida)
-  // }
-
-  // population[0].fitness.first = 90;
-  // population[8].fitness.second = -100;
-
-  // for (int i = 0; i < 10; i++) {
-  //       cout << "Solution " << i + 1 << ":" << endl;
-  //       cout << "Grid: ";
-  //       for (int j : population[i].grid) cout << j << " ";
-  //       cout << endl;
-
-  //       cout << "Available Positions: ";
-  //       for (int j : population[i].available_positions) cout << j << " ";
-  //       cout << endl;
-
-  //       cout << "Occupied Positions: ";
-  //       for (int j : population[i].n_available_positions) cout << j << " ";
-  //       cout << endl;
-
-  //       cout << "Fitness (Cost, Net Power): " << population[i].fitness.first << ", " << population[i].fitness.second << endl;
-  //       cout << "--------------------------" << endl;
-  //   }
-
-
   cout << endl;
-  cout << "------------Initial population ------------ " << endl;
+  cout << "------------INITIAL POPULATION ------------ " << endl;
   for(auto& i : population){
-    cout << i.fitness.first << " " << i.fitness.second << endl;
+    cout << "<" << i.fitness.first << ", " << i.fitness.second << ">" << endl;
   }
-  cout << "------------------------------------------- " << endl;
+  cout << "------------------------------------------- " << endl << endl;
+
+  cout << "SIZE OF INITIAL POPULATION: " << population.size() << endl << endl;
 
   int generation = 0;
+
   while(generation < max_generations){
-    vector<Solution> offspring;
+
+    cout << "======================= GENERATION: " << generation << "=======================" << endl << endl;
+
+    vector<Solution> offspring_population;
 
     for(int i = 0; i < size_population; i++){
       //Parent selection
-      pair<Solution, Solution> parents = binary_tornament(population);
-      cout << endl;
-      cout << "Parent 1: " << parents.first.fitness.first << " " << parents.first.fitness.second << endl;
-      cout << "Parent 2: " << parents.second.fitness.first << " " << parents.second.fitness.second << endl;
-      
+      pair<Solution, Solution> parents = binary_tournament(population);
+  
       //Crossover
       Solution child1, child2;
-      double k = (double) rand() / RAND_MAX;
+      double k = dist(re);
 
-      if(k < probCross){
+      if(k < cross_prob){
         child1 = crossover(parents.first, parents.second);
         child2 = crossover(parents.second, parents.first);
       }
@@ -91,43 +98,82 @@ int main(){
         child2 = parents.second;
       }
 
-      //Mutation
-      k = (double) rand() / RAND_MAX;
+      offspring_population.push_back(child1);
+      offspring_population.push_back(child2);
 
-      if(k < probMutacao){
+      //Mutation
+      k = dist(re);
+
+      if(k < mutation_prob){
         mutation(child1);
         mutation(child2);
       }
 
-      offspring.push_back(child1);
-      offspring.push_back(child2);
+      offspring_population.push_back(child1);
+      offspring_population.push_back(child2);
     }
 
-    //Mergin 'population' + 'offspring' = 'total_population'
-    //Adding the offspring at the end of the 'population' in 'total_population'
+    //Mergin 'population' (size: N) + 'offspring_population' (size: 4N) = 'total_population' (size: 5N)
+    //Adding the offspring_population at the end of the 'population' in 'total_population'
     vector<Solution> total_population = population;
-    total_population.insert(total_population.end(), offspring.begin(), offspring.end()); 
+    total_population.insert(total_population.end(), offspring_population.begin(), offspring_population.end()); 
+    cout << "SIZE OF TOTAL POPULATION: " << total_population.size() << endl << endl;
 
     //Non dominated sorting
     vector<vector<Solution>> fronts = non_dominated_sorting(total_population);
 
-    population.clear(); //Cleaning the population to generates the next generation
+    cout << "========================== FRONTS ==========================" << endl << endl;
+    for(int i = 0; i < fronts.size(); i++){
+      cout << "----------------------- FRONT: "<< i << " -----------------------" << endl;
+      for(int j = 0; j < fronts[i].size(); j++){
+        cout << "<" << fronts[i][j].fitness.first << ", " << fronts[i][j].fitness.second << ">"<< endl;
+      }
+    } cout << endl;
 
+    population.clear(); //Cleaning the population to generates the next generation
+    
+    int k = 0;
     for (auto& front : fronts) {
-      if(population.size() + front.size() <=size_population){
-        for(auto& solution : front){
+      if (population.size() + front.size() <= size_population) {
+        // Add the entire front if it fits in the population
+        cout << "ADDING THE WHOLE FRONT " << k << endl;
+        for (auto& solution : front) {
           population.push_back(solution);
         }
-      }
-      else{
+      } 
+      else {
+        // If the front doesn't fit all the way, sort by crowding distance and add the missing solutions
         auto front_sorted = crowding_distance(front);
-        for(int i = 0; i < size_population - population.size(); i++){
+        cout << "ADDING PART OF FRONT " << k << " (crowding distance)" << endl;
+        
+        // Calculate how many solutions are missing to complete the population
+        int remaining_spots = size_population - population.size();
+        
+        // Add missing solutions
+        for (int i = 0; i < remaining_spots; i++) {
           population.push_back(front_sorted[i]);
         }
+        
+        // The population is complete, we can exit the loop
         break;
       }
+      k++;
     }
+
     generation++;
   }
+
+
+  updatePopulation(population);
   
+  cout << endl;
+  cout << "------------FINAL POPULATION ------------ " << endl;
+  for(auto& i : population){
+    cout << "<" << i.fitness.first << ", " << i.fitness.second << ">" << endl;
+  }
+  cout << "------------------------------------------- " << endl << endl;
+
+  cout << "SIZE OF FINAL POPULATION: " << population.size() << endl << endl;
+  
+  return population;
 }

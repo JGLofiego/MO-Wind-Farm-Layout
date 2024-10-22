@@ -95,14 +95,14 @@ double calculate_power(Solution& sol){
             deficit = 0;
 
             for(int j = 0; j < num_zones; j++){
-                for(int k = 0; k < sol.turbines[z].size(); k++){
-                    result = calculate_interference(sol.turbines[z][i], sol.turbines[j][k]);
+                for(int k = 0; k < sol.turbines[j].size(); k++){
+                    result = calculate_interference(sol.turbines[j][k], sol.turbines[z][i]);
                     deficit += result * result;
                 }
             }
 
-            for( Turbine turbina: fixd){
-                result = calculate_interference(sol.turbines[z][i], turbina);
+            for(int a = 0; a < fixd.size(); a++){
+                result = calculate_interference(fixd[a], sol.turbines[z][i]);
                 deficit += result * result;
             }
 
@@ -120,13 +120,13 @@ double calculate_power(Solution& sol){
         deficit = 0.0;
 
         for(int j = 0; j < fixd.size(); j++){
-            result = calculate_interference(fixd[i], fixd[j]);
+            result = calculate_interference(fixd[j], fixd[i]);
             deficit += result * result;
         }
 
         for(int j = 0; j < num_zones; j++){
-            for(int k = 0; k < num_zones; k++){
-                result = calculate_interference(fixd[i], sol.turbines[j][k]);
+            for(int k = 0; k < turbines_per_zone[j]; k++){
+                result = calculate_interference(sol.turbines[j][k], fixd[i]);
                 deficit += result * result;
             }
         }
@@ -141,7 +141,7 @@ double calculate_power(Solution& sol){
 }
 
 // Função para gerar uma solução aleatória, retorna uma matriz booleana a qual false = sem turbina, e true = turbina
-Solution generate_solution(int num_turb){
+Solution generate_solution(){
     id = fixd.size();
 
     // inicializa um vector de int com todas as possiveis posições de um grid upperboundX x upperBoundY 
@@ -154,7 +154,7 @@ Solution generate_solution(int num_turb){
     vector<vector<Turbine>> turbines(num_zones);
     
     for(int i = 0; i < num_zones; i++){
-        turbines[i].resize(num_turb);
+        turbines[i].resize(turbines_per_zone[i]);
     }
 
     Turbine t;
@@ -181,7 +181,7 @@ Solution generate_solution(int num_turb){
     t.diameter = 240;
 
     for(int z = 0; z < num_zones; z++){
-        for(int i = 0; i < num_turb; i++){
+        for(int i = 0; i < turbines_per_zone[z]; i++){
             // Gera um número aleatório do tamanho do vector de posições disponíveis
             rand_int = rand() % pos[z].size();
 
@@ -197,6 +197,7 @@ Solution generate_solution(int num_turb){
             t.thrust_coef = thrust_coef;
             t.zone = z;
             turbines[z][i] = t;
+            // cout << t.id << " " << t.x << " " << t.y << endl;
 
             // // apaga o elemento do array de posições disponíveis, evitando possíveis repetições
             pos[z].erase(pos[z].begin() + rand_int);
