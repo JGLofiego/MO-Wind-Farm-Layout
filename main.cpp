@@ -28,15 +28,15 @@ int main(int argc, char* argv[]){
     // wind = 12;
     // angle = 0.0;
 
-    Solution sol = generate_solution();
+    // Solution sol = generate_solution();
 
     // cout << "Fitness: " << sol.fitness.first << " " << sol.fitness.second << endl;
 
     // cout << "num_zones: " << num_zones << endl;
 
-    for(int i = 0; i < num_zones; i++){
-        cout << "zone " << i + 1 << ": " << sol.turbines[i].size() << endl;
-    }
+    // for(int i = 0; i < num_zones; i++){
+    //     cout << "zone " << i + 1 << ": " << sol.turbines[i].size() << endl;
+    // }
 
     // for (int i = 0; i < num_zones; i++){
     //     cout << sol.turbines[i].size() << endl;
@@ -113,7 +113,7 @@ int main(int argc, char* argv[]){
     // }
 
 
-    // auto landscapes_vector = landscapes_decomposition(10);
+    auto landscapes_vector = landscapes_decomposition(10);
 
     // metafeatures_extraction(landscapes_vector);
 }

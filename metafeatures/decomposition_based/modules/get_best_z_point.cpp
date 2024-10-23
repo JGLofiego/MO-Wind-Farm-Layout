@@ -6,7 +6,7 @@
 
 using namespace std;
 
-pair<double, double> get_z_point_metafeatures(vector<Solution>& population) {
+pair<double, double> get_z_point_metafeatures() {
   
   // Power of a changable turbine in free wind
   double power_turb_changeable = power_alt(wind, power, thrust_coef);
