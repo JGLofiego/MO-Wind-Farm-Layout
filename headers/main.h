@@ -35,6 +35,8 @@
 #include "../metafeatures/decomposition_based/modules/adaptative_walk.cpp"
 #include "../metafeatures/decomposition_based/modules/normalization.cpp"
 
+
 #include "../metafeatures/extraction.cpp"
+#include "../metafeatures/so_features.cpp"
 
 #endif
