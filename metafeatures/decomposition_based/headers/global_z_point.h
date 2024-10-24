@@ -1,5 +1,5 @@
-#ifndef BEST_Z_POINT_META_H
-#define BEST_Z_POINT_META_H
+#ifndef GLOBAL_Z_POINT_H
+#define GLOBAL_Z_POINT_H
 
 using namespace std;
 
@@ -10,6 +10,6 @@ extern float thrust_coef;
 extern float tcFxd;
 extern vector<Turbine> fixd;
 
-pair<double, double> get_z_point_metafeatures();
+pair<double, double> get_global_z_point();
 
 #endif 

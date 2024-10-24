@@ -6,7 +6,7 @@
 #include "./headers/weight_vectors_metafeatures.h"
 #include "./headers/random_walk.h"
 #include "./headers/tchebycheff_metafeatures.h"
-#include "./headers/z_point_metafeatures.h"
+#include "./headers/global_z_point.h"
 #include "./headers/get_neighborhood.h"
 #include "./headers/adaptative_walk.h"
 
@@ -35,6 +35,8 @@ void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght
   //Getting the min and max values of all solutions x, ie, {max/min(F(x)) | 'x' in landscapes}
   double max = numeric_limits<double>::lowest();
   double min = numeric_limits<double>::infinity();
+
+  // pair<double, double> global_z_point = get_global_z_point();
 
   for(int i = 0; i < qtd_of_landscapes; i++){
     //Landscape i refers to the landscape of the subproblem i

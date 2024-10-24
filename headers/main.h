@@ -27,7 +27,7 @@
 #include "../modules/nsga2/non_dominated_sorting.cpp"
 
 #include "../metafeatures/decomposition_based/decomposition.cpp"
-#include "../metafeatures/decomposition_based/modules/get_best_z_point.cpp"
+#include "../metafeatures/decomposition_based/modules/get_global_z_point.cpp"
 #include "../metafeatures/decomposition_based/modules/tchebycheff_metafeatures.cpp"
 #include "../metafeatures/decomposition_based/modules/weight_vectors_metafeatures.cpp"
 #include "../metafeatures/decomposition_based/modules/get_neighborhood.cpp"

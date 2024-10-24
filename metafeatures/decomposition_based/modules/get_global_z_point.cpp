@@ -2,11 +2,12 @@
 #include <limits>
 #include <iostream>
 #include <utility>
-#include "../headers/z_point_metafeatures.h"
+#include "../headers/global_z_point.h"
+#include "../../../modules/headers/generate_rSolution.h"
 
 using namespace std;
 
-pair<double, double> get_z_point_metafeatures() {
+pair<double, double> get_global_z_point() {
   
   // Power of a changable turbine in free wind
   double power_turb_changeable = power_alt(wind, power, thrust_coef);
