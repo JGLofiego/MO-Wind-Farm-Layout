@@ -3,12 +3,12 @@
 #include <iostream>
 #include <limits> 
 
-#include "./headers/weight_vectors_metafeatures.h"
-#include "./headers/random_walk.h"
-#include "./headers/tchebycheff_metafeatures.h"
-#include "./headers/global_z_point.h"
-#include "./headers/get_neighborhood.h"
-#include "./headers/adaptative_walk.h"
+#include "../../headers/features/weight_vectors_metafeatures.h"
+#include "../../headers/features/random_walk.h"
+#include "../../headers/features/tchebycheff_metafeatures.h"
+#include "../../headers/features/global_z_point.h"
+#include "../../headers/features/get_neighborhood.h"
+#include "../../headers/features/adaptative_walk.h"
 
 #include "../../headers/features/landscapeMetrics.h"
 #include "../../headers/features/normalization.h"

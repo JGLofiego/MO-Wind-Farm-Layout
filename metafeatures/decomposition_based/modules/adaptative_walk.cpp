@@ -1,11 +1,11 @@
 #include <vector>
 #include <utility>
 
-#include "../headers/adaptative_walk.h"
+#include "../../../headers/features/adaptative_walk.h"
 #include "../../../headers/features/landscapeElement.h"
-#include "../headers/tchebycheff_metafeatures.h"
+#include "../../../headers/features/tchebycheff_metafeatures.h"
 #include "../../../modules/headers/population.h"
-#include "../headers/get_neighborhood.h"
+#include "../../../headers/features/get_neighborhood.h"
 
 using namespace std;
 

@@ -2,7 +2,7 @@
 #include <limits>
 #include <iostream>
 #include <utility>
-#include "../headers/global_z_point.h"
+#include "../../../headers/features/global_z_point.h"
 #include "../../../modules/headers/generate_rSolution.h"
 
 using namespace std;

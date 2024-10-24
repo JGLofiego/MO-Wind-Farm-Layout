@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <utility>
-#include "../../../modules/headers/generate_rSolution.h"
+#include "../../modules/headers/generate_rSolution.h"
 
 vector<Solution> get_neighborhood(Solution &currentSolution, int number_of_neighbors);
 
