@@ -112,8 +112,11 @@ int main(int argc, char* argv[]){
     //     cout << endl;
     // }
 
+    int qtd_of_landscapes = 10;
+    int walk_lenght = 8;
+    int number_of_neighbors = 5;
 
-    auto landscapes_vector = landscapes_decomposition(10);
+    auto landscapes_vector = landscapes_decomposition(qtd_of_landscapes, walk_lenght, number_of_neighbors);
 
     // metafeatures_extraction(landscapes_vector);
 }

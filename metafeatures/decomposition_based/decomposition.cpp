@@ -14,32 +14,31 @@
 #include "../../headers/features/normalization.h"
 #include "../../headers/features/landscapeElement.h"
 #include "../so_features.h"
-#include "../extraction.h"
+#include "../mo_features.h"
 
 #include "../../modules/headers/generate_rSolution.h"
 #include "../../modules/headers/mutation.h"
 #include "../../modules/headers/isEqual.h"
 #include "../../modules/headers/population.h"
 
-pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landscapes_decomposition(int population_size){
+pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landscapes_decomposition(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
-  vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(population_size);
+  vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(qtd_of_landscapes);
 
   //Building a landscape for each subproblem
-  vector<vector<LandscapeElement>> landscapes_random_walk(population_size);
-  vector<vector<LandscapeElement>> landscapes_adaptative_walk(population_size);
+  vector<vector<LandscapeElement>> landscapes_random_walk(qtd_of_landscapes);
+  vector<vector<LandscapeElement>> landscapes_adaptative_walk(qtd_of_landscapes);
 
   //Getting the min and max values of all solutions x, ie, {max/min(F(x)) | 'x' in landscapes}
-
   double max = numeric_limits<double>::lowest();
   double min = numeric_limits<double>::infinity();
 
-  for(int i = 0; i < landscapes_random_walk.size(); i++){
+  for(int i = 0; i < qtd_of_landscapes; i++){
     //Landscape i refers to the landscape of the subproblem i
     //lambda_vector i refers to the weight vector of the subproblem i
-    landscapes_random_walk[i] = random_walk(8, 5, lambda_vector[i], max, min);
-    landscapes_adaptative_walk[i] = adaptive_walk(5, lambda_vector[i], max, min);
+    landscapes_random_walk[i] = random_walk(walk_lenght, number_of_neighbors, lambda_vector[i], max, min);
+    landscapes_adaptative_walk[i] = adaptive_walk(number_of_neighbors, lambda_vector[i], max, min);
   }
 
   normalization(landscapes_random_walk, max, min);
@@ -48,7 +47,7 @@ pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landsca
   auto random_wak_so_features = so_features_extraction(landscapes_random_walk);
   auto adaptative_walk_so_features = so_features_extraction(landscapes_adaptative_walk);
 
-  metafeatures_extraction(adaptative_walk_so_features);
+  mo_features_extraction(random_wak_so_features);
 
   pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landscapes;
   landscapes.first = landscapes_random_walk;

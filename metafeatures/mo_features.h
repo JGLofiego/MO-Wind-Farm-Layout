@@ -1,10 +1,10 @@
-#ifndef EXTRACTION_H
-#define EXTRACTION_H
+#ifndef MO_METAFEATURES_H
+#define MO_METAFEATURES_H
 
 #include <vector>
 #include "../modules/headers/generate_rSolution.h"
 #include "../headers/features/landscape.h"
 
-void metafeatures_extraction(std::vector<Landscape> landscapes_vector);
+void mo_features_extraction(std::vector<Landscape> landscapes_vector);
 
 #endif 

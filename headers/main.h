@@ -36,7 +36,7 @@
 #include "../metafeatures/decomposition_based/modules/normalization.cpp"
 
 
-#include "../metafeatures/extraction.cpp"
+#include "../metafeatures/mo_features.cpp"
 #include "../metafeatures/so_features.cpp"
 
 #endif
