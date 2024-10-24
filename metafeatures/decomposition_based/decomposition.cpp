@@ -36,13 +36,13 @@ void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght
   double max = numeric_limits<double>::lowest();
   double min = numeric_limits<double>::infinity();
 
-  // pair<double, double> global_z_point = get_global_z_point();
+  pair<double, double> global_z_point = get_global_z_point();
 
   for(int i = 0; i < qtd_of_landscapes; i++){
     //Landscape i refers to the landscape of the subproblem i
     //lambda_vector i refers to the weight vector of the subproblem i
-    landscapes_random_walk[i] = random_walk(walk_lenght, number_of_neighbors, lambda_vector[i], max, min);
-    landscapes_adaptative_walk[i] = adaptive_walk(number_of_neighbors, lambda_vector[i], max, min);
+    landscapes_random_walk[i] = random_walk(walk_lenght, number_of_neighbors, lambda_vector[i], global_z_point, max, min);
+    landscapes_adaptative_walk[i] = adaptive_walk(number_of_neighbors, lambda_vector[i], global_z_point, max, min);
   }
 
   normalization(landscapes_random_walk, max, min);

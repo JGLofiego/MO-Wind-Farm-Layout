@@ -40,7 +40,7 @@ void build_csv(vector<double> &mo_features, const string& filename) {
         file << "\n";  
 
         file.close(); 
-        cout << "Arquivo CSV 'mo_features.csv' gerado com sucesso!" << endl;
+        cout << "Arquivo CSV " << filename << " gerado com sucesso!" << endl;
     } else {
         cerr << "Erro ao abrir o arquivo para escrita." << endl;
     }
