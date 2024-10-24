@@ -4,22 +4,17 @@
 #include <limits> 
 
 #include "../../headers/features/weight_vectors_metafeatures.h"
-#include "../../headers/features/random_walk.h"
 #include "../../headers/features/tchebycheff_metafeatures.h"
 #include "../../headers/features/global_z_point.h"
 #include "../../headers/features/get_neighborhood.h"
+#include "../../headers/features/random_walk.h"
 #include "../../headers/features/adaptative_walk.h"
-
-#include "../../headers/features/landscapeMetrics.h"
 #include "../../headers/features/normalization.h"
-#include "../../headers/features/landscapeElement.h"
 #include "../so_features.h"
 #include "../mo_features.h"
 
-#include "../../modules/headers/generate_rSolution.h"
-#include "../../modules/headers/mutation.h"
-#include "../../modules/headers/isEqual.h"
-#include "../../modules/headers/population.h"
+#include "../../headers/features/landscapeMetrics.h"
+#include "../../headers/features/landscapeElement.h"
 
 #include "../../headers/utils/features_csv.h"
 
@@ -36,6 +31,7 @@ void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght
   double max = numeric_limits<double>::lowest();
   double min = numeric_limits<double>::infinity();
 
+  //Getting the global z_point
   pair<double, double> global_z_point = get_global_z_point();
 
   for(int i = 0; i < qtd_of_landscapes; i++){
@@ -45,15 +41,19 @@ void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght
     landscapes_adaptative_walk[i] = adaptive_walk(number_of_neighbors, lambda_vector[i], global_z_point, max, min);
   }
 
+  //Normalizing the landscapes elements
   normalization(landscapes_random_walk, max, min);
   normalization(landscapes_adaptative_walk, max, min);
 
+  //Getting the metrics (single objective features) of each landscape of each type (random walk and adaptative walk)
   auto random_wak_so_features = so_features_extraction(landscapes_random_walk);
   auto adaptative_walk_so_features = so_features_extraction(landscapes_adaptative_walk);
 
+  //Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
   auto random_wak_mo_features = mo_features_extraction(random_wak_so_features);
   auto adaptative_walk_mo_features = mo_features_extraction(adaptative_walk_so_features);
 
-  build_csv(random_wak_mo_features, "mo_features_random_walk.csv");
-  build_csv(adaptative_walk_mo_features, "mo_features_adaptative_walk.csv");
+  //Buiding the csv
+  build_csv(random_wak_mo_features, "mo_features_random_walk_decomposition.csv");
+  build_csv(adaptative_walk_mo_features, "mo_features_adaptative_walk_decomposition.csv");
 }

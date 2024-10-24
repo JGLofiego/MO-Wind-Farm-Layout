@@ -3,8 +3,7 @@
 
 #include <utility>
 #include <vector>
-using namespace std;
 
-vector<pair<double, double>> build_weight_vector_metafeatures(int population_size);
+std::vector<std::pair<double, double>> build_weight_vector_metafeatures(int population_size);
 
 #endif 
