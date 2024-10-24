@@ -10,7 +10,7 @@
 #include "./headers/get_neighborhood.h"
 #include "./headers/adaptative_walk.h"
 
-#include "../../headers/features/landscape.h"
+#include "../../headers/features/landscapeMetrics.h"
 #include "../../headers/features/normalization.h"
 #include "../../headers/features/landscapeElement.h"
 #include "../so_features.h"

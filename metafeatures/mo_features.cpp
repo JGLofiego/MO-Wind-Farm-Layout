@@ -5,7 +5,7 @@
 #include <string>
 #include <functional>
 
-#include "../headers/features/landscape.h"
+#include "../headers/features/landscapeMetrics.h"
 #include "./mo_features.h"
 
 using namespace std;
@@ -53,7 +53,7 @@ double sk(const vector<double>& values) {
   return sum / values.size();
 }
 
-vector<double> get_mo_features(vector<Landscape> &landscapes_vector, function<vector<double>(const Landscape&)> get_feature){
+vector<double> get_mo_features(vector<LandscapeMetrics> &landscapes_vector, function<vector<double>(const LandscapeMetrics&)> get_feature){
   vector<double> mo_features;
   vector<double> s_mean;
   vector<double> s_sd;
@@ -96,15 +96,15 @@ vector<double> get_mo_features(vector<Landscape> &landscapes_vector, function<ve
   return mo_features;
 }
 
-vector<double> mo_features_extraction(vector<Landscape> landscapes_vector){
+vector<double> mo_features_extraction(vector<LandscapeMetrics> landscapes_vector){
   vector<double> mo_features;
   vector<double> fitness_values;
   vector<double> fitness_differences;
   vector<double> improving_neighbors;
 
-  fitness_values = get_mo_features(landscapes_vector, [](const Landscape& landscape) { return landscape.fitness_values;});
-  fitness_differences = get_mo_features(landscapes_vector, [](const Landscape& landscape) { return landscape.fitness_differences;});
-  improving_neighbors = get_mo_features(landscapes_vector, [](const Landscape& landscape) { return landscape.improving_neighbors_count;});
+  fitness_values = get_mo_features(landscapes_vector, [](const LandscapeMetrics& landscape) { return landscape.fitness_values;});
+  fitness_differences = get_mo_features(landscapes_vector, [](const LandscapeMetrics& landscape) { return landscape.fitness_differences;});
+  improving_neighbors = get_mo_features(landscapes_vector, [](const LandscapeMetrics& landscape) { return landscape.improving_neighbors_count;});
 
   mo_features = fitness_values;
   mo_features.insert(mo_features.end(), fitness_differences.begin(), fitness_differences.end());

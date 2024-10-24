@@ -5,6 +5,6 @@
 #include <utility>
 
 #include "../../../headers/features/landscapeElement.h"
-#include "../../../headers/features/landscape.h"
+#include "../../../headers/features/landscapeMetrics.h"
 
 #endif

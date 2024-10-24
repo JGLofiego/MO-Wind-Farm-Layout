@@ -2,15 +2,15 @@
 #include <utility>
 
 #include "../headers/features/landscapeElement.h"
-#include "../headers/features/landscape.h"
+#include "../headers/features/landscapeMetrics.h"
 #include "./so_features.h"
 
-vector<Landscape> so_features_extraction(vector<vector<LandscapeElement>> &landscapes){
+vector<LandscapeMetrics> so_features_extraction(vector<vector<LandscapeElement>> &landscapes){
 
-  vector<Landscape> landscape_so_features;
+  vector<LandscapeMetrics> landscape_so_features;
 
   for(const auto& landscape : landscapes){
-    Landscape landscape_metrics;
+    LandscapeMetrics landscape_metrics;
 
     for(const auto& element : landscape){
       double current_solution_fitness = element.tch_current_solution;

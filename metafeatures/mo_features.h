@@ -3,8 +3,8 @@
 
 #include <vector>
 #include "../modules/headers/generate_rSolution.h"
-#include "../headers/features/landscape.h"
+#include "../headers/features/landscapeMetrics.h"
 
-vector<double> mo_features_extraction(std::vector<Landscape> landscapes_vector);
+vector<double> mo_features_extraction(std::vector<LandscapeMetrics> landscapes_vector);
 
 #endif 
