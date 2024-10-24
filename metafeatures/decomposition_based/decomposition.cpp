@@ -21,7 +21,9 @@
 #include "../../modules/headers/isEqual.h"
 #include "../../modules/headers/population.h"
 
-pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landscapes_decomposition(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
+#include "../../headers/utils/features_csv.h"
+
+void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(qtd_of_landscapes);
@@ -47,11 +49,9 @@ pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landsca
   auto random_wak_so_features = so_features_extraction(landscapes_random_walk);
   auto adaptative_walk_so_features = so_features_extraction(landscapes_adaptative_walk);
 
-  mo_features_extraction(random_wak_so_features);
+  auto random_wak_mo_features = mo_features_extraction(random_wak_so_features);
+  auto adaptative_walk_mo_features = mo_features_extraction(adaptative_walk_so_features);
 
-  pair<vector<vector<LandscapeElement>>, vector<vector<LandscapeElement>>> landscapes;
-  landscapes.first = landscapes_random_walk;
-  landscapes.second = landscapes_adaptative_walk;
-
-  return landscapes;
+  build_csv(random_wak_mo_features, "mo_features_random_walk.csv");
+  build_csv(adaptative_walk_mo_features, "mo_features_adaptative_walk.csv");
 }

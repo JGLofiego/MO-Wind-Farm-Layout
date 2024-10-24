@@ -38,5 +38,6 @@
 
 #include "../metafeatures/mo_features.cpp"
 #include "../metafeatures/so_features.cpp"
+#include "../utils/features_csv.cpp"
 
 #endif

@@ -3,9 +3,11 @@
 #include <vector>
 #include <iomanip> 
 
+#include "../headers/utils/features_csv.h"
+
 using namespace std;
 
-void build_csv(vector<double> &mo_features) {
+void build_csv(vector<double> &mo_features, const string& filename) {
 
     vector<string> column_names = {
         "FV_avg_avg", "FV_avg_sd", "FV_sd_avg", "FV_sd_sd", "FV_r1_avg", 
@@ -16,7 +18,7 @@ void build_csv(vector<double> &mo_features) {
         "IN_r1_sd", "IN_kr_avg", "IN_kr_sd", "IN_sk_avg", "IN_sk_sd",
     };
 
-    ofstream file("mo_features.csv");
+    ofstream file(filename);
 
     if (file.is_open()) {
         for (size_t i = 0; i < column_names.size(); ++i) {

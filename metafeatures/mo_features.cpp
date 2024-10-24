@@ -6,7 +6,6 @@
 #include <functional>
 
 #include "../headers/features/landscape.h"
-#include "../utils/features_csv.cpp"
 #include "./mo_features.h"
 
 using namespace std;
@@ -97,7 +96,7 @@ vector<double> get_mo_features(vector<Landscape> &landscapes_vector, function<ve
   return mo_features;
 }
 
-void mo_features_extraction(vector<Landscape> landscapes_vector){
+vector<double> mo_features_extraction(vector<Landscape> landscapes_vector){
   vector<double> mo_features;
   vector<double> fitness_values;
   vector<double> fitness_differences;
@@ -111,5 +110,5 @@ void mo_features_extraction(vector<Landscape> landscapes_vector){
   mo_features.insert(mo_features.end(), fitness_differences.begin(), fitness_differences.end());
   mo_features.insert(mo_features.end(), improving_neighbors.begin(), improving_neighbors.end());
 
-  build_csv(mo_features);
+  return mo_features;
 }
