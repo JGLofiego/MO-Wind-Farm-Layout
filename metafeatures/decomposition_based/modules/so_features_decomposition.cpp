@@ -1,9 +1,9 @@
 #include <vector>
 #include <utility>
 
-#include "../headers/features/landscapeElement.h"
-#include "../headers/features/landscapeMetrics.h"
-#include "./so_features.h"
+#include "../../../headers/features/landscapeElement.h"
+#include "../../../headers/features/landscapeMetrics.h"
+#include "../../../headers/features/so_features_decomposition.h"
 
 vector<LandscapeMetrics> so_features_extraction(vector<vector<LandscapeElement>> &landscapes){
 

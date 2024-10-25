@@ -5,8 +5,8 @@
 #include <string>
 #include <functional>
 
-#include "../headers/features/landscapeMetrics.h"
-#include "./mo_features.h"
+#include "../../../headers/features/landscapeMetrics.h"
+#include "../../../headers/features/mo_features_decomposition.h"
 
 using namespace std;
 

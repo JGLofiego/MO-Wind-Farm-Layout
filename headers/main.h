@@ -36,8 +36,9 @@
 #include "../metafeatures/decomposition_based/modules/normalization.cpp"
 
 
-#include "../metafeatures/mo_features.cpp"
-#include "../metafeatures/so_features.cpp"
+#include "../metafeatures/decomposition_based/modules/so_features_decomposition.cpp"
+#include "../metafeatures/decomposition_based/modules/mo_features_decomposition.cpp"
+
 #include "../utils/features_csv.cpp"
 
 #endif

@@ -10,8 +10,8 @@
 #include "../../headers/features/random_walk.h"
 #include "../../headers/features/adaptative_walk.h"
 #include "../../headers/features/normalization.h"
-#include "../so_features.h"
-#include "../mo_features.h"
+#include "../../headers/features/so_features_decomposition.h"
+#include "../../headers/features/mo_features_decomposition.h"
 
 #include "../../headers/features/landscapeMetrics.h"
 #include "../../headers/features/landscapeElement.h"
