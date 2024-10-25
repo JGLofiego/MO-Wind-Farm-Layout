@@ -3,18 +3,18 @@
 #include <iostream>
 #include <limits> 
 
-#include "../../headers/features/weight_vectors_metafeatures.h"
-#include "../../headers/features/tchebycheff_metafeatures.h"
-#include "../../headers/features/global_z_point.h"
-#include "../../headers/features/get_neighborhood.h"
-#include "../../headers/features/random_walk.h"
-#include "../../headers/features/adaptative_walk.h"
-#include "../../headers/features/normalization.h"
-#include "../../headers/features/so_features_decomposition.h"
-#include "../../headers/features/mo_features_decomposition.h"
+#include "../../headers/metafeatures/weight_vectors_metafeatures.h"
+#include "../../headers/metafeatures/tchebycheff_metafeatures.h"
+#include "../../headers/metafeatures/global_z_point.h"
+#include "../../headers/metafeatures/get_neighborhood.h"
+#include "../../headers/metafeatures/random_walk.h"
+#include "../../headers/metafeatures/adaptative_walk.h"
+#include "../../headers/metafeatures/normalization.h"
+#include "../../headers/metafeatures/so_features_decomposition.h"
+#include "../../headers/metafeatures/mo_features_decomposition.h"
 
-#include "../../headers/features/landscapeMetrics.h"
-#include "../../headers/features/landscapeElement.h"
+#include "../../headers/metafeatures/landscapeMetrics.h"
+#include "../../headers/metafeatures/landscapeElement.h"
 
 #include "../../headers/utils/features_csv.h"
 

@@ -1,10 +1,10 @@
 #include <vector>
 #include <utility>
 
-#include "../../../headers/features/landscapeElement.h"
-#include "../../../headers/features/tchebycheff_metafeatures.h"
-#include "../../../headers/features/random_walk.h"
-#include "../../../headers/features/get_neighborhood.h"
+#include "../../../headers/metafeatures/landscapeElement.h"
+#include "../../../headers/metafeatures/tchebycheff_metafeatures.h"
+#include "../../../headers/metafeatures/random_walk.h"
+#include "../../../headers/metafeatures/get_neighborhood.h"
 #include "../../../modules/headers/population.h"
 
 using namespace std;

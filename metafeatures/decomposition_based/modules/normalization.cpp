@@ -1,8 +1,8 @@
 #include <vector>
 #include <iostream>
 
-#include "../../../headers/features/landscapeElement.h"
-#include "../../../headers/features/normalization.h"
+#include "../../../headers/metafeatures/landscapeElement.h"
+#include "../../../headers/metafeatures/normalization.h"
 
 void normalization(vector<vector<LandscapeElement>>& landscapes, double &max, double &min){
 
