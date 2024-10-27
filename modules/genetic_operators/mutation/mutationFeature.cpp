@@ -43,7 +43,8 @@ void mutationAuxFeature(Solution &solution, int zone){
     do{
       rand_intA = rand() % zone_size;
       rand_intB = rand() % zone_size;
-    } while(rand_intA == rand_intB || (solution.grid[zone][rand_intA] == 0 && solution.grid[zone][rand_intB] == 0));
+    } while((solution.grid[zone][rand_intA] == 0 && solution.grid[zone][rand_intB] == 0) ||
+             solution.grid[zone][rand_intA] != 0 && solution.grid[zone][rand_intB] != 0);
 
     // Swapping the genes (turbine_id) betwen grid[zone][rand_intA] e grid[zone][rand_intB]
     int geneA = solution.grid[zone][rand_intA];
@@ -57,22 +58,7 @@ void mutationAuxFeature(Solution &solution, int zone){
       indexB = find_indexFeature(solution.turbines[zone], solution.grid[zone][rand_intB]);
     }
 
-    if(indexA != -1 && indexB != -1){
-      int index;
-      double x, y;
-
-      index = solution.turbines[zone][indexA].index;
-      x = solution.turbines[zone][indexA].x;
-      y = solution.turbines[zone][indexA].y;
-
-      solution.turbines[zone][indexA].index = solution.turbines[zone][indexB].index;
-      solution.turbines[zone][indexA].x = solution.turbines[zone][indexB].x;
-      solution.turbines[zone][indexA].y = solution.turbines[zone][indexB].y;
-
-      solution.turbines[zone][indexB].index = index;
-      solution.turbines[zone][indexB].x = x;
-      solution.turbines[zone][indexB].y = y;
-    } else if (indexA != -1 && indexB == -1){
+    if (indexA != -1 && indexB == -1){
       solution.turbines[zone][indexA].index = rand_intB;
       solution.turbines[zone][indexA].x = foundations[zone][rand_intB].x;
       solution.turbines[zone][indexA].y = foundations[zone][rand_intB].y;
