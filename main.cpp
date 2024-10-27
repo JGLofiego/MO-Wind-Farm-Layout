@@ -112,15 +112,9 @@ int main(int argc, char* argv[]){
     //     cout << endl;
     // }
 
-<<<<<<< HEAD
-    int size_of_population = 20;
-    int walk_lenght = 8;
-    int number_of_neighbors = 50;
-=======
     int size_of_population = 10;
     int walk_lenght = 8;
     int number_of_neighbors = 5;
->>>>>>> 51e87f00273921e450c37188ecb63d611bb020ec
 
     mo_features_extraction_decomposition(size_of_population, walk_lenght, number_of_neighbors);
 
