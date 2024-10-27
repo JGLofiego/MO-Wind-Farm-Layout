@@ -12,6 +12,8 @@ struct Foundation {
     double cost;
 };
 
+float power_alt(float& wind, float& power, float& tc);
+
 extern vector<vector<Foundation>> foundations;
 extern vector<Turbine> fixd;
 extern vector<int> turbines_per_zone;

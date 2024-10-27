@@ -14,6 +14,10 @@ float power_produced(double& wind, Turbine& turbine){
     return 0.6125 * turbine.power * turbine.thrust_coef * (wind * wind * wind);
 }
 
+float power_alt(float& wind, float& power, float& tc){
+    return 0.6125 * power * tc * (wind * wind * wind);
+}
+
 double calculate_cost(Solution& sol){
     double acc = 0;
 
