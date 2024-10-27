@@ -42,6 +42,7 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
     vector<Solution> neighborhood = get_neighborhood(current_solution, number_of_neighbors);
     element.neighborhod = neighborhood; //Adding the neighborhood of 'current_solution' to S
 
+<<<<<<< HEAD
     //Calculating Dominance Metrics
     double num_neighbors = (double) neighborhood.size();
 
@@ -60,6 +61,8 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
     element.inc = 1.0 - (element.inf + element.sup);
 
 
+=======
+>>>>>>> 51e87f00273921e450c37188ecb63d611bb020ec
     for (Solution& neighbor : neighborhood) {
       double neighborSolution_fitness = calculate_gte_metafeatures(neighbor.fitness, lambda, z_point);
       element.tchebycheff_neighbors.push_back(neighborSolution_fitness);
