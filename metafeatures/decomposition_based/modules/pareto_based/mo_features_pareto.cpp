@@ -5,9 +5,9 @@
 #include <string>
 #include <functional>
 
-#include "../../../headers/metafeatures/landscapeMetrics.h"
-#include "../../../headers/metafeatures/mo_features_pareto.h"
-#include "../../../headers/metafeatures/statistical_functions.h"
+#include "../../../../headers/metafeatures/landscapeMetrics.h"
+#include "../../../../headers/metafeatures/mo_features_pareto.h"
+#include "../../../../headers/metafeatures/statistical_functions.h"
 
 using namespace std;
 
