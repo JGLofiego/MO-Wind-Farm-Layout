@@ -11,15 +11,11 @@
 
 using namespace std;
 
-vector<double> get_mo_features_pareto(vector<LandscapeMetrics> &landscapes_vector, function<vector<double>(const LandscapeMetrics&)> get_feature){
+vector<double> get_mo_features_pareto(LandscapeMetrics &landscape, function<vector<double>(const LandscapeMetrics&)> get_feature){
   vector<double> mo_features;
 
-  int rand_int = rand() % (int) landscapes_vector.size();
-
-  LandscapeMetrics landscapeChosen = landscapes_vector[rand_int];
-
   // ================= F?_s =================
-  vector<double> feature = get_feature(landscapeChosen);
+  vector<double> feature = get_feature(landscape);
   mo_features.push_back(mean(feature)); //F?_avg
   mo_features.push_back(sd(feature)); //F?_sd
   mo_features.push_back(r1(feature)); //F?_r1
@@ -29,19 +25,19 @@ vector<double> get_mo_features_pareto(vector<LandscapeMetrics> &landscapes_vecto
   return mo_features;
 }
 
-vector<double> mo_features_extraction_pareto(vector<LandscapeMetrics> landscapesMetrics){
+vector<double> mo_features_extraction_pareto(LandscapeMetrics landscapeMetrics){
   vector<double> mo_dom_features;
   vector<double> inf_neighbors_features, sup_neighbors_features, inc_neighbors_features, ind_neighbors_features;
 
-  inf_neighbors_features = get_mo_features_pareto(landscapesMetrics, [](const LandscapeMetrics& landscape) { return landscape.inf_neighbors;});
-  sup_neighbors_features = get_mo_features_pareto(landscapesMetrics, [](const LandscapeMetrics& landscape) { return landscape.sup_neighbors;});
-  inc_neighbors_features = get_mo_features_pareto(landscapesMetrics, [](const LandscapeMetrics& landscape) { return landscape.inc_neighbors;});
-  ind_neighbors_features = get_mo_features_pareto(landscapesMetrics, [](const LandscapeMetrics& landscape) { return landscape.ind_neighbors;});
+  inf_neighbors_features = get_mo_features_pareto(landscapeMetrics, [](const LandscapeMetrics& landscape) { return landscape.inf_neighbors;});
+  sup_neighbors_features = get_mo_features_pareto(landscapeMetrics, [](const LandscapeMetrics& landscape) { return landscape.sup_neighbors;});
+  inc_neighbors_features = get_mo_features_pareto(landscapeMetrics, [](const LandscapeMetrics& landscape) { return landscape.inc_neighbors;});
+  ind_neighbors_features = get_mo_features_pareto(landscapeMetrics, [](const LandscapeMetrics& landscape) { return landscape.ind_neighbors;});
 
   mo_dom_features = inf_neighbors_features;
   mo_dom_features.insert(mo_dom_features.end(), sup_neighbors_features.begin(), sup_neighbors_features.end());
   mo_dom_features.insert(mo_dom_features.end(), inc_neighbors_features.begin(), inc_neighbors_features.end());
-  mo_dom_features.insert(mo_dom_features.end(), ind_neighbors_features.begin(), ind_neighbors_features.end());
+  mo_dom_features.insert(mo_dom_features.end(), inc_neighbors_features.begin(), inc_neighbors_features.end());
 
   return mo_dom_features;
 }
