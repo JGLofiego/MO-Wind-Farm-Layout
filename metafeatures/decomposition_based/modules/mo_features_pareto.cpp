@@ -13,27 +13,19 @@ using namespace std;
 
 vector<double> get_mo_features_pareto(vector<LandscapeMetrics> &landscapes_vector, function<vector<double>(const LandscapeMetrics&)> get_feature){
   vector<double> mo_features;
-  vector<double> s_mean;
-  vector<double> s_sd;
-  vector<double> s_r1;
-  vector<double> s_kr;
-  vector<double> s_sk;
+
+  int rand_int = rand() % (int) landscapes_vector.size();
+  cout << rand_int << endl;
+
+  LandscapeMetrics landscapeChosen = landscapes_vector[rand_int];
 
   // ================= F?_s =================
-  for(auto& landscape : landscapes_vector){
-    vector<double> feature = get_feature(landscape);
-    s_mean.push_back(mean(feature)); //F?_avg
-    s_sd.push_back(sd(feature)); //F?_sd
-    s_r1.push_back(r1(feature)); //F?_r1
-    s_kr.push_back(kr(feature)); //F?_kr
-    s_sk.push_back(sk(feature)); //F?_sk
-  }
-
-  mo_features.push_back(mean(s_mean));
-  mo_features.push_back(mean(s_sd));
-  mo_features.push_back(mean(s_r1));
-  mo_features.push_back(mean(s_kr));
-  mo_features.push_back(mean(s_sk));
+  vector<double> feature = get_feature(landscapeChosen);
+  mo_features.push_back(mean(feature)); //F?_avg
+  mo_features.push_back(sd(feature)); //F?_sd
+  mo_features.push_back(r1(feature)); //F?_r1
+  mo_features.push_back(kr(feature)); //F?_kr
+  mo_features.push_back(sk(feature)); //F?_sk
 
   return mo_features;
 }
