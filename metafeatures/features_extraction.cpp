@@ -3,24 +3,24 @@
 #include <iostream>
 #include <limits> 
 
-#include "../../headers/metafeatures/weight_vectors_metafeatures.h"
-#include "../../headers/metafeatures/tchebycheff_metafeatures.h"
-#include "../../headers/metafeatures/global_z_point.h"
-#include "../../headers/metafeatures/get_neighborhood.h"
-#include "../../headers/metafeatures/random_walk.h"
-#include "../../headers/metafeatures/adaptative_walk.h"
-#include "../../headers/metafeatures/normalization.h"
+#include "../headers/metafeatures/decomposition_based/weight_vectors_metafeatures.h"
+#include "../headers/metafeatures/decomposition_based/tchebycheff_metafeatures.h"
+#include "../headers/metafeatures/decomposition_based/global_z_point.h"
+#include "../headers/metafeatures/decomposition_based/get_neighborhood.h"
+#include "../headers/metafeatures/decomposition_based/mo_features_decomposition.h"
 
-#include "../../headers/metafeatures/metrics_extraction.h"
-#include "../../headers/metafeatures/mo_features_decomposition.h"
-#include "../../headers/metafeatures/mo_features_pareto.h"
+#include "../headers/metafeatures/walks/random_walk.h"
+#include "../headers/metafeatures/walks/adaptative_walk.h"
 
-#include "../../headers/metafeatures/landscapeMetrics.h"
-#include "../../headers/metafeatures/landscapeElement.h"
+#include "../headers/metafeatures/normalization.h"
+#include "../headers/metafeatures/metrics_extraction.h"
+#include "../headers/metafeatures/features_extraction.h"
+#include "../headers/metafeatures/pareto_based/mo_features_pareto.h"
+#include "../headers/metafeatures/landscapeMetrics.h"
+#include "../headers/metafeatures/landscapeElement.h"
+#include "../headers/utils/features_csv.h"
 
-#include "../../headers/utils/features_csv.h"
-
-vector<string> column_names_decomp = {
+vector<string> column_names_decomposition = {
       "FV_avg_avg", "FV_avg_sd", "FV_sd_avg", "FV_sd_sd", "FV_r1_avg", 
       "FV_r1_sd", "FV_kr_avg", "FV_kr_sd", "FV_sk_avg", "FV_sk_sd",
       "FD_avg_avg", "FD_avg_sd", "FD_sd_avg", "FD_sd_sd", "FD_r1_avg", 
@@ -29,13 +29,13 @@ vector<string> column_names_decomp = {
       "IN_r1_sd", "IN_kr_avg", "IN_kr_sd", "IN_sk_avg", "IN_sk_sd",
 };
 
-vector<string> column_names_dom = {
+vector<string> column_names_pareto = {
   "INF.avg", "INF.sd", "INF.r1", "INF.kr", "INF.sk",
   "SUP.avg", "SUP.sd", "SUP.r1", "SUP.kr", "SUP.sk",
   "INC.avg", "INC.sd", "INC.r1", "INC.kr", "INC.sk"
 };
 
-void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
+void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(qtd_of_landscapes);
@@ -75,9 +75,9 @@ void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght
   auto AW_mo_pareto_features = mo_features_extraction_pareto(AW_metrics);
 
   //Buiding the csv
-  build_csv(RW_mo_decomposition_features, column_names_decomp, "mo_features_random_walk_decomposition.csv");
-  build_csv(AW_mo_decomposition_features, column_names_decomp, "mo_features_adaptative_walk_decomposition.csv");
+  build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");
+  build_csv(AW_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_decomposition.csv");
 
-  build_csv(RW_mo_pareto_features, column_names_dom, "mo_features_random_walk_dominance.csv");
-  build_csv(AW_mo_pareto_features, column_names_dom, "mo_features_adaptative_walk_dominance.csv");
+  build_csv(RW_mo_pareto_features, column_names_pareto, "mo_features_random_walk_pareto.csv");
+  build_csv(AW_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_pareto.csv");
 }

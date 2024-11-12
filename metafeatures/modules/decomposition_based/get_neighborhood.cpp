@@ -1,5 +1,5 @@
 #include <vector>
-#include "../../../headers/metafeatures/get_neighborhood.h"
+#include "../../../headers/metafeatures/decomposition_based/get_neighborhood.h"
 #include "../../../modules/headers/isEqual.h"
 #include "../../../modules/headers/mutation.h"
 

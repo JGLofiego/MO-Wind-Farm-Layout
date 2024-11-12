@@ -116,7 +116,7 @@ int main(int argc, char* argv[]){
     int walk_lenght = 8;
     int number_of_neighbors = 5;
 
-    mo_features_extraction_decomposition(size_of_population, walk_lenght, number_of_neighbors);
+    features_extraction(size_of_population, walk_lenght, number_of_neighbors);
 
     // metafeatures_extraction(landscapes_vector);
 }

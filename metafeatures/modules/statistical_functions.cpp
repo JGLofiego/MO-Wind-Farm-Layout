@@ -3,7 +3,7 @@
 #include <numeric>
 #include <cmath>
 
-#include "../../../headers/metafeatures/statistical_functions.h"
+#include "../../headers/metafeatures/statistical_functions.h"
 
 using namespace std;
 

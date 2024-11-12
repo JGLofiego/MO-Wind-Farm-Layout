@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "../../../headers/metafeatures/landscapeMetrics.h"
-#include "../../../headers/metafeatures/mo_features_decomposition.h"
+#include "../../../headers/metafeatures/decomposition_based/mo_features_decomposition.h"
 #include "../../../headers/metafeatures/statistical_functions.h"
 
 using namespace std;

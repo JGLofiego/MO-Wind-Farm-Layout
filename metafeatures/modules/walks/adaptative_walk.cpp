@@ -2,11 +2,11 @@
 #include <utility>
 #include <limits>
 
-#include "../../../headers/metafeatures/adaptative_walk.h"
+#include "../../../headers/metafeatures/walks/adaptative_walk.h"
 #include "../../../headers/metafeatures/landscapeElement.h"
-#include "../../../headers/metafeatures/tchebycheff_metafeatures.h"
+#include "../../../headers/metafeatures/decomposition_based/tchebycheff_metafeatures.h"
 #include "../../../modules/headers/population.h"
-#include "../../../headers/metafeatures/get_neighborhood.h"
+#include "../../../headers/metafeatures/decomposition_based/get_neighborhood.h"
 
 using namespace std;
 

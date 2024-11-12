@@ -1,9 +1,9 @@
 #include <vector>
 #include <utility>
 
-#include "../../../headers/metafeatures/landscapeElement.h"
-#include "../../../headers/metafeatures/landscapeMetrics.h"
-#include "../../../headers/metafeatures/metrics_extraction.h"
+#include "../../headers/metafeatures/landscapeElement.h"
+#include "../../headers/metafeatures/landscapeMetrics.h"
+#include "../../headers/metafeatures/metrics_extraction.h"
 
 vector<LandscapeMetrics> metrics_extraction(vector<vector<LandscapeElement>> &landscapes){
 
