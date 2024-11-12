@@ -3,9 +3,9 @@
 
 #include "../../../headers/metafeatures/landscapeElement.h"
 #include "../../../headers/metafeatures/landscapeMetrics.h"
-#include "../../../headers/metafeatures/so_features_decomposition.h"
+#include "../../../headers/metafeatures/metrics_extraction.h"
 
-vector<LandscapeMetrics> so_features_extraction(vector<vector<LandscapeElement>> &landscapes){
+vector<LandscapeMetrics> metrics_extraction(vector<vector<LandscapeElement>> &landscapes){
 
   vector<LandscapeMetrics> landscape_so_features;
 

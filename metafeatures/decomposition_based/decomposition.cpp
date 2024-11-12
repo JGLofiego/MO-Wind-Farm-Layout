@@ -10,8 +10,11 @@
 #include "../../headers/metafeatures/random_walk.h"
 #include "../../headers/metafeatures/adaptative_walk.h"
 #include "../../headers/metafeatures/normalization.h"
-#include "../../headers/metafeatures/so_features_decomposition.h"
+
+#include "../../headers/metafeatures/metrics_extraction.h"
 #include "../../headers/metafeatures/mo_features_decomposition.h"
+#include "../../headers/metafeatures/mo_features_domination.h"
+
 
 #include "../../headers/metafeatures/landscapeMetrics.h"
 #include "../../headers/metafeatures/landscapeElement.h"
@@ -61,15 +64,15 @@ void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght
   normalization(landscapes_adaptative_walk, max, min);
 
   //Getting the metrics (single objective features) of each landscape of each type (random walk and adaptative walk)
-  auto random_wak_so_features = so_features_extraction(landscapes_random_walk);
-  auto adaptative_walk_so_features = so_features_extraction(landscapes_adaptative_walk);
+  auto random_wak_so_features = metrics_extraction(landscapes_random_walk);
+  auto adaptative_walk_so_features = metrics_extraction(landscapes_adaptative_walk);
 
   //Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
   auto random_wak_mo_features = mo_features_extraction(random_wak_so_features);
   auto adaptative_walk_mo_features = mo_features_extraction(adaptative_walk_so_features);
 
-  auto RW_mo_dom_features = mo_feat_extraction_dom(random_wak_so_features);
-  auto AW_mo_dom_features = mo_feat_extraction_dom(adaptative_walk_so_features);
+  auto RW_mo_dom_features = mo_features_extraction_domination(random_wak_so_features);
+  auto AW_mo_dom_features = mo_features_extraction_domination(adaptative_walk_so_features);
 
   //Buiding the csv
   build_csv(random_wak_mo_features, column_names_decomp, "mo_features_random_walk_decomposition.csv");
