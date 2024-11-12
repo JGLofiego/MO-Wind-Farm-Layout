@@ -38,7 +38,7 @@
 
 #include "../metafeatures/decomposition_based/modules/metrics_extraction.cpp"
 #include "../metafeatures/decomposition_based/modules/mo_features_decomposition.cpp"
-#include "../metafeatures/decomposition_based/modules/mo_features_domination.cpp"
+#include "../metafeatures/decomposition_based/modules/mo_features_pareto.cpp"
 #include "../metafeatures/decomposition_based/modules/statistical_functions.cpp"
 
 #include "../utils/features_csv.cpp"

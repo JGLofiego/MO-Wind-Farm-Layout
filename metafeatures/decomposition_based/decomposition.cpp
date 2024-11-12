@@ -13,8 +13,7 @@
 
 #include "../../headers/metafeatures/metrics_extraction.h"
 #include "../../headers/metafeatures/mo_features_decomposition.h"
-#include "../../headers/metafeatures/mo_features_domination.h"
-
+#include "../../headers/metafeatures/mo_features_pareto.h"
 
 #include "../../headers/metafeatures/landscapeMetrics.h"
 #include "../../headers/metafeatures/landscapeElement.h"
@@ -72,8 +71,8 @@ void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght
   auto AW_mo_decomposition_features = mo_features_extraction(AW_metrics);
   
   //PARETO -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
-  auto RW_mo_pareto_features = mo_features_extraction_domination(RW_metrics);
-  auto AW_mo_pareto_features = mo_features_extraction_domination(AW_metrics);
+  auto RW_mo_pareto_features = mo_features_extraction_pareto(RW_metrics);
+  auto AW_mo_pareto_features = mo_features_extraction_pareto(AW_metrics);
 
   //Buiding the csv
   build_csv(RW_mo_decomposition_features, column_names_decomp, "mo_features_random_walk_decomposition.csv");
