@@ -1,7 +1,7 @@
 #include <vector>
-#include "../../../../headers/metafeatures/get_neighborhood.h"
-#include "../../../../modules/headers/isEqual.h"
-#include "../../../../modules/headers/mutation.h"
+#include "../../../headers/metafeatures/get_neighborhood.h"
+#include "../../../modules/headers/isEqual.h"
+#include "../../../modules/headers/mutation.h"
 
 bool isEqualNeighborhood(Solution &new_neighbor, vector<Solution> &neighborhood ){
   for(auto &solution : neighborhood){

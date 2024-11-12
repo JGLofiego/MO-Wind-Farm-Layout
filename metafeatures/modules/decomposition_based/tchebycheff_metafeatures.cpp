@@ -3,7 +3,7 @@
 #include <iostream>
 #include <utility>
 #include <limits> 
-#include "../../../../headers/metafeatures/tchebycheff_metafeatures.h"
+#include "../../../headers/metafeatures/tchebycheff_metafeatures.h"
 
 using namespace std;
 

@@ -3,22 +3,22 @@
 #include <iostream>
 #include <limits> 
 
-#include "../../headers/metafeatures/weight_vectors_metafeatures.h"
-#include "../../headers/metafeatures/tchebycheff_metafeatures.h"
-#include "../../headers/metafeatures/global_z_point.h"
-#include "../../headers/metafeatures/get_neighborhood.h"
-#include "../../headers/metafeatures/random_walk.h"
-#include "../../headers/metafeatures/adaptative_walk.h"
-#include "../../headers/metafeatures/normalization.h"
+#include "../headers/metafeatures/weight_vectors_metafeatures.h"
+#include "../headers/metafeatures/tchebycheff_metafeatures.h"
+#include "../headers/metafeatures/global_z_point.h"
+#include "../headers/metafeatures/get_neighborhood.h"
+#include "../headers/metafeatures/random_walk.h"
+#include "../headers/metafeatures/adaptative_walk.h"
+#include "../headers/metafeatures/normalization.h"
 
-#include "../../headers/metafeatures/metrics_extraction.h"
-#include "../../headers/metafeatures/mo_features_decomposition.h"
-#include "../../headers/metafeatures/mo_features_pareto.h"
+#include "../headers/metafeatures/metrics_extraction.h"
+#include "../headers/metafeatures/mo_features_decomposition.h"
+#include "../headers/metafeatures/mo_features_pareto.h"
 
-#include "../../headers/metafeatures/landscapeMetrics.h"
-#include "../../headers/metafeatures/landscapeElement.h"
+#include "../headers/metafeatures/landscapeMetrics.h"
+#include "../headers/metafeatures/landscapeElement.h"
 
-#include "../../headers/utils/features_csv.h"
+#include "../headers/utils/features_csv.h"
 
 vector<string> column_names_decomp = {
       "FV_avg_avg", "FV_avg_sd", "FV_sd_avg", "FV_sd_sd", "FV_r1_avg", 

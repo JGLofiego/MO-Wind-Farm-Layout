@@ -2,8 +2,8 @@
 #include <limits>
 #include <iostream>
 #include <utility>
-#include "../../../../headers/metafeatures/global_z_point.h"
-#include "../../../../modules/headers/generate_rSolution.h"
+#include "../../../headers/metafeatures/global_z_point.h"
+#include "../../../modules/headers/generate_rSolution.h"
 
 using namespace std;
 

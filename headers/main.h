@@ -26,20 +26,20 @@
 #include "../modules/nsga2/crowding_distance.cpp"
 #include "../modules/nsga2/non_dominated_sorting.cpp"
 
-#include "../metafeatures/decomposition_based/decomposition.cpp"
-#include "../metafeatures/decomposition_based/modules/decomposition_based/get_global_z_point.cpp"
-#include "../metafeatures/decomposition_based/modules/decomposition_based/tchebycheff_metafeatures.cpp"
-#include "../metafeatures/decomposition_based/modules/decomposition_based/weight_vectors_metafeatures.cpp"
-#include "../metafeatures/decomposition_based/modules/decomposition_based/get_neighborhood.cpp"
-#include "../metafeatures/decomposition_based/modules/walks/random_walk.cpp"
-#include "../metafeatures/decomposition_based/modules/walks/adaptative_walk.cpp"
-#include "../metafeatures/decomposition_based/modules/normalization.cpp"
+#include "../metafeatures/decomposition.cpp"
+#include "../metafeatures/modules/decomposition_based/get_global_z_point.cpp"
+#include "../metafeatures/modules/decomposition_based/tchebycheff_metafeatures.cpp"
+#include "../metafeatures/modules/decomposition_based/weight_vectors_metafeatures.cpp"
+#include "../metafeatures/modules/decomposition_based/get_neighborhood.cpp"
+#include "../metafeatures/modules/walks/random_walk.cpp"
+#include "../metafeatures/modules/walks/adaptative_walk.cpp"
+#include "../metafeatures/modules/normalization.cpp"
 
 
-#include "../metafeatures/decomposition_based/modules/metrics_extraction.cpp"
-#include "../metafeatures/decomposition_based/modules/decomposition_based/mo_features_decomposition.cpp"
-#include "../metafeatures/decomposition_based/modules/pareto_based/mo_features_pareto.cpp"
-#include "../metafeatures/decomposition_based/modules/statistical_functions.cpp"
+#include "../metafeatures/modules/metrics_extraction.cpp"
+#include "../metafeatures/modules/decomposition_based/mo_features_decomposition.cpp"
+#include "../metafeatures/modules/pareto_based/mo_features_pareto.cpp"
+#include "../metafeatures/modules/statistical_functions.cpp"
 
 #include "../utils/features_csv.cpp"
 

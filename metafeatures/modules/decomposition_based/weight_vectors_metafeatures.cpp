@@ -1,7 +1,7 @@
 #include <utility>
 #include <vector>
 #include <iostream>
-#include "../../../../headers/metafeatures/weight_vectors_metafeatures.h"
+#include "../../../headers/metafeatures/weight_vectors_metafeatures.h"
 
 using namespace std;
 
