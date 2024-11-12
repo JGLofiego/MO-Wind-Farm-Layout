@@ -15,7 +15,6 @@ vector<double> get_mo_features_pareto(vector<LandscapeMetrics> &landscapes_vecto
   vector<double> mo_features;
 
   int rand_int = rand() % (int) landscapes_vector.size();
-  cout << rand_int << endl;
 
   LandscapeMetrics landscapeChosen = landscapes_vector[rand_int];
 
