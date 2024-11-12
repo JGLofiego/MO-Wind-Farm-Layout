@@ -35,7 +35,6 @@
 #include "../metafeatures/modules/walks/adaptative_walk.cpp"
 #include "../metafeatures/modules/normalization.cpp"
 
-
 #include "../metafeatures/modules/metrics_extraction.cpp"
 #include "../metafeatures/modules/decomposition_based/mo_features_decomposition.cpp"
 #include "../metafeatures/modules/pareto_based/mo_features_pareto.cpp"
