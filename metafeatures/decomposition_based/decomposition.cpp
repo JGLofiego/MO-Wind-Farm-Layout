@@ -63,21 +63,22 @@ void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght
   normalization(landscapes_random_walk, max, min);
   normalization(landscapes_adaptative_walk, max, min);
 
-  //Getting the metrics (single objective features) of each landscape of each type (random walk and adaptative walk)
-  auto random_wak_so_features = metrics_extraction(landscapes_random_walk);
-  auto adaptative_walk_so_features = metrics_extraction(landscapes_adaptative_walk);
+  //METRICS -> Getting the metrics of each landscape of each type (random walk and adaptative walk)
+  auto RW_metrics = metrics_extraction(landscapes_random_walk);
+  auto AW_metrics = metrics_extraction(landscapes_adaptative_walk);
 
-  //Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
-  auto random_wak_mo_features = mo_features_extraction(random_wak_so_features);
-  auto adaptative_walk_mo_features = mo_features_extraction(adaptative_walk_so_features);
-
-  auto RW_mo_dom_features = mo_features_extraction_domination(random_wak_so_features);
-  auto AW_mo_dom_features = mo_features_extraction_domination(adaptative_walk_so_features);
+  //DECOMPOSTION -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
+  auto RW_mo_decomposition_features = mo_features_extraction(RW_metrics);
+  auto AW_mo_decomposition_features = mo_features_extraction(AW_metrics);
+  
+  //PARETO -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
+  auto RW_mo_pareto_features = mo_features_extraction_domination(RW_metrics);
+  auto AW_mo_pareto_features = mo_features_extraction_domination(AW_metrics);
 
   //Buiding the csv
-  build_csv(random_wak_mo_features, column_names_decomp, "mo_features_random_walk_decomposition.csv");
-  build_csv(adaptative_walk_mo_features, column_names_decomp, "mo_features_adaptative_walk_decomposition.csv");
+  build_csv(RW_mo_decomposition_features, column_names_decomp, "mo_features_random_walk_decomposition.csv");
+  build_csv(AW_mo_decomposition_features, column_names_decomp, "mo_features_adaptative_walk_decomposition.csv");
 
-  build_csv(RW_mo_dom_features, column_names_dom, "mo_features_random_walk_dominance.csv");
-  build_csv(AW_mo_dom_features, column_names_dom, "mo_features_adaptative_walk_dominance.csv");
+  build_csv(RW_mo_pareto_features, column_names_dom, "mo_features_random_walk_dominance.csv");
+  build_csv(AW_mo_pareto_features, column_names_dom, "mo_features_adaptative_walk_dominance.csv");
 }
