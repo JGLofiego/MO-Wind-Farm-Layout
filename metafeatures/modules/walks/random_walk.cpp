@@ -58,6 +58,7 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
     element.inf = countDominating / num_neighbors ;
     element.sup = countIsDominated / num_neighbors;
     element.inc = 1.0 - (element.inf + element.sup);
+    element.ind = number_pareto_front(element) / num_neighbors;
 
 
     for (Solution& neighbor : neighborhood) {

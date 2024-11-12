@@ -48,6 +48,9 @@ vector<LandscapeMetrics> metrics_extraction(vector<vector<LandscapeElement>> &la
       // Stroring proportions of incomparable neighbors of landscape
       landscape_metrics.inc_neighbors.push_back(element.inc);
 
+      // Stroring proportions of indifferent neighbors of landscape
+      landscape_metrics.ind_neighbors.push_back(element.ind);
+
       landscape_metrics.improving_neighbors_count.push_back(normalized_improving_neighbors);
     }
 

@@ -10,6 +10,7 @@ struct LandscapeMetrics {
   std::vector<double> inf_neighbors; // Stores the proportions of neighbors that are inferior to the solution
   std::vector<double> sup_neighbors; // Stores the proportions of neighbors that are superior to the solution
   std::vector<double> inc_neighbors; // Stores the proportions of neighbors that are incomparable with the solution
+  std::vector<double> ind_neighbors; // Stores the proportions of neighbors that are incomparable with each other
 };
 
 #endif 

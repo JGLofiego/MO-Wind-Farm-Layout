@@ -10,6 +10,7 @@ struct LandscapeElement {
   double inf; // Proportion of inferior solutions, that current solution dominates
   double sup; // Proportion of superior solutions, that dominates current solution
   double inc; // Proportion of solutions that are incomparable with current solution
+  double ind; // Proportion of solutions non dominated between them (Proportion of Pareto front)
   vector<Solution> neighborhod;
   vector<double> tchebycheff_neighbors;
 };

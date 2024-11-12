@@ -31,15 +31,17 @@ vector<double> get_mo_features_pareto(vector<LandscapeMetrics> &landscapes_vecto
 
 vector<double> mo_features_extraction_pareto(vector<LandscapeMetrics> landscapesMetrics){
   vector<double> mo_dom_features;
-  vector<double> inf_neighbors_features, sup_neighbors_features, inc_neighbors_features;
+  vector<double> inf_neighbors_features, sup_neighbors_features, inc_neighbors_features, ind_neighbors_features;
 
   inf_neighbors_features = get_mo_features_pareto(landscapesMetrics, [](const LandscapeMetrics& landscape) { return landscape.inf_neighbors;});
   sup_neighbors_features = get_mo_features_pareto(landscapesMetrics, [](const LandscapeMetrics& landscape) { return landscape.sup_neighbors;});
   inc_neighbors_features = get_mo_features_pareto(landscapesMetrics, [](const LandscapeMetrics& landscape) { return landscape.inc_neighbors;});
+  ind_neighbors_features = get_mo_features_pareto(landscapesMetrics, [](const LandscapeMetrics& landscape) { return landscape.ind_neighbors;});
 
   mo_dom_features = inf_neighbors_features;
   mo_dom_features.insert(mo_dom_features.end(), sup_neighbors_features.begin(), sup_neighbors_features.end());
   mo_dom_features.insert(mo_dom_features.end(), inc_neighbors_features.begin(), inc_neighbors_features.end());
+  mo_dom_features.insert(mo_dom_features.end(), ind_neighbors_features.begin(), ind_neighbors_features.end());
 
   return mo_dom_features;
 }

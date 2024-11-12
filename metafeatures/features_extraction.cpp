@@ -32,7 +32,8 @@ vector<string> column_names_decomposition = {
 vector<string> column_names_pareto = {
   "INF.avg", "INF.sd", "INF.r1", "INF.kr", "INF.sk",
   "SUP.avg", "SUP.sd", "SUP.r1", "SUP.kr", "SUP.sk",
-  "INC.avg", "INC.sd", "INC.r1", "INC.kr", "INC.sk"
+  "INC.avg", "INC.sd", "INC.r1", "INC.kr", "INC.sk",
+  "IND.avg", "IND.sd", "IND.r1", "IND.kr", "IND.sk",
 };
 
 void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
