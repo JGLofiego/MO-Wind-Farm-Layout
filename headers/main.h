@@ -26,7 +26,7 @@
 #include "../modules/nsga2/crowding_distance.cpp"
 #include "../modules/nsga2/non_dominated_sorting.cpp"
 
-#include "../metafeatures/decomposition.cpp"
+#include "../metafeatures/features_extraction.cpp"
 #include "../metafeatures/modules/decomposition_based/get_global_z_point.cpp"
 #include "../metafeatures/modules/decomposition_based/tchebycheff_metafeatures.cpp"
 #include "../metafeatures/modules/decomposition_based/weight_vectors_metafeatures.cpp"

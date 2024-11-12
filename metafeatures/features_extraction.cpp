@@ -12,6 +12,7 @@
 #include "../headers/metafeatures/normalization.h"
 
 #include "../headers/metafeatures/metrics_extraction.h"
+#include "../headers/metafeatures/features_extraction.h"
 #include "../headers/metafeatures/mo_features_decomposition.h"
 #include "../headers/metafeatures/mo_features_pareto.h"
 
@@ -35,7 +36,7 @@ vector<string> column_names_dom = {
   "INC.avg", "INC.sd", "INC.r1", "INC.kr", "INC.sk"
 };
 
-void mo_features_extraction_decomposition(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
+void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(qtd_of_landscapes);
