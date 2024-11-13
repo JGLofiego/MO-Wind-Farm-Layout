@@ -78,33 +78,33 @@ void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_n
 
   //Normalizing the landscapes elements
   // normalization(landscapes_random_walk, maximal, minimal);
-  // normalization(landscapes_adaptative_walk_D, maximal, minimal);
+  normalization(landscapes_adaptative_walk_D, maximal, minimal);
   normalization(landscapes_adaptative_walk_P, maximal, minimal);
   
 // 
   //METRICS -> Getting the metrics of each landscape of each type (random walk and adaptative walk)
-  // auto RW_metrics = metrics_extraction(landscapes_random_walk);
-  // auto AWD_metrics = metrics_extraction(landscapes_adaptative_walk_D);
+  auto RW_metrics = metrics_extraction(landscapes_random_walk);
+  auto AWD_metrics = metrics_extraction(landscapes_adaptative_walk_D);
   auto AWP_metrics = metrics_extraction(landscapes_adaptative_walk_P);
 
   //DECOMPOSTION -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
-  // auto RW_mo_decomposition_features = mo_features_extraction(RW_metrics);
-  // auto AWD_mo_decomposition_features = mo_features_extraction(AWD_metrics);
+  auto RW_mo_decomposition_features = mo_features_extraction(RW_metrics);
+  auto AWD_mo_decomposition_features = mo_features_extraction(AWD_metrics);
   auto AWP_mo_decomposition_features = mo_features_extraction(AWP_metrics);
 
   //PARETO -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
   int rand_int = rand() % qtd_of_landscapes;
 
-  // auto RW_mo_pareto_features = mo_features_extraction_pareto(RW_metrics[rand_int]);
-  // auto AWD_mo_pareto_features = mo_features_extraction_pareto(AWD_metrics[rand_int]);
+  auto RW_mo_pareto_features = mo_features_extraction_pareto(RW_metrics[rand_int]);
+  auto AWD_mo_pareto_features = mo_features_extraction_pareto(AWD_metrics[rand_int]);
   auto AWP_mo_pareto_features = mo_features_extraction_pareto(AWP_metrics[rand_int]);
 
   //Buiding the csv
-  // build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");
-  // build_csv(AWD_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_D_decomposition.csv");
+  build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");
+  build_csv(AWD_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_D_decomposition.csv");
   build_csv(AWP_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_P_decomposition.csv");
 
-  // build_csv(RW_mo_pareto_features, column_names_pareto, "mo_features_random_walk_pareto.csv");
-  // build_csv(AWD_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_D_pareto.csv");
+  build_csv(RW_mo_pareto_features, column_names_pareto, "mo_features_random_walk_pareto.csv");
+  build_csv(AWD_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_D_pareto.csv");
   build_csv(AWP_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_P_pareto.csv");
 }

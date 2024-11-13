@@ -5,6 +5,8 @@
 #include <string>
 using namespace std;
 
+int walk_length = 8, num_neighbors = 50;
+
 int main(int argc, char* argv[]){
 
     get_instance_info(argc, argv);
@@ -113,10 +115,10 @@ int main(int argc, char* argv[]){
     // }
 
     int size_of_population = 10;
-    int walk_lenght = 8;
-    int number_of_neighbors = 10;
+    // int walk_lenght = 8;
+    // int number_of_neighbors = 10;
 
-    features_extraction(size_of_population, walk_lenght, number_of_neighbors);
+    features_extraction(size_of_population, walk_length, num_neighbors);
 
     // metafeatures_extraction(landscapes_vector);
 }
