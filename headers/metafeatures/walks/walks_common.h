@@ -40,4 +40,27 @@ int number_pareto_front(LandscapeElement &landscape){
   return pareto_front.size();
 }
 
+void calculate_dominance_metrics(LandscapeElement &element){
+
+  vector<Solution> neighborhood = element.neighborhod;
+
+  //Calculating Dominance Metrics
+    double num_neighbors = (double) neighborhood.size();
+
+    int countDominating = 0;    // Number of neighbors that Current Solution Dominates
+    int countIsDominated = 0;   // Number of neighbors that dominates Current Solution
+    for(int i = 0; i < neighborhood.size(); i++){
+      if(dominates(element.current_solution, neighborhood[i])){
+        countDominating++;
+      } else if(dominates(neighborhood[i], element.current_solution)){
+        countIsDominated++;
+      }
+    }
+
+    element.inf = countDominating / num_neighbors ;
+    element.sup = countIsDominated / num_neighbors;
+    element.inc = 1.0 - (element.inf + element.sup);
+    element.ind = number_pareto_front(element) / num_neighbors;
+}
+
 #endif

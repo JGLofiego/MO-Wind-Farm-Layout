@@ -4,7 +4,11 @@
 #include "walks_common.h"
 #include <vector>
 #include <utility>
+#include <functional>
 
-std::vector<LandscapeElement> adaptive_walk(int number_of_neighbors, std::pair<double, double> &lambda, std::pair<double, double> &global_z_point, double &max, double &min);
+std::vector<LandscapeElement> adaptive_walk_decomp(int number_of_neighbors);
+std::vector<LandscapeElement> adaptive_walk(int number_of_neighbors, Solution (*next_solution) (const LandscapeElement &));
+
+Solution pareto_next_solution(const LandscapeElement &element);
 
 #endif 

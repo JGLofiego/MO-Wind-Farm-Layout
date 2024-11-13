@@ -36,52 +36,75 @@ vector<string> column_names_pareto = {
   "IND.avg", "IND.sd", "IND.r1", "IND.kr", "IND.sk",
 };
 
+vector<pair<double, double>> lambda_vector;
+
+pair<double, double> global_z_point;
+
+//Getting the min and max values of all solutions x, ie, {max/min(F(x)) | 'x' in landscapes}
+double maximal = numeric_limits<double>::lowest();
+double minimal = numeric_limits<double>::infinity();
+
+int iLandscape;
+
 void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
-  vector<pair<double, double>> lambda_vector = build_weight_vector_metafeatures(qtd_of_landscapes);
+  lambda_vector = build_weight_vector_metafeatures(qtd_of_landscapes);
 
   //Building a landscape for each subproblem
   vector<vector<LandscapeElement>> landscapes_random_walk(qtd_of_landscapes);
-  vector<vector<LandscapeElement>> landscapes_adaptative_walk(qtd_of_landscapes);
-
-  //Getting the min and max values of all solutions x, ie, {max/min(F(x)) | 'x' in landscapes}
-  double max = numeric_limits<double>::lowest();
-  double min = numeric_limits<double>::infinity();
+  vector<vector<LandscapeElement>> landscapes_adaptative_walk_D(qtd_of_landscapes); // Adaptative walk decomposition based
+  vector<vector<LandscapeElement>> landscapes_adaptative_walk_P(qtd_of_landscapes); // Adaptative walk pareto based
 
   //Getting the global z_point
-  pair<double, double> global_z_point = get_global_z_point();
+  global_z_point = get_global_z_point();
 
   for(int i = 0; i < qtd_of_landscapes; i++){
+    iLandscape = i;
     //Landscape i refers to the landscape of the subproblem i
     //lambda_vector i refers to the weight vector of the subproblem i
-    landscapes_random_walk[i] = random_walk(walk_lenght, number_of_neighbors, lambda_vector[i], global_z_point, max, min);
-    landscapes_adaptative_walk[i] = adaptive_walk(number_of_neighbors, lambda_vector[i], global_z_point, max, min);
+    landscapes_random_walk[i] = random_walk(walk_lenght, number_of_neighbors, lambda_vector[i], global_z_point, maximal, minimal);
+    landscapes_adaptative_walk_D[i] = adaptive_walk_decomp(number_of_neighbors);
+    landscapes_adaptative_walk_P[i] = adaptive_walk(number_of_neighbors, pareto_next_solution);
+
+    if(landscapes_adaptative_walk_P[i].size() <= 1){
+      cout << "Adaptive pareto walk: " << landscapes_adaptative_walk_P[i][0].current_solution.fitness.first << " " << landscapes_adaptative_walk_P[i][0].current_solution.fitness.second << endl;
+    }
+
+    if(landscapes_adaptative_walk_D[i].size() <= 1){
+      cout << "Adaptive decomposition walk: " << landscapes_adaptative_walk_D[i][0].tch_current_solution << endl;
+    }
   }
 
   //Normalizing the landscapes elements
-  normalization(landscapes_random_walk, max, min);
-  normalization(landscapes_adaptative_walk, max, min);
-
+  // normalization(landscapes_random_walk, maximal, minimal);
+  // normalization(landscapes_adaptative_walk_D, maximal, minimal);
+  normalization(landscapes_adaptative_walk_P, maximal, minimal);
+  
+// 
   //METRICS -> Getting the metrics of each landscape of each type (random walk and adaptative walk)
-  auto RW_metrics = metrics_extraction(landscapes_random_walk);
-  auto AW_metrics = metrics_extraction(landscapes_adaptative_walk);
+  // auto RW_metrics = metrics_extraction(landscapes_random_walk);
+  // auto AWD_metrics = metrics_extraction(landscapes_adaptative_walk_D);
+  auto AWP_metrics = metrics_extraction(landscapes_adaptative_walk_P);
 
   //DECOMPOSTION -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
-  auto RW_mo_decomposition_features = mo_features_extraction(RW_metrics);
-  auto AW_mo_decomposition_features = mo_features_extraction(AW_metrics);
-  
-  //PARETO -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
+  // auto RW_mo_decomposition_features = mo_features_extraction(RW_metrics);
+  // auto AWD_mo_decomposition_features = mo_features_extraction(AWD_metrics);
+  auto AWP_mo_decomposition_features = mo_features_extraction(AWP_metrics);
 
+  //PARETO -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
   int rand_int = rand() % qtd_of_landscapes;
 
-  auto RW_mo_pareto_features = mo_features_extraction_pareto(RW_metrics[rand_int]);
-  auto AW_mo_pareto_features = mo_features_extraction_pareto(AW_metrics[rand_int]);
+  // auto RW_mo_pareto_features = mo_features_extraction_pareto(RW_metrics[rand_int]);
+  // auto AWD_mo_pareto_features = mo_features_extraction_pareto(AWD_metrics[rand_int]);
+  auto AWP_mo_pareto_features = mo_features_extraction_pareto(AWP_metrics[rand_int]);
 
   //Buiding the csv
-  build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");
-  build_csv(AW_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_decomposition.csv");
+  // build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");
+  // build_csv(AWD_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_D_decomposition.csv");
+  build_csv(AWP_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_P_decomposition.csv");
 
-  build_csv(RW_mo_pareto_features, column_names_pareto, "mo_features_random_walk_pareto.csv");
-  build_csv(AW_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_pareto.csv");
+  // build_csv(RW_mo_pareto_features, column_names_pareto, "mo_features_random_walk_pareto.csv");
+  // build_csv(AWD_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_D_pareto.csv");
+  build_csv(AWP_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_P_pareto.csv");
 }

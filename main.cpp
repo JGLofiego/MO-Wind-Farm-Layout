@@ -114,7 +114,7 @@ int main(int argc, char* argv[]){
 
     int size_of_population = 10;
     int walk_lenght = 8;
-    int number_of_neighbors = 5;
+    int number_of_neighbors = 10;
 
     features_extraction(size_of_population, walk_lenght, number_of_neighbors);
 
