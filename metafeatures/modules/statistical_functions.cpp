@@ -35,13 +35,6 @@ double kr(const vector<double>& values) {
   double stddev = sd(values);
   double sum = 0.0;
 
-  if(stddev <= 0.0){
-    cout << endl << "Desvio padrao 0" << endl;
-    for(int i = 0; i < values.size(); i++){
-      cout << values[i] << endl;
-    } cout << endl;
-  }
-
   for (double value : values) {
     sum += pow((value - avg) / stddev, 4);
   }

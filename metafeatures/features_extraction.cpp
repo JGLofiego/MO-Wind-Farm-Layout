@@ -67,17 +67,15 @@ void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_n
     landscapes_adaptative_walk_D[i] = adaptive_walk_decomp(number_of_neighbors);
     landscapes_adaptative_walk_P[i] = adaptive_walk(number_of_neighbors, pareto_next_solution);
 
-    if(landscapes_adaptative_walk_P[i].size() <= 1){
-      cout << "Adaptive pareto walk: " << landscapes_adaptative_walk_P[i][0].current_solution.fitness.first << " " << landscapes_adaptative_walk_P[i][0].current_solution.fitness.second << endl;
-    }
+    cout << i << ". Decomposition adaptive walk size: " << landscapes_adaptative_walk_D[i].size() << endl;
+    cout << i << ". Pareto adaptive walk size: " << landscapes_adaptative_walk_P[i].size() << endl;
 
-    if(landscapes_adaptative_walk_D[i].size() <= 1){
-      cout << "Adaptive decomposition walk: " << landscapes_adaptative_walk_D[i][0].tch_current_solution << endl;
-    }
   }
 
+  cout << endl;
+
   //Normalizing the landscapes elements
-  // normalization(landscapes_random_walk, maximal, minimal);
+  normalization(landscapes_random_walk, maximal, minimal);
   normalization(landscapes_adaptative_walk_D, maximal, minimal);
   normalization(landscapes_adaptative_walk_P, maximal, minimal);
   
@@ -93,11 +91,17 @@ void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_n
   auto AWP_mo_decomposition_features = mo_features_extraction(AWP_metrics);
 
   //PARETO -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
-  int rand_int = rand() % qtd_of_landscapes;
+  int rand_int1 = rand() % qtd_of_landscapes;
+  int rand_int2 = rand() % qtd_of_landscapes;
+  int rand_int3 = rand() % qtd_of_landscapes;
 
-  auto RW_mo_pareto_features = mo_features_extraction_pareto(RW_metrics[rand_int]);
-  auto AWD_mo_pareto_features = mo_features_extraction_pareto(AWD_metrics[rand_int]);
-  auto AWP_mo_pareto_features = mo_features_extraction_pareto(AWP_metrics[rand_int]);
+  
+  cout << "Decomposition adaptive walk: " << AWD_metrics[rand_int2].inc_neighbors.size() << endl;
+  cout << "Dominance adaptive walk: " << AWP_metrics[rand_int3].inc_neighbors.size() << endl;
+
+  auto RW_mo_pareto_features = mo_features_extraction_pareto(RW_metrics[rand_int1]);
+  auto AWD_mo_pareto_features = mo_features_extraction_pareto(AWD_metrics[rand_int2]);
+  auto AWP_mo_pareto_features = mo_features_extraction_pareto(AWP_metrics[rand_int3]);
 
   //Buiding the csv
   build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");

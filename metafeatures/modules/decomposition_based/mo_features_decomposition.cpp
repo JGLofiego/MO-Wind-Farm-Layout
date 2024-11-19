@@ -25,8 +25,10 @@ vector<double> get_mo_features(vector<LandscapeMetrics> &landscapes_vector, func
     s_mean.push_back(mean(feature)); //F?_avg
     s_sd.push_back(sd(feature)); //F?_sd
     s_r1.push_back(r1(feature)); //F?_r1
-    s_kr.push_back(kr(feature)); //F?_kr
-    s_sk.push_back(sk(feature)); //F?_sk
+    if(s_sd.back() != 0){
+      s_kr.push_back(kr(feature)); //F?_kr
+      s_sk.push_back(sk(feature)); //F?_sk
+    }
   }
 
   // ================= F?_s_r =================

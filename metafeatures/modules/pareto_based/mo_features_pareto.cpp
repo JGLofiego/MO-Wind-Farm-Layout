@@ -14,13 +14,20 @@ using namespace std;
 vector<double> get_mo_features_pareto(LandscapeMetrics &landscape, function<vector<double>(const LandscapeMetrics&)> get_feature){
   vector<double> mo_features;
 
+
   // ================= F?_s =================
   vector<double> feature = get_feature(landscape);
   mo_features.push_back(mean(feature)); //F?_avg
-  mo_features.push_back(sd(feature)); //F?_sd
+  double dp = sd(feature);
+  mo_features.push_back(dp); //F?_sd
   mo_features.push_back(r1(feature)); //F?_r1
-  mo_features.push_back(kr(feature)); //F?_kr
-  mo_features.push_back(sk(feature)); //F?_sk
+  if(dp != 0){
+    mo_features.push_back(kr(feature)); //F?_kr
+    mo_features.push_back(sk(feature)); //F?_sk
+  } else {
+    mo_features.push_back(0.0);
+    mo_features.push_back(0.0);
+  }
 
   return mo_features;
 }

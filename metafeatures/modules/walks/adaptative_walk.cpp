@@ -77,9 +77,6 @@ vector<LandscapeElement> adaptive_walk_decomp(int number_of_neighbors) {
     if(best_neighbor_fitness < current_solution_fitness){
       current_solution = neighborhood[index_best_neighbor];
     } else{
-      if(S.size() == 1){
-        continue;
-      }
       break;
     }
   }
@@ -115,9 +112,6 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, Solution (*next_
     current_solution = next_solution(element);
 
     if(current_solution.fitness.first == element.current_solution.fitness.first && current_solution.fitness.second == element.current_solution.fitness.second){
-      if(S.size() == 1){
-        continue;
-      }
       break;
     }
   }
