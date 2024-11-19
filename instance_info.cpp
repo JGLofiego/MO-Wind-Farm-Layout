@@ -35,7 +35,8 @@ map<string, vector<int>> turbines_instace = {
 
 vector<int> turbines_per_zone;
 
-extern int walk_length, num_neighbors;
+extern int walk_length;
+extern float percent_neighbors;
 
 void get_instance_info(int argc, char* argv[]){
     cout << fixed << setprecision(12);
@@ -67,16 +68,16 @@ void get_instance_info(int argc, char* argv[]){
     } else if(argc == 4){
         instance = (string) argv[1];
         walk_length = atoi(argv[2]);
-        num_neighbors = atoi(argv[3]);
+        percent_neighbors = stof(argv[3]);
     } else if(argc == 5){
         instance = (string) argv[1];
         walk_length = atoi(argv[2]);
-        num_neighbors = atoi(argv[3]);
+        percent_neighbors = stof(argv[3]);
         pathFolders = (string) argv[4];
     } else if(argc > 6){
         instance = (string) argv[1];
         walk_length = atoi(argv[2]);
-        num_neighbors = atoi(argv[3]);
+        percent_neighbors = stof(argv[3]);
         pathFolders = (string) argv[4];
         windFile = (string) argv[5];
     };
