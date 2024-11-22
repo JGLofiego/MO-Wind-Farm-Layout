@@ -3,4 +3,8 @@
 
 void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors);
 
+vector<double> decomposition_extraction(vector<vector<LandscapeElement>> &landscapes);
+
+vector<double> dominance_extraction(vector<LandscapeElement> &landscape);
+
 #endif 

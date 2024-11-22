@@ -6,6 +6,8 @@
 #include "./landscapeMetrics.h"
 #include "./landscapeElement.h"
 
+LandscapeMetrics metric_extraction(vector<LandscapeElement> &landscape);
+
 std::vector<LandscapeMetrics> metrics_extraction(std::vector<std::vector<LandscapeElement>> &landscapes);
 
 #endif 

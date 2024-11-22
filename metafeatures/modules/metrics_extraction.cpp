@@ -5,14 +5,10 @@
 #include "../../headers/metafeatures/landscapeMetrics.h"
 #include "../../headers/metafeatures/metrics_extraction.h"
 
-vector<LandscapeMetrics> metrics_extraction(vector<vector<LandscapeElement>> &landscapes){
+LandscapeMetrics metric_extraction(vector<LandscapeElement> &landscape){
+  LandscapeMetrics landscape_metrics;
 
-  vector<LandscapeMetrics> landscape_so_features;
-
-  for(const auto& landscape : landscapes){
-    LandscapeMetrics landscape_metrics;
-
-    for(const auto& element : landscape){
+  for(const auto& element : landscape){
       double current_solution_fitness = element.tch_current_solution;
       int improving_count = 0;
       double total_difference = 0.0;
@@ -54,7 +50,16 @@ vector<LandscapeMetrics> metrics_extraction(vector<vector<LandscapeElement>> &la
       landscape_metrics.improving_neighbors_count.push_back(normalized_improving_neighbors);
     }
 
-    landscape_so_features.push_back(landscape_metrics);
+    return landscape_metrics;
+}
+
+vector<LandscapeMetrics> metrics_extraction(vector<vector<LandscapeElement>> &landscapes){
+
+  vector<LandscapeMetrics> landscape_so_features;
+
+  for(int i = 0; i < landscapes.size(); i++){
+    LandscapeMetrics metric = metric_extraction(landscapes[i]);
+    landscape_so_features.push_back(metric);
   }
 
   return landscape_so_features;

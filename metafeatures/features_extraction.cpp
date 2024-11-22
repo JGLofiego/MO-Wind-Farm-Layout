@@ -46,62 +46,65 @@ double minimal = numeric_limits<double>::infinity();
 
 int iLandscape;
 
+vector<double> decomposition_extraction(vector<vector<LandscapeElement>> &landscapes){
+  //Normalizing the landscapes elements
+  normalization(landscapes, maximal, minimal);
+  
+  //METRICS -> Getting the metrics of each landscape of each type
+  vector<LandscapeMetrics> metrics = metrics_extraction(landscapes);
+
+  return mo_features_extraction(metrics);
+}
+
+vector<double> dominance_extraction(vector<LandscapeElement> &landscape){
+  LandscapeMetrics metric = metric_extraction(landscape);
+
+  return mo_features_extraction_pareto(metric);
+}
+
 void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_neighbors){
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   lambda_vector = build_weight_vector_metafeatures(qtd_of_landscapes);
 
   //Building a landscape for each subproblem
-  vector<vector<LandscapeElement>> landscapes_random_walk(qtd_of_landscapes);
-  vector<vector<LandscapeElement>> landscapes_adaptative_walk_D(qtd_of_landscapes); // Adaptative walk decomposition based
-  vector<vector<LandscapeElement>> landscapes_adaptative_walk_P(qtd_of_landscapes); // Adaptative walk pareto based
+  vector<vector<LandscapeElement>> landscapes_random_walk;
+  vector<vector<LandscapeElement>> landscapes_adaptative_walk_D; // Adaptative walk decomposition based
+  vector<vector<LandscapeElement>> landscapes_adaptative_walk_P; // Adaptative walk pareto based
 
   //Getting the global z_point
   global_z_point = get_global_z_point();
 
   for(int i = 0; i < qtd_of_landscapes; i++){
     iLandscape = i;
-    //Landscape i refers to the landscape of the subproblem i
-    //lambda_vector i refers to the weight vector of the subproblem i
-    landscapes_random_walk[i] = random_walk(walk_lenght, number_of_neighbors, lambda_vector[i], global_z_point, maximal, minimal);
-    landscapes_adaptative_walk_D[i] = adaptive_walk_decomp(number_of_neighbors);
-    landscapes_adaptative_walk_P[i] = adaptive_walk(number_of_neighbors, pareto_next_solution);
-
-    cout << i << ". Decomposition adaptive walk size: " << landscapes_adaptative_walk_D[i].size() << endl;
-    cout << i << ". Pareto adaptive walk size: " << landscapes_adaptative_walk_P[i].size() << endl;
-
+    landscapes_random_walk.push_back(random_walk(walk_lenght, number_of_neighbors, lambda_vector[i], global_z_point, maximal, minimal));
   }
 
-  cout << endl;
+  for(int i = 0; i < qtd_of_landscapes; i++){
+    iLandscape = i;
+    landscapes_adaptative_walk_D.push_back(adaptive_walk_decomp(number_of_neighbors));
+  }
 
-  //Normalizing the landscapes elements
-  normalization(landscapes_random_walk, maximal, minimal);
-  normalization(landscapes_adaptative_walk_D, maximal, minimal);
-  normalization(landscapes_adaptative_walk_P, maximal, minimal);
-  
-// 
-  //METRICS -> Getting the metrics of each landscape of each type (random walk and adaptative walk)
-  auto RW_metrics = metrics_extraction(landscapes_random_walk);
-  auto AWD_metrics = metrics_extraction(landscapes_adaptative_walk_D);
-  auto AWP_metrics = metrics_extraction(landscapes_adaptative_walk_P);
+  for(int i = 0; i < qtd_of_landscapes; i++){
+    iLandscape = i;
+    landscapes_adaptative_walk_P.push_back(adaptive_walk(number_of_neighbors, pareto_next_solution));
+  }
 
-  //DECOMPOSTION -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
-  auto RW_mo_decomposition_features = mo_features_extraction(RW_metrics);
-  auto AWD_mo_decomposition_features = mo_features_extraction(AWD_metrics);
-  auto AWP_mo_decomposition_features = mo_features_extraction(AWP_metrics);
+  auto RW_mo_decomposition_features = decomposition_extraction(landscapes_random_walk);
+  auto AWD_mo_decomposition_features = decomposition_extraction(landscapes_adaptative_walk_D);
+  auto AWP_mo_decomposition_features = decomposition_extraction(landscapes_adaptative_walk_P);
 
   //PARETO -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
   int rand_int1 = rand() % qtd_of_landscapes;
   int rand_int2 = rand() % qtd_of_landscapes;
   int rand_int3 = rand() % qtd_of_landscapes;
 
-  
-  cout << "Decomposition adaptive walk: " << AWD_metrics[rand_int2].inc_neighbors.size() << endl;
-  cout << "Dominance adaptive walk: " << AWP_metrics[rand_int3].inc_neighbors.size() << endl;
+  cout << "Decomposition adaptive walk: " << landscapes_adaptative_walk_D[rand_int2].size() << endl;
+  cout << "Dominance adaptive walk: " << landscapes_adaptative_walk_P[rand_int3].size() << endl;
 
-  auto RW_mo_pareto_features = mo_features_extraction_pareto(RW_metrics[rand_int1]);
-  auto AWD_mo_pareto_features = mo_features_extraction_pareto(AWD_metrics[rand_int2]);
-  auto AWP_mo_pareto_features = mo_features_extraction_pareto(AWP_metrics[rand_int3]);
+  auto RW_mo_pareto_features = dominance_extraction(landscapes_random_walk[rand_int1]);
+  auto AWD_mo_pareto_features = dominance_extraction(landscapes_adaptative_walk_D[rand_int2]);
+  auto AWP_mo_pareto_features = dominance_extraction(landscapes_adaptative_walk_P[rand_int3]);
 
   //Buiding the csv
   build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");
