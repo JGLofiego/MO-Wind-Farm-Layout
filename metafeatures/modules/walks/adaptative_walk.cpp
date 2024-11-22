@@ -10,6 +10,8 @@
 
 using namespace std;
 
+extern int *countReval;
+
 extern vector<pair<double, double>> lambda_vector;
 extern pair<double, double> global_z_point;
 extern double maximal, minimal;
@@ -20,6 +22,7 @@ vector<LandscapeElement> adaptive_walk_decomp(int number_of_neighbors) {
   pair<double, double> lambda = lambda_vector[iLandscape];
   vector<LandscapeElement> S;
   Solution current_solution = create_initial_population(1)[0];
+  *countReval = *countReval + 1;
 
   //Definition of z_point
   pair<double, double> z_point;
@@ -87,6 +90,7 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, Solution (*next_
 
   vector<LandscapeElement> S;
   Solution current_solution = create_initial_population(1)[0];
+  *countReval = *countReval + 1;
 
   while (true) {
     LandscapeElement element;

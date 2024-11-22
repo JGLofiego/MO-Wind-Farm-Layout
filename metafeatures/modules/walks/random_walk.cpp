@@ -9,10 +9,13 @@
 
 using namespace std;
 
+extern int* countReval;
+
 vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, pair<double, double> &lambda, std::pair<double, double> &global_z_point, double &max, double &min){
 
   vector<LandscapeElement> S;
   Solution current_solution = create_initial_population(1)[0];
+  *countReval = *countReval + 1;
 
   //Definition of z_point
   pair<double, double> z_point;

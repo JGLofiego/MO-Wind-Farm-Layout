@@ -46,6 +46,10 @@ double minimal = numeric_limits<double>::infinity();
 
 int iLandscape;
 
+int countDecomp = 0;
+int countPareto = 0;
+int *countReval = &countDecomp;
+
 vector<double> decomposition_extraction(vector<vector<LandscapeElement>> &landscapes){
   //Normalizing the landscapes elements
   normalization(landscapes, maximal, minimal);
@@ -94,17 +98,27 @@ void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_n
   auto AWD_mo_decomposition_features = decomposition_extraction(landscapes_adaptative_walk_D);
   auto AWP_mo_decomposition_features = decomposition_extraction(landscapes_adaptative_walk_P);
 
+  countReval = &countPareto;
+
   //PARETO -> Getting the multiobjective features of each landscape of each type (random walk and adaptative walk)
-  int rand_int1 = rand() % qtd_of_landscapes;
-  int rand_int2 = rand() % qtd_of_landscapes;
-  int rand_int3 = rand() % qtd_of_landscapes;
+  auto single_random_walk = random_walk(walk_lenght, number_of_neighbors, lambda_vector[0], global_z_point, maximal, minimal);
+  cout << *countReval << endl;
+  countPareto = 0;
+  
+  auto single_adaptive_walk_D = adaptive_walk_decomp(number_of_neighbors);
+  cout << *countReval << endl;
+  countPareto = 0;
 
-  cout << "Decomposition adaptive walk: " << landscapes_adaptative_walk_D[rand_int2].size() << endl;
-  cout << "Dominance adaptive walk: " << landscapes_adaptative_walk_P[rand_int3].size() << endl;
+  auto single_adaptive_walk_P = adaptive_walk(number_of_neighbors, pareto_next_solution);
+  cout << *countReval << endl;
+  countPareto = 0;
 
-  auto RW_mo_pareto_features = dominance_extraction(landscapes_random_walk[rand_int1]);
-  auto AWD_mo_pareto_features = dominance_extraction(landscapes_adaptative_walk_D[rand_int2]);
-  auto AWP_mo_pareto_features = dominance_extraction(landscapes_adaptative_walk_P[rand_int3]);
+  cout << "Decomposition adaptive walk: " << single_adaptive_walk_D.size() << endl;
+  cout << "Dominance adaptive walk: " << single_adaptive_walk_P.size() << endl;
+
+  auto RW_mo_pareto_features = dominance_extraction(single_random_walk);
+  auto AWD_mo_pareto_features = dominance_extraction(single_adaptive_walk_D);
+  auto AWP_mo_pareto_features = dominance_extraction(single_adaptive_walk_P);
 
   //Buiding the csv
   build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");
