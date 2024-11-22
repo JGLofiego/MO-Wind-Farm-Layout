@@ -73,9 +73,10 @@ void mutationAuxFeature(Solution &solution, int zone){
 }
 
 void mutationFeature(Solution &solution){
-  for(int i = 0; i < num_zones; i++){
-    mutationAuxFeature(solution, i);
-  }
+  
+  int rand_int = rand() % num_zones;
+
+  mutationAuxFeature(solution, rand_int);
 
   calculate_cost(solution);
   calculate_power(solution);

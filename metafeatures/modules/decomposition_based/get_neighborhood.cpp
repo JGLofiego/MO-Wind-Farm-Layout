@@ -1,7 +1,7 @@
 #include <vector>
 #include "../../../headers/metafeatures/decomposition_based/get_neighborhood.h"
 #include "../../../modules/headers/isEqual.h"
-#include "../../../modules/headers/mutation.h"
+#include "../../../modules/headers/mutationFeature.h"
 
 bool isEqualNeighborhood(Solution &new_neighbor, vector<Solution> &neighborhood ){
   for(auto &solution : neighborhood){
@@ -18,11 +18,11 @@ vector<Solution> get_neighborhood(Solution &currentSolution, int number_of_neigh
 
   for(int i = 0; i < number_of_neighbors; i++){
  
-    mutation(new_neighbor);
+    mutationFeature(new_neighbor);
     //WARNING: RISK OFF INFINITE LOOP
     while(isEqualNeighborhood(new_neighbor, neighborhood)){
       new_neighbor = currentSolution;
-      mutation(new_neighbor);
+      mutationFeature(new_neighbor);
     }
 
     neighborhood.push_back(new_neighbor);
