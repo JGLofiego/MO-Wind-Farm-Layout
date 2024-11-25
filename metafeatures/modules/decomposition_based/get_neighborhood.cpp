@@ -21,6 +21,16 @@ bool isEqualNeighborhood(Solution &new_neighbor, vector<Solution> &neighborhood 
   return false;
 }
 
+Solution get_neighbor(Solution &currentSolution){
+
+  Solution new_neighbor = currentSolution;
+
+  mutationFeature(new_neighbor);
+  *countReval = *countReval + 1;
+
+  return new_neighbor;
+}
+
 vector<Solution> get_neighborhood(Solution &currentSolution, int number_of_neighbors){
   vector<Solution> neighborhood;
   Solution new_neighbor = currentSolution;
