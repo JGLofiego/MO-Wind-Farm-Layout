@@ -34,8 +34,79 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
     element.current_solution = current_solution; //Adding the 'current_solution' to S
 
     //Building the neighborhood of the current solution
-    vector<Solution> neighborhood = get_neighborhood(current_solution, number_of_neighbors);
-    element.neighborhod = neighborhood; //Adding the neighborhood of 'current_solution' to S
+    for(int i = 0; i < number_of_neighbors; i++){
+      Solution neighbor = get_neighbor(current_solution);
+
+      if(mode == 0 && *countReval % defaultDecompPace == 0){
+        auto actual = *updated_mult_walk;
+        auto walk_copy = S;
+        auto element_copy = element;
+
+        calculate_decomp_metrics(element_copy);
+        calculate_dominance_metrics(element_copy);
+
+        walk_copy.push_back(element_copy);
+        actual.push_back(walk_copy);
+
+        auto result = decomposition_extraction(actual);
+        cout << *countReval << ". Decomposition ";
+        for (double d : result){
+          cout << d << " ";
+        } cout << endl;
+      } else if(mode == 1 && *countReval % defaultDomPace == 0){
+        auto walk_copy = S;
+        auto element_copy = element;
+
+        calculate_decomp_metrics(element_copy);
+        calculate_dominance_metrics(element_copy);
+
+        walk_copy.push_back(element_copy);
+
+        auto result = dominance_extraction(walk_copy);
+        cout << *countReval << ". Dominance: ";
+        for (double d : result){
+          cout << d << " ";
+        } cout << endl;
+      }
+
+      while(isEqualNeighborhood(neighbor, element.neighborhod)){
+        neighbor = get_neighbor(current_solution);
+
+        if(mode == 0 && *countReval % defaultDecompPace == 0){
+          auto actual = *updated_mult_walk;
+          auto walk_copy = S;
+          auto element_copy = element;
+
+          calculate_decomp_metrics(element_copy);
+          calculate_dominance_metrics(element_copy);
+
+          walk_copy.push_back(element_copy);
+          actual.push_back(walk_copy);
+
+          auto result = decomposition_extraction(actual);
+          cout << *countReval << ". Decomposition ";
+          for (double d : result){
+            cout << d << " ";
+          } cout << endl;
+        } else if(mode == 1 && *countReval % defaultDomPace == 0){
+          auto walk_copy = S;
+          auto element_copy = element;
+
+          calculate_decomp_metrics(element_copy);
+          calculate_dominance_metrics(element_copy);
+
+          walk_copy.push_back(element_copy);
+
+          auto result = dominance_extraction(walk_copy);
+          cout << *countReval << ". Dominance: ";
+          for (double d : result){
+            cout << d << " ";
+          } cout << endl;
+        }
+      }
+
+      element.neighborhod.push_back(neighbor);
+    }
 
     calculate_decomp_metrics(element);
     calculate_dominance_metrics(element);
@@ -43,7 +114,7 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
     S.push_back(element);
 
     //Getting a random neighbor of the neighborhood of the current solution
-    Solution random_neighbor = neighborhood[rand() % neighborhood.size()];
+    Solution random_neighbor = element.neighborhod[rand() % element.neighborhod.size()];
 
     current_solution = random_neighbor;
   }

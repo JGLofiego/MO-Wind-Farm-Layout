@@ -4,6 +4,9 @@
 #include <vector>
 #include "../../../modules/headers/generate_rSolution.h"
 
-std::vector<Solution> get_neighborhood(Solution &currentSolution, int number_of_neighbors);
+Solution get_neighbor(Solution &currentSolution);
+
+bool isEqualNeighborhood(Solution &new_neighbor, vector<Solution> &neighborhood);
+
 
 #endif 
