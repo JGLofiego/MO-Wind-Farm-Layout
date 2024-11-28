@@ -36,6 +36,8 @@ vector<string> column_names_pareto = {
   "IND.avg", "IND.sd", "IND.r1", "IND.kr", "IND.sk",
 };
 
+extern string fold_name;
+
 vector<pair<double, double>> lambda_vector;
 
 pair<double, double> global_z_point;
@@ -51,8 +53,8 @@ int countPareto = 0;
 int *countReval = &countDecomp;
 
 
-int defaultDecompPace = 100;
-int defaultDomPace = 100;
+int defaultDecompPace = 300;
+int defaultDomPace = 200;
 
 int mode = 0;
 vector<vector<LandscapeElement>> *updated_mult_walk;
@@ -142,11 +144,11 @@ void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_n
   auto AWP_mo_pareto_features = dominance_extraction(single_adaptive_walk_P);
 
   //Buiding the csv
-  build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv");
-  build_csv(AWD_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_D_decomposition.csv");
+  // build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv", "dataset", "decomposition_based", "adaptative_walk", fold_name);
+  // build_csv(AWD_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_D_decomposition.csv");
   // build_csv(AWP_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_P_decomposition.csv");
 
-  build_csv(RW_mo_pareto_features, column_names_pareto, "mo_features_random_walk_pareto.csv");
+  // build_csv(RW_mo_pareto_features, column_names_pareto, "mo_features_random_walk_pareto.csv");
   // build_csv(AWD_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_D_pareto.csv");
-  build_csv(AWP_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_P_pareto.csv");
+  // build_csv(AWP_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_P_pareto.csv");
 }

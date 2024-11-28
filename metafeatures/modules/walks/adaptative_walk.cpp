@@ -10,6 +10,9 @@
 #include "../../../headers/metafeatures/decomposition_based/get_neighborhood.h"
 #include "../../../headers/metafeatures/features_extraction.h"
 
+#include "../../../headers/utils/features_csv.h"
+
+
 using namespace std;
 
 extern int *countReval;
@@ -22,6 +25,10 @@ extern pair<double, double> global_z_point;
 extern double maximal, minimal;
 extern int iLandscape;
 
+extern string fold_name;
+extern vector<string> column_names_decomposition;
+extern vector<string> column_names_pareto;
+
 vector<LandscapeElement> adaptive_walk_decomp(int number_of_neighbors) {
 
   pair<double, double> lambda = lambda_vector[iLandscape];
@@ -32,6 +39,8 @@ vector<LandscapeElement> adaptive_walk_decomp(int number_of_neighbors) {
 
   if(mode == 0 && *countReval % defaultDecompPace == 0){
     auto result = decomposition_extraction(*updated_mult_walk);
+    string file_name = "fv_" + to_string(*countReval);
+    build_csv(result, column_names_decomposition, file_name, "dataset", "decomposition_based", "adaptative_walk", fold_name);
   } else if (mode == 1 && *countReval % defaultDomPace == 0){
     auto result = dominance_extraction(*updated_single_walk);
   }
@@ -59,6 +68,10 @@ vector<LandscapeElement> adaptive_walk_decomp(int number_of_neighbors) {
         actual.push_back(walk_copy);
 
         auto result = decomposition_extraction(actual);
+
+        string file_name = "fv_" + to_string(*countReval);
+        build_csv(result, column_names_decomposition, file_name, "dataset", "decomposition_based", "adaptative_walk", fold_name);
+        
         cout << *countReval << ". Decomposition ";
         for (double d : result){
           cout << d << " ";
@@ -95,6 +108,10 @@ vector<LandscapeElement> adaptive_walk_decomp(int number_of_neighbors) {
           
 
           auto result = decomposition_extraction(actual);
+
+          string file_name = "fv_" + to_string(*countReval);
+          build_csv(result, column_names_decomposition, file_name, "dataset", "decomposition_based", "adaptative_walk", fold_name);
+        
           cout << *countReval << ". Decomposition ";
           for (double d : result){
             cout << d << " ";
@@ -146,6 +163,8 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, Solution (*next_
     auto result = decomposition_extraction(*updated_mult_walk);
   } else if (mode == 1 && *countReval % defaultDomPace == 0){
     auto result = dominance_extraction(*updated_single_walk);
+    string file_name = "fv_" + to_string(*countReval);
+    build_csv(result, column_names_pareto, file_name, "dataset", "pareto_based", "adaptative_walk", fold_name);
   }
 
   while (true) {
@@ -182,6 +201,8 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, Solution (*next_
         walk_copy.push_back(element_copy);
 
         auto result = dominance_extraction(walk_copy);
+        string file_name = "fv_" + to_string(*countReval);
+        build_csv(result, column_names_pareto, file_name, "dataset", "pareto_based", "adaptative_walk", fold_name);
         cout << *countReval << ". Dominance: ";
         for (double d : result){
           cout << d << " ";
@@ -217,6 +238,8 @@ vector<LandscapeElement> adaptive_walk(int number_of_neighbors, Solution (*next_
           walk_copy.push_back(element_copy);
 
           auto result = dominance_extraction(walk_copy);
+          string file_name = "fv_" + to_string(*countReval);
+          build_csv(result, column_names_pareto, file_name, "dataset", "pareto_based", "adaptative_walk", fold_name);
           cout << *countReval << ". Dominance: ";
           for (double d : result){
             cout << d << " ";
