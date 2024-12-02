@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-pair<double, double> left_most_point = make_pair(150000, 0);
+pair<double, double> left_most_point;
 
 extern default_random_engine rd;
 extern uniform_real_distribution<double> points_x;
@@ -16,6 +16,8 @@ bool polygon_order(const pair<double, double>& a, const pair<double, double>& b)
 }
 
 vector<pair<double, double>> generate_polygon(int num_vertex){
+    left_most_point = make_pair(150000, 0);
+    
     vector<pair<double, double>> points;
     pair<double, double> aux;
 
