@@ -68,7 +68,7 @@ bool doIntersect(vector<pair<double, double>>& polygonA, vector<pair<double, dou
         }
     }
 
-    
+
 
     return false;
 }}
@@ -87,6 +87,113 @@ void shrink(vector<pair<double, double>>& points, double scale, int iPoint_based
         points[i].first = points[i].first * scale + pace_x;
         points[i].second = points[i].second * scale + pace_y;
     }
+}
+
+void moveY(vector<pair<double, double>>& polygon, int iPolygonPoint, double y){
+    double pace = y - polygon[iPolygonPoint].second;
+
+    for(int i = 0; i < polygon.size(); i++){
+        polygon[i].second += pace;
+    }
+}
+
+void moveX(vector<pair<double, double>>& polygon, int iPolygonPoint, double x){
+    double pace = x - polygon[iPolygonPoint].first;
+
+    for(int i = 0; i < polygon.size(); i++){
+        polygon[i].first += pace;
+    }
+}
+
+int find_pointX(vector<pair<double, double>>& points, double val){
+    for(int i = 0; i < points.size(); i++){
+        if(points[i].first == val){
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+int find_pointY(vector<pair<double, double>>& points, double val){
+    for(int i = 0; i < points.size(); i++){
+        if(points[i].second == val){
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+bool isInBoundaries(vector<pair<double, double>>& bounding_box){
+    if((bounding_box[0].first >= 100000 && bounding_box[0].first <= 150000) &&
+       (bounding_box[3].first >= 100000 && bounding_box[0].first <= 150000) &&
+       (bounding_box[0].second >= 100000 && bounding_box[0].second <= 150000) &&
+       (bounding_box[3].second >= 100000 && bounding_box[03].second <= 150000)){
+        return true;
+       }
+    return false;
+}
+
+bool re_position(vector<pair<double, double>>& polygonA, vector<pair<double, double>>& polygonB){
+    auto boundingBoxA = bounding_box(polygonA);
+    auto boundingBoxB = bounding_box(polygonB);
+    double last_x, last_y;
+
+    int rand_side = rand() % 4;
+
+    for(int i = 0; i < 4; i++){
+        if(rand_side == 0){
+            moveX(polygonB, 0, boundingBoxA[3].first);
+            auto new_bounding_box = bounding_box(polygonB);
+            if(isInBoundaries(new_bounding_box)){
+                return true;
+            }
+            moveX(polygonB, 0, boundingBoxB[0].first);
+        } else if(rand_side == 1){
+            int lowest_y_point = find_pointY(polygonB, boundingBoxB[0].second);
+            moveY(polygonB, lowest_y_point, boundingBoxA[3].second);
+            auto new_bounding_box = bounding_box(polygonB);
+            if(isInBoundaries(new_bounding_box)){
+                return true;
+            }
+            moveY(polygonB, lowest_y_point, boundingBoxB[0].second);
+        } else if(rand_side == 2){
+            int highest_x_point = find_pointX(polygonB, boundingBoxB[3].first);
+            moveX(polygonB, highest_x_point, boundingBoxA[0].first);
+            auto new_bounding_box = bounding_box(polygonB);
+            if(isInBoundaries(new_bounding_box)){
+                return true;
+            }
+            moveX(polygonB, highest_x_point, boundingBoxB[3].first);
+        } else if(rand_side == 3){
+            int highest_y_point = find_pointY(polygonB, boundingBoxB[3].second);
+            moveY(polygonB, highest_y_point, boundingBoxA[0].second);
+            auto new_bounding_box = bounding_box(polygonB);
+            if(isInBoundaries(new_bounding_box)){
+                return true;
+            }
+            moveY(polygonB, highest_y_point, boundingBoxB[3].second);
+        }
+        rand_side = (rand_side + 1) % 4;
+    }
+    
+    return false;
+}
+
+bool hasIntersections(vector<vector<pair<double, double>>>& polygons){
+
+    if(polygons.size() == 1){
+        return false;
+    }
+
+    for (int i = 0; i < polygons.size(); i++){
+        if(doIntersect(polygons[i], polygons[(i + 1) % polygons.size()])){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 int main(){
@@ -137,30 +244,25 @@ int main(){
         scales.push_back((double) (available_positions - break_point2) / (double) available_positions);
     }
 
-    // double scale = 0.7;
-
-    // double x_pace = left_most_point.first - left_most_point.first * scale;
-    // double y_pace = left_most_point.second - left_most_point.second * scale;
-
-    // for(int i = 0; i < test.size(); i++){
-    //     aux = test[i];
-    //     aux.first = aux.first * scale;
-    //     aux.second = aux.second * scale;
-    //     aux.first += x_pace;
-    //     aux.second += y_pace;
-    //     test[i] = aux;
-    // }
-
     for(int i = 0; i < num_zones; i++){
         auto test = generate_polygon(polygon_vertex(rd));
         shrink(test, scales[i], rand() % test.size());
         polygons.push_back(test);
-        for(int j = 0; j < test.size(); j++){
-            cout << test[j].first << " " << test[j].second << endl;
-        } cout << endl;
     }
 
-    for (int i = 0; i < polygons.size(); i++){
-        cout << doIntersect(polygons[i], polygons[(i + 1) % num_zones]) << " ";    
-    } cout << endl;
+    while(hasIntersections(polygons)){
+        for (int i = 0; i < polygons.size(); i++){
+            if(doIntersect(polygons[i], polygons[(i + 1) % num_zones])){
+                if(!re_position(polygons[i], polygons[(i + 1) % num_zones])){
+                    cout << "ERROR, IT WAS NOT POSSIBLE TO REPOSITION CONFLICTED ZONES" << endl;
+                }
+            }
+        }
+    }
+
+    for(int i = 0; i < num_zones; i++){
+        for(int j = 0; j < polygons[i].size(); j++){
+            cout << polygons[i][j].first << " " << polygons[i][j].second << endl;
+        } cout << endl;
+    }
 }
