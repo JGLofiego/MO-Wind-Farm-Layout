@@ -36,7 +36,7 @@ vector<string> column_names_pareto = {
   "IND.avg", "IND.sd", "IND.r1", "IND.kr", "IND.sk",
 };
 
-extern string fold_name;
+extern string folder_name_adaptative_walk;
 
 vector<pair<double, double>> lambda_vector;
 
@@ -107,15 +107,6 @@ void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_n
     landscapes_adaptative_walk_D.push_back(adaptive_walk_decomp(number_of_neighbors));
   }
 
-  // countDecomp = 0;
-  // updated_mult_walk = &landscapes_adaptative_walk_P;
-  // cout << endl << "Multi adaptive dominance walk:" << endl;
-
-  // for(int i = 0; i < qtd_of_landscapes; i++){
-  //   iLandscape = i;
-  //   landscapes_adaptative_walk_P.push_back(adaptive_walk(number_of_neighbors, pareto_next_solution));
-  // }
-
   auto RW_mo_decomposition_features = decomposition_extraction(landscapes_random_walk);
   auto AWD_mo_decomposition_features = decomposition_extraction(landscapes_adaptative_walk_D);
   // auto AWP_mo_decomposition_features = decomposition_extraction(landscapes_adaptative_walk_P);
@@ -128,10 +119,6 @@ void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_n
   auto single_random_walk = random_walk(walk_lenght, number_of_neighbors, lambda_vector[0], global_z_point, maximal, minimal);
   countPareto = 0;
 
-  // cout << endl << "Single adaptive decomposition walk:" << endl;
-  // auto single_adaptive_walk_D = adaptive_walk_decomp(number_of_neighbors);
-  // countPareto = 0;
-
   cout << endl << "Single adaptive dominance walk:" << endl;
   auto single_adaptive_walk_P = adaptive_walk(number_of_neighbors, pareto_next_solution);
   countPareto = 0;
@@ -142,13 +129,4 @@ void features_extraction(int qtd_of_landscapes, int walk_lenght, int number_of_n
   auto RW_mo_pareto_features = dominance_extraction(single_random_walk);
   // auto AWD_mo_pareto_features = dominance_extraction(single_adaptive_walk_D);
   auto AWP_mo_pareto_features = dominance_extraction(single_adaptive_walk_P);
-
-  //Buiding the csv
-  // build_csv(RW_mo_decomposition_features, column_names_decomposition, "mo_features_random_walk_decomposition.csv", "dataset", "decomposition_based", "adaptative_walk", fold_name);
-  // build_csv(AWD_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_D_decomposition.csv");
-  // build_csv(AWP_mo_decomposition_features, column_names_decomposition, "mo_features_adaptative_walk_P_decomposition.csv");
-
-  // build_csv(RW_mo_pareto_features, column_names_pareto, "mo_features_random_walk_pareto.csv");
-  // build_csv(AWD_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_D_pareto.csv");
-  // build_csv(AWP_mo_pareto_features, column_names_pareto, "mo_features_adaptative_walk_P_pareto.csv");
 }

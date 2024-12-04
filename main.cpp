@@ -7,8 +7,8 @@ using namespace std;
 
 int walk_length = 8;
 float percent_neighbors = 1.0;
-string fold_name;
-string fold_name_random_walk;
+string folder_name_adaptative_walk;
+string folder_name_random_walk;
 
 int main(int argc, char* argv[]){
 

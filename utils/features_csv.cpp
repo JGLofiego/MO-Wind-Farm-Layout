@@ -8,15 +8,13 @@
 using namespace std;
 
 void build_csv(const vector<double> &mo_features, const vector<string> &column_names, 
-               const string &filename, const string &rootfolder, const string &folder, 
-               const string &subfolder, const string &subsubfolder) {
+               const string &rootfolder, const string &folder, 
+               const string &subfolder, const string &subsubfolder, const string &filename) {
     
-    // Construir o caminho completo manualmente
     string separator = "\\"; //para windows
     string full_path = rootfolder + separator + folder + separator + subfolder + separator + subsubfolder;
     string file_path = full_path + separator + filename;
 
-    // Abrir o arquivo no local especificado
     ofstream file(file_path);
 
     if (file.is_open()) {

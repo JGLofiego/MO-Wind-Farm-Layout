@@ -11,8 +11,8 @@ using namespace std;
 
 vector<vector<Foundation>> foundations(3);
 vector<Turbine> fixd;
-extern string fold_name;
-extern string fold_name_random_walk;
+extern string folder_name_adaptative_walk;
+extern string folder_name_random_walk;
 
 int num_zones;
 int id = 0;
@@ -72,8 +72,8 @@ void get_instance_info(int argc, char* argv[]){
         walk_length = atoi(argv[2]);
         percent_neighbors = stof(argv[3]);
 
-        fold_name = "l" + string(argv[2]) + "_r" + string(argv[3]);  
-        fold_name_random_walk = "l" + string(argv[2]);  
+        folder_name_random_walk =  "l" + string(argv[2]) + "_r" + string(argv[3]);
+        folder_name_adaptative_walk = "l" + string(argv[2]);   
     } else if(argc == 5){
         instance = (string) argv[1];
         walk_length = atoi(argv[2]);

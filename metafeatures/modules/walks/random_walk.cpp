@@ -11,7 +11,6 @@
 
 #include "../../../headers/utils/features_csv.h"
 
-
 using namespace std;
 
 extern int* countReval;
@@ -19,8 +18,8 @@ extern int mode, defaultDecompPace, defaultDomPace;
 extern vector<vector<LandscapeElement>> *updated_mult_walk;
 extern vector<LandscapeElement> *updated_single_walk;
 
-extern string fold_name;
-extern string fold_name_random_walk;
+extern string folder_name_adaptative_walk;
+extern string folder_name_random_walk;
 extern vector<string> column_names_decomposition;
 extern vector<string> column_names_pareto;
 
@@ -33,12 +32,12 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
 
   if(mode == 0 && *countReval % defaultDecompPace == 0){
     auto result = decomposition_extraction(*updated_mult_walk);
-    string file_name = "fv_" + to_string(*countReval);
-    build_csv(result, column_names_decomposition, file_name, "dataset", "decomposition_based", "random_walk", fold_name_random_walk);
+    string file_name = "fv_" + to_string(*countReval)+ ".csv";
+    build_csv(result, column_names_decomposition, "dataset", "decomposition_based", "random_walk", folder_name_random_walk, file_name);
   } else if (mode == 1 && *countReval % defaultDomPace == 0){
     auto result = dominance_extraction(*updated_single_walk);
-    string file_name = "fv_" + to_string(*countReval);
-    build_csv(result, column_names_decomposition, file_name, "dataset", "pareto_based", "random_walk", fold_name_random_walk);
+    string file_name = "fv_" + to_string(*countReval) + ".csv";
+    build_csv(result, column_names_decomposition, "dataset", "pareto_based", "random_walk", folder_name_random_walk, file_name);
   }
 
   for(int step = 0; step < walk_lenght; step++){
@@ -61,8 +60,8 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
         actual.push_back(walk_copy);
 
         auto result = decomposition_extraction(actual);
-        string file_name = "fv_" + to_string(*countReval);
-        build_csv(result, column_names_decomposition, file_name, "dataset", "decomposition_based", "random_walk", fold_name_random_walk);
+        string file_name = "fv_" + to_string(*countReval) + ".csv";
+        build_csv(result, column_names_decomposition, "dataset", "decomposition_based", "random_walk", folder_name_random_walk, file_name);
         cout << *countReval << ". Decomposition ";
         for (double d : result){
           cout << d << " ";
@@ -78,8 +77,8 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
 
         auto result = dominance_extraction(walk_copy);
         cout << *countReval << ". Dominance: ";
-        string file_name = "fv_" + to_string(*countReval);
-        build_csv(result, column_names_decomposition, file_name, "dataset", "pareto_based", "random_walk", fold_name_random_walk);
+        string file_name = "fv_" + to_string(*countReval) + ".csv";
+        build_csv(result, column_names_decomposition, "dataset", "pareto_based", "random_walk", folder_name_random_walk, file_name);
         for (double d : result){
           cout << d << " ";
         } cout << endl;
@@ -101,8 +100,8 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
 
           auto result = decomposition_extraction(actual);
           cout << *countReval << ". Decomposition ";
-          string file_name = "fv_" + to_string(*countReval);
-          build_csv(result, column_names_decomposition, file_name, "dataset", "decomposition_based", "random_walk", fold_name_random_walk);
+          string file_name = "fv_" + to_string(*countReval) + ".csv";
+          build_csv(result, column_names_decomposition, "dataset", "decomposition_based", "random_walk", folder_name_random_walk, file_name);
           for (double d : result){
             cout << d << " ";
           } cout << endl;
@@ -117,8 +116,8 @@ vector<LandscapeElement> random_walk(int walk_lenght, int number_of_neighbors, p
 
           auto result = dominance_extraction(walk_copy);
           cout << *countReval << ". Dominance: ";
-          string file_name = "fv_" + to_string(*countReval);
-          build_csv(result, column_names_decomposition, file_name, "dataset", "pareto_based", "random_walk", fold_name_random_walk);
+          string file_name = "fv_" + to_string(*countReval) + ".csv";
+          build_csv(result, column_names_decomposition, "dataset", "pareto_based", "random_walk", folder_name_random_walk, file_name);
           for (double d : result){
             cout << d << " ";
           } cout << endl;
