@@ -6,7 +6,7 @@ colors = ["red", "green", "blue"]
 
 def gen_hole(polygon: shapely.Polygon):
     new_hole = []
-    hole_max = min(1000, (polygon.area ** 0.5) * 0.3)
+    hole_max =  max(random.uniform(polygon.area / 150000, polygon.area / 100000), 500)
     
     for i in range(random.randint(3, 7)):
         new_hole.append(tuple([random.uniform(0.0, hole_max), random.uniform(0.0, hole_max)]))
@@ -64,7 +64,7 @@ def gen_structure(polygon: shapely.Polygon):
         pointOut = shapely.Point([random.uniform(minx, maxx), random.uniform(miny, maxy)])
         
     
-    dist = random.uniform(polygon.length / 300, polygon.length / 100)
+    dist = random.uniform(polygon.length / 300, polygon.length / 200)
     
     paceX = pointOut.x - pointIn.x
     paceY = pointOut.y - pointIn.y
@@ -111,10 +111,10 @@ for line in f.readlines():
     
 
 for i in range(len(polygons)):
-    num_structs = random.randint(1, 4)
+    num_structs = random.randint(5, 8)
     num_holes = random.randint(2, 5)
     polygons[i] = gen_holes(polygons[i], num_holes)
-    polygons[i] = gen_structures(polygons[i], num_structs)
+    polygons[i] = gen_structures(polygons[i], num_structs - num_holes)
     xe, ye = polygons[i].exterior.xy
     for inner in polygons[i].interiors:
         xi, yi = zip(*inner.coords[:])
