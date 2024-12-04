@@ -64,25 +64,33 @@ def gen_structure(polygon: shapely.Polygon):
         pointOut = shapely.Point([random.uniform(minx, maxx), random.uniform(miny, maxy)])
         
     
-    dist = 100
+    dist = random.uniform(polygon.length / 300, polygon.length / 100)
     
     paceX = pointOut.x - pointIn.x
     paceY = pointOut.y - pointIn.y
     
     line = shapely.LineString([pointIn, pointOut])
     
-    lineR = shapely.LineString([pointIn, pointOut])
+    left = [shapely.Point(c) for c in line.parallel_offset(dist/2, "left").coords]
+    right = [shapely.Point(p) for p in line.parallel_offset(dist/2, "right").coords]
     
-    point0 = line.parallel_offset(dist / 2, "left").boundary.geoms[0]
-    point1 = line.parallel_offset(dist / 2, "right").boundary.geoms[1]
-    point2 = shapely.Point(point0.x + paceX, point0.y + paceY)
-    point3 = shapely.Point(point1.x + paceX, point1.y + paceY)
-    
-    structure = shapely.Polygon([point0, point1, point3, point2])
-    
-    print(structure)
+    structure = shapely.Polygon(left + right).convex_hull
             
-    return structure
+    return polygon.difference(structure)
+
+def gen_structures(polygon: shapely.Polygon, qtty):
+    for i in range(qtty):
+        copy = polygon
+        
+        copy = gen_structure(copy)
+            
+        while(copy.geom_type == "MultiPolygon"):
+            copy = polygon
+            copy = gen_structure(copy)
+        
+        polygon = copy
+    
+    return polygon
     
 
 
@@ -103,11 +111,10 @@ for line in f.readlines():
     
 
 for i in range(len(polygons)):
-    # num_holes = random.randint(2, 5)
-    # polygons[i] = gen_holes(polygons[i], num_holes)
-    # polygons[i] = gen_structure(polygons[i])
-    teste = gen_structure(polygons[i]).exterior.xy
-    plt.plot(teste[0], teste[1], marker="o")
+    num_structs = random.randint(1, 4)
+    num_holes = random.randint(2, 5)
+    polygons[i] = gen_holes(polygons[i], num_holes)
+    polygons[i] = gen_structures(polygons[i], num_structs)
     xe, ye = polygons[i].exterior.xy
     for inner in polygons[i].interiors:
         xi, yi = zip(*inner.coords[:])
