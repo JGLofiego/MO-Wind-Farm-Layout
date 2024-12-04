@@ -33,9 +33,8 @@ def gen_hole(polygon: shapely.Polygon):
     
     return polygon.difference(new_hole)
     
-def gen_holes(polygon: shapely.Polygon):
-    qtty = random.randint(2, 5)
-    
+def gen_holes(polygon: shapely.Polygon, qtty):
+
     for i in range(qtty):
         copy = polygon
         
@@ -50,7 +49,42 @@ def gen_holes(polygon: shapely.Polygon):
         polygon = copy
     
     return polygon
+
+def gen_structure(polygon: shapely.Polygon):
+    minx, miny, maxx, maxy = polygon.bounds
+    
+    pointIn = shapely.Point([random.uniform(100000.0, 150000.0), random.uniform(100000.0, 150000.0)])
+    
+    while(not polygon.contains(pointIn)):
+        pointIn = shapely.Point([random.uniform(minx, maxx), random.uniform(miny, maxy)])
         
+    pointOut = shapely.Point([random.uniform(100000.0, 150000.0), random.uniform(100000.0, 150000.0)])
+    
+    while(polygon.contains(pointOut)):
+        pointOut = shapely.Point([random.uniform(minx, maxx), random.uniform(miny, maxy)])
+        
+    
+    dist = 100
+    
+    paceX = pointOut.x - pointIn.x
+    paceY = pointOut.y - pointIn.y
+    
+    line = shapely.LineString([pointIn, pointOut])
+    
+    lineR = shapely.LineString([pointIn, pointOut])
+    
+    point0 = line.parallel_offset(dist / 2, "left").boundary.geoms[0]
+    point1 = line.parallel_offset(dist / 2, "right").boundary.geoms[1]
+    point2 = shapely.Point(point0.x + paceX, point0.y + paceY)
+    point3 = shapely.Point(point1.x + paceX, point1.y + paceY)
+    
+    structure = shapely.Polygon([point0, point1, point3, point2])
+    
+    print(structure)
+            
+    return structure
+    
+
 
 polygons = []
 points = []
@@ -69,7 +103,11 @@ for line in f.readlines():
     
 
 for i in range(len(polygons)):
-    polygons[i] = gen_holes(polygons[i])
+    # num_holes = random.randint(2, 5)
+    # polygons[i] = gen_holes(polygons[i], num_holes)
+    # polygons[i] = gen_structure(polygons[i])
+    teste = gen_structure(polygons[i]).exterior.xy
+    plt.plot(teste[0], teste[1], marker="o")
     xe, ye = polygons[i].exterior.xy
     for inner in polygons[i].interiors:
         xi, yi = zip(*inner.coords[:])
