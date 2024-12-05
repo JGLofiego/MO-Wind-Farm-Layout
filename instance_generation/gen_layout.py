@@ -47,43 +47,106 @@ def scale(polygon: shapely.Polygon, scale_factor: float):
     resized_poly = shapely.Polygon([pointsX[i], pointsY[i]] for i in range(len(pointsX)))
     
     return resized_poly
+
+def translate(polygon: shapely.Polygon, pacex: float, pacey: float):
+    pointsX, pointsY = polygon.exterior.coords.xy
+    
+    pointsX = [x + pacex for x in pointsX]
+    pointsY = [y + pacey for y in pointsY]
+    
+    translated_poly = shapely.Polygon([pointsX[i], pointsY[i]] for i in range(len(pointsX)))
+    
+    return translated_poly
     
 
 def gen_layout(num_zones) -> list[shapely.Polygon]:
     polygons : list[shapely.Polygon] = []
     area = 0
-    
-    i_l_area = 0
-    i_h_area = 0
 
     for i in range(num_zones):
-        polygons.append(gen_polygon(random.randint(3, 9)))
+        polygons.append(scale(gen_polygon(random.randint(3, 9)), random.uniform(0.3, 1.2)))
+        
+        while polygons[i].area / 1000000 > 550:
+            polygons[i] = scale(polygons[i], 0.95)
+        
+        while polygons[i].area / 1000000 < 20:
+            polygons[i] = scale(polygons[i], 1.05)
             
         area += polygons[i].area / (1000000)
     
     print(area)
     
-    while area > 550:
-        for i in range(num_zones):
-            if polygons[i_h_area].area < polygons[i].area:
-                i_h_area = i
-        
-        area -= polygons[i_h_area].area / 1000000
-        
-        polygons[i_h_area] = scale(polygons[i_h_area], 0.9)
-        
-        area += polygons[i_h_area].area / 1000000
-    
-    print(area)
                 
             
     return polygons
+
+def re_position(polygonA: shapely.Polygon, polygonB: shapely.Polygon):
+    minx1, miny1, maxx1, maxy1 = polygonA.bounds
+    minx2, miny2, maxx2, maxy2 = polygonB.bounds
+    
+    mode = random.randint(0, 1)
+    side = random.randint(0, 3)
+    
+    if mode == 0:
+        if side == 0:
+            pacex = maxx1 - minx2
+            polygonB = translate(polygonB, pacex, 0.0)
+        elif side == 1:
+            pacey = maxy1 - miny2
+            polygonB = translate(polygonB, 0.0, pacey)
+        elif side == 2:
+            pacex = minx1 - maxx2
+            polygonB = translate(polygonB, pacex, 0.0)
+        else:
+            pacey = miny1 - maxy2
+            polygonB = translate(polygonB, 0.0, pacey)
+    else:
+        if side == 0:
+            pacex = maxx2 - minx1
+            polygonA = translate(polygonA, pacex, 0.0)
+        elif side == 1:
+            pacey = maxy2 - miny1
+            polygonA = translate(polygonA, 0.0, pacey)
+        elif side == 2:
+            pacex = minx2 - maxx1
+            polygonA = translate(polygonA, pacex, 0.0)
+        else:
+            pacey = miny2 - maxy1
+            polygonA = translate(polygonA, 0.0, pacey)
+    
+    return polygonA, polygonB
+
+def hasIntersections(polygons: list[shapely.Polygon]):
+    
+    if len(polygons) == 1:
+        return False
+    
+    result = [False] * len(polygons)
+    
+    for i in range(len(polygons)):
+        result[i] = polygons[i].intersects(polygons[(i + 1) % len(polygons)])
+    
+    return any(result)
         
 polygons = gen_layout(random.randint(1, 3))
+
+while hasIntersections(polygons):    
+    for i in range(len(polygons)):
+        if(polygons[i].intersects(polygons[(i+1) % len(polygons)])):
+            polygons[i], polygons[(i+1) % len(polygons)] = re_position(polygons[i], polygons[(i+1) % len(polygons)])
+
+f = open("out.txt", "w")
 
 for i in range(len(polygons)):
     xe, ye = polygons[i].exterior.xy
     plt.plot(xe, ye)
+    
+    for j in range(len(xe)):
+        f.write(f"{xe[j]:11f} {ye[j]:11f} \n")
+    f.write(f"\n")
+
+f.close()
 
 plt.show()
+
         
