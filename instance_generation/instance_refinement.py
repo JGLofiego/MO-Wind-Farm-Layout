@@ -91,8 +91,32 @@ def gen_structures(polygon: shapely.Polygon, qtty):
         polygon = copy
     
     return polygon
-    
 
+def gen_points(polygon: shapely.Polygon):
+    minx, miny, maxx, maxy = polygon.bounds
+    
+    sizex = (maxx - minx)
+    sizey = (maxy - miny)
+    
+    valuex = round(sizex / 160)
+    valuey = round(sizey / 160)
+    
+    cellx = sizex / valuex
+    celly = sizey / valuey
+    
+    allPoints = []
+    
+    for i in range(valuey):
+        centroidY = (maxy - (i * celly) + maxy - ((i + 1) * celly)) / 2 
+        for j in range(valuex):
+            centroidX = (minx + (j * cellx) + minx + ((j + 1) * cellx)) / 2
+            
+            if(polygon.contains(shapely.Point(centroidX, centroidY))):
+                allPoints.append([centroidX, centroidY])
+    
+    print(len(allPoints))
+    
+    return allPoints
 
 polygons = []
 points = []
@@ -115,6 +139,10 @@ for i in range(len(polygons)):
     num_holes = random.randint(2, 5)
     polygons[i] = gen_holes(polygons[i], num_holes)
     polygons[i] = gen_structures(polygons[i], num_structs - num_holes)
+    
+    pointsX, pointsY = zip(*gen_points(polygons[i]))
+    plt.plot(pointsX, pointsY, "o", color=colors[i])
+    
     xe, ye = polygons[i].exterior.xy
     for inner in polygons[i].interiors:
         xi, yi = zip(*inner.coords[:])
