@@ -140,8 +140,9 @@ for i in range(len(polygons)):
     polygons[i] = gen_holes(polygons[i], num_holes)
     polygons[i] = gen_structures(polygons[i], num_structs - num_holes)
     
+for i in range(len(polygons)):
     pointsX, pointsY = zip(*gen_points(polygons[i]))
-    plt.plot(pointsX, pointsY, "o", color=colors[i])
+    plt.plot(pointsX, pointsY, "s", color=colors[i])
     
     xe, ye = polygons[i].exterior.xy
     for inner in polygons[i].interiors:
