@@ -104,7 +104,7 @@ def gen_points(polygon: shapely.Polygon, octaves: int):
     valuey = round(sizey / 160)
     
     noise = PerlinNoise(octaves=octaves)
-    pic = [[noise([j/valuex, i/valuey]) for j in range(valuex)] for i in range(valuey)]
+    pic = [[noise([i/valuex, j/valuey]) for j in range(valuex)] for i in range(valuey)]
     
     cellx = sizex / valuex
     celly = sizey / valuey
@@ -205,10 +205,9 @@ for i in range(len(polygons)):
     polygons[i] = gen_holes(polygons[i], num_holes)
     polygons[i] = gen_structures(polygons[i], num_structs - num_holes)
     
-octaves = random.randint(2, 5)
-    
-for i in range(len(polygons)):    
-    allPoints, depths = gen_points(polygons[i], octaves)
+octaves = random.randint(3, 7)
+for i in range(len(polygons)):
+    allPoints, depths = gen_points(polygons[i], octaves + random.randint(-1, 1))
     
     for j in range(len(allPoints)):
         lines_to_write.append(f"{allPoints[j][0]:.11f} {allPoints[j][1]:.11f} {depths[j]:.11f} {cost(depths[j]):.11f} {i + 1}")

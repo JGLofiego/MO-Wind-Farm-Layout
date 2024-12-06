@@ -64,7 +64,7 @@ def gen_layout(num_zones) -> list[shapely.Polygon]:
     area = 0
 
     for i in range(num_zones):
-        polygons.append(scale(gen_polygon(random.randint(3, 9)), random.uniform(0.3, 1.2)))
+        polygons.append(scale(gen_polygon(random.randint(3, 9)), random.uniform(0.3, 1)))
         
         while polygons[i].area / 1000000 > 550:
             polygons[i] = scale(polygons[i], 0.95)
@@ -74,10 +74,22 @@ def gen_layout(num_zones) -> list[shapely.Polygon]:
             
         area += polygons[i].area / (1000000)
     
+    rand_int = random.randint(0, len(polygons))
+    while(area > 1500):    
+        area -= polygons[rand_int].area / 1000000
+        
+        polygons[rand_int] = scale(polygons[rand_int], 0.9)
+        area += polygons[rand_int].area / (1000000)
+    
+    while(area < 100):
+        area -= polygons[rand_int].area / 1000000
+        
+        polygons[rand_int] = scale(polygons[rand_int], 1.1)
+        area += polygons[rand_int].area / (1000000)
+                
+    
     print(area)
     
-                
-            
     return polygons
 
 def re_position(polygonA: shapely.Polygon, polygonB: shapely.Polygon):
