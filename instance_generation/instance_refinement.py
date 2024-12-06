@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import shapely
 import random
 from perlin_noise import PerlinNoise
+import shapely.plotting
 
 def cost(depth: float) -> float:
     return 659933.9999999129 + depth * -72606.60000000268
@@ -103,7 +104,7 @@ def gen_points(polygon: shapely.Polygon, octaves: int):
     valuey = round(sizey / 160)
     
     noise = PerlinNoise(octaves=octaves)
-    pic = [[(noise([i/valuex, j/valuey])) * 1.5 for j in range(valuex)] for i in range(valuey)]
+    pic = [[noise([j/valuex, i/valuey]) for j in range(valuex)] for i in range(valuey)]
     
     cellx = sizex / valuex
     celly = sizey / valuey
@@ -122,6 +123,57 @@ def gen_points(polygon: shapely.Polygon, octaves: int):
         
     return allPoints, depths
 
+def create_grid(num_points : int) -> tuple[int, int]:
+    factors = [(i, num_points // i) for i in range(1, int(num_points ** 0.5) + 1) if i > 1]
+    
+    factors += [(factor[1], factor[0]) for factor in reversed(factors)]
+        
+    return factors[random.randint(0, len(factors) - 1)]
+
+def gen_grid(vec: list[float, float], rows: int, cols: int, dist : float, base: shapely.LineString):
+    tVec = dist / (vec[0] ** 2 + vec[1] ** 2) ** 0.5
+    vec = [vec[0] * tVec, vec[1] * tVec]
+    
+    perpVec = [vec[1], - vec[0]]
+    
+    points = []
+    
+    jumps = cols - 1
+    
+    limit = base.length - jumps * dist if base.length - jumps * dist > 0 else 0
+    
+    initial_point = base.interpolate(random.uniform(0, limit))
+    
+    for i in range(cols):
+        for j in range(1, rows + 1):
+            points.append([initial_point.x + vec[0] * i + perpVec[0] * j, initial_point.y + vec[1] * i + perpVec[1] * j])
+    
+    return shapely.MultiPoint(points)
+
+def gen_fixed(polygons: list[shapely.Polygon], num_fixed: int):
+    
+    grid_sizes = create_grid(num_fixed)
+    
+    zone = random.randint(0, len(polygons) - 1)
+        
+    dist = random.uniform(200, 500)
+    
+    polyX, polyY = polygons[zone].exterior.xy
+    
+    polyX = polyX[:-1]
+    polyY = polyY[:-1]
+    
+    rlNum = random.randint(0, len(polyX) - 1)
+        
+    vector = [polyX[(rlNum + 1) % len(polyX)] - polyX[rlNum], polyY[(rlNum + 1) % len(polyY)] - polyY[rlNum]]
+    
+    randomLine = shapely.LineString([[polyX[rlNum], polyY[rlNum]], [polyX[(rlNum + 1) % len(polyX)], polyY[(rlNum + 1) % len(polyY)]]])
+    
+    points = gen_grid(vector, grid_sizes[1], grid_sizes[0], 1440, randomLine)
+    
+    return points
+    
+
 polygons = []
 points = []
 
@@ -136,6 +188,15 @@ for line in f.readlines():
     if len(line.split()) == 0:
         polygons.append(shapely.Polygon(points))
         points.clear()
+
+num_fixed = random.randint(5, 75)
+
+points = gen_fixed(polygons, num_fixed)
+
+while(any([polygons[i].intersects(points) for i in range(len(polygons))])):
+    points = gen_fixed(polygons, num_fixed)
+
+shapely.plotting.plot_points(points)
     
 
 for i in range(len(polygons)):
@@ -165,5 +226,5 @@ for i in range(len(polygons)):
 plt.colorbar()
 plt.show()
 
-for line in lines_to_write:
-    print(line)
+# for line in lines_to_write:
+#     print(line)
