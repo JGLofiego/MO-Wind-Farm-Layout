@@ -1,8 +1,12 @@
 import matplotlib.pyplot as plt
 import shapely
 import random
+from perlin_noise import PerlinNoise
 
-colors = ["red", "green", "blue"]
+def cost(depth: float) -> float:
+    return 659933.9999999129 + depth * -72606.60000000268
+
+lines_to_write = []
 
 def gen_hole(polygon: shapely.Polygon):
     new_hole = []
@@ -89,7 +93,7 @@ def gen_structures(polygon: shapely.Polygon, qtty):
     
     return polygon
 
-def gen_points(polygon: shapely.Polygon):
+def gen_points(polygon: shapely.Polygon, octaves: int):
     minx, miny, maxx, maxy = polygon.bounds
     
     sizex = (maxx - minx)
@@ -98,10 +102,14 @@ def gen_points(polygon: shapely.Polygon):
     valuex = round(sizex / 160)
     valuey = round(sizey / 160)
     
+    noise = PerlinNoise(octaves=octaves)
+    pic = [[(noise([i/valuex, j/valuey])) * 1.5 for j in range(valuex)] for i in range(valuey)]
+    
     cellx = sizex / valuex
     celly = sizey / valuey
     
     allPoints = []
+    depths = []
     
     for i in range(valuey):
         centroidY = (maxy - (i * celly) + maxy - ((i + 1) * celly)) / 2 
@@ -110,10 +118,9 @@ def gen_points(polygon: shapely.Polygon):
             
             if(polygon.contains(shapely.Point(centroidX, centroidY))):
                 allPoints.append([centroidX, centroidY])
-    
-    print(len(allPoints))
-    
-    return allPoints
+                depths.append(-25.0 + pic[i][j] * 15.0)
+        
+    return allPoints, depths
 
 polygons = []
 points = []
@@ -137,14 +144,26 @@ for i in range(len(polygons)):
     polygons[i] = gen_holes(polygons[i], num_holes)
     polygons[i] = gen_structures(polygons[i], num_structs - num_holes)
     
-for i in range(len(polygons)):
-    # pointsX, pointsY = zip(*gen_points(polygons[i]))
-    # plt.plot(pointsX, pointsY, "s", color=colors[i])
+octaves = random.randint(2, 5)
+    
+for i in range(len(polygons)):    
+    allPoints, depths = gen_points(polygons[i], octaves)
+    
+    for j in range(len(allPoints)):
+        lines_to_write.append(f"{allPoints[j][0]:.11f} {allPoints[j][1]:.11f} {depths[j]:.11f} {cost(depths[j]):.11f} {i + 1}")
+    
+    pointsX, pointsY = zip(*allPoints)
+    
+    plt.scatter(pointsX, pointsY, 10, c=depths)
     
     xe, ye = polygons[i].exterior.xy
     for inner in polygons[i].interiors:
         xi, yi = zip(*inner.coords[:])
-        plt.plot(xi, yi, color=colors[i])
-    plt.plot(xe, ye, color=colors[i])
+        plt.plot(xi, yi, color="magenta")
+    plt.plot(xe, ye, color="magenta")
 
+plt.colorbar()
 plt.show()
+
+for line in lines_to_write:
+    print(line)
