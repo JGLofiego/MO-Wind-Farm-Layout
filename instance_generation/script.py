@@ -3,11 +3,11 @@ import shapely
 import random
 from perlin_noise import PerlinNoise
 import shapely.plotting
+from gen_layout import gen_complete_layout
+import os, sys
 
 def cost(depth: float) -> float:
     return 659933.9999999129 + depth * -72606.60000000268
-
-lines_to_write = []
 
 def gen_hole(polygon: shapely.Polygon):
     new_hole = []
@@ -148,7 +148,7 @@ def gen_grid(vec: list[float, float], rows: int, cols: int, dist : float, base: 
         for j in range(1, rows + 1):
             points.append([initial_point.x + vec[0] * i + perpVec[0] * j, initial_point.y + vec[1] * i + perpVec[1] * j])
     
-    return shapely.MultiPoint(points)
+    return points
 
 def gen_fixed(polygons: list[shapely.Polygon], num_fixed: int):
     
@@ -172,14 +172,30 @@ def gen_fixed(polygons: list[shapely.Polygon], num_fixed: int):
     points = gen_grid(vector, grid_sizes[1], grid_sizes[0], 1440, randomLine)
     
     return points
+
+os.chdir("../instances")
+
+if len(os.listdir()) != 0:
+    dirName = str(int(os.listdir()[len(os.listdir()) - 1]) + 1)
+else:
+    dirName = "0"
+
+if len(sys.argv) > 1:
+    dirName = sys.argv[1]
     
+os.mkdir(dirName)
+
+os.chdir(dirName)
+
+gen_complete_layout()
+
+lines_to_write = []
 
 polygons = []
 points = []
+polygonsDensity = []
 
-path = "out.txt"
-
-f = open(path, 'r')
+f = open("geometry.txt", 'r')
 
 for line in f.readlines():
     if len(line.split()) == 2:
@@ -189,15 +205,22 @@ for line in f.readlines():
         polygons.append(shapely.Polygon(points))
         points.clear()
 
+f.close()
+
 num_fixed = random.randint(5, 75)
 
 points = gen_fixed(polygons, num_fixed)
 
-while(any([polygons[i].intersects(points) for i in range(len(polygons))])):
+while(any([polygons[i].intersects(shapely.MultiPoint(points)) for i in range(len(polygons))])):
     points = gen_fixed(polygons, num_fixed)
 
-shapely.plotting.plot_points(points)
-    
+f = open("fixed_wf.txt", "w")
+
+for point in points:
+    f.write(f"{point[0]:.11f} {point[1]:.11f} 0.0 {len(polygons) + 1}\n")
+    plt.plot(point[0], point[1], marker="o", color="orange", markersize=1)
+
+f.close()
 
 for i in range(len(polygons)):
     num_structs = random.randint(5, 8)
@@ -209,12 +232,14 @@ octaves = random.randint(3, 7)
 for i in range(len(polygons)):
     allPoints, depths = gen_points(polygons[i], octaves + random.randint(-1, 1))
     
+    polygonsDensity.append(len(allPoints))
+    
     for j in range(len(allPoints)):
-        lines_to_write.append(f"{allPoints[j][0]:.11f} {allPoints[j][1]:.11f} {depths[j]:.11f} {cost(depths[j]):.11f} {i + 1}")
+        lines_to_write.append(f"{allPoints[j][0]:.11f} {allPoints[j][1]:.11f} {depths[j]:.11f} {cost(depths[j]):.11f} {i + 1}\n")
     
     pointsX, pointsY = zip(*allPoints)
     
-    plt.scatter(pointsX, pointsY, 10, c=depths)
+    plt.scatter(pointsX, pointsY, 2, c=depths)
     
     xe, ye = polygons[i].exterior.xy
     for inner in polygons[i].interiors:
@@ -222,8 +247,22 @@ for i in range(len(polygons)):
         plt.plot(xi, yi, color="magenta")
     plt.plot(xe, ye, color="magenta")
 
-plt.colorbar()
-plt.show()
+f = open("availablePositions.txt", "w")
 
-# for line in lines_to_write:
-#     print(line)
+for line in lines_to_write:
+    f.write(line)
+
+f.close()
+
+turbines_per_zone = [int(random.uniform(0.005, 0.02) * polygonsDensity[i]) for i in range(len(polygons))]
+
+f = open("turbines_per_zone.txt", "w")
+
+for i in range(len(polygons)):
+    f.write(str(turbines_per_zone[i]) + " ")
+
+f.close()
+
+plt.colorbar()
+plt.tight_layout()
+plt.savefig("plot.png", dpi=195)

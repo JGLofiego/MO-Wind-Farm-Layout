@@ -74,7 +74,7 @@ def gen_layout(num_zones) -> list[shapely.Polygon]:
             
         area += polygons[i].area / (1000000)
     
-    rand_int = random.randint(0, len(polygons))
+    rand_int = random.randint(0, len(polygons) - 1)
     while(area > 1500):    
         area -= polygons[rand_int].area / 1000000
         
@@ -87,9 +87,7 @@ def gen_layout(num_zones) -> list[shapely.Polygon]:
         polygons[rand_int] = scale(polygons[rand_int], 1.1)
         area += polygons[rand_int].area / (1000000)
                 
-    
-    print(area)
-    
+        
     return polygons
 
 def re_position(polygonA: shapely.Polygon, polygonB: shapely.Polygon):
@@ -139,26 +137,27 @@ def hasIntersections(polygons: list[shapely.Polygon]):
         result[i] = polygons[i].intersects(polygons[(i + 1) % len(polygons)])
     
     return any(result)
-        
-polygons = gen_layout(random.randint(1, 3))
 
-while hasIntersections(polygons):    
+def gen_complete_layout() -> None:
+    polygons = gen_layout(random.randint(1, 3))
+
+    while hasIntersections(polygons):    
+        for i in range(len(polygons)):
+            if(polygons[i].intersects(polygons[(i+1) % len(polygons)])):
+                polygons[i], polygons[(i+1) % len(polygons)] = re_position(polygons[i], polygons[(i+1) % len(polygons)])
+
+    f = open("geometry.txt", "w")
+
     for i in range(len(polygons)):
-        if(polygons[i].intersects(polygons[(i+1) % len(polygons)])):
-            polygons[i], polygons[(i+1) % len(polygons)] = re_position(polygons[i], polygons[(i+1) % len(polygons)])
-
-f = open("out.txt", "w")
-
-for i in range(len(polygons)):
-    xe, ye = polygons[i].exterior.xy
-    plt.plot(xe, ye)
+        xe, ye = polygons[i].exterior.xy
+        
+        for j in range(len(xe)):
+            line = f"{xe[j]:11f} {ye[j]:11f} \n"
+            f.write(line)
+        f.write("\n")
+        
+    f.close()
     
-    for j in range(len(xe)):
-        f.write(f"{xe[j]:11f} {ye[j]:11f} \n")
-    f.write(f"\n")
 
-f.close()
-
-plt.show()
 
         
