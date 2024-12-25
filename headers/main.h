@@ -41,5 +41,6 @@
 #include "../metafeatures/modules/statistical_functions.cpp"
 
 #include "../utils/features_csv.cpp"
+#include "../adaptive_grid/BoundedParetoSet.cpp"
 
 #endif

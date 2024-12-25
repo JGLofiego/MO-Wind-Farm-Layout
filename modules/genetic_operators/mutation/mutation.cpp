@@ -98,4 +98,9 @@ void mutation(Solution &solution){
 
   calculate_cost(solution);
   calculate_power(solution);
+
+  Solution *sol = new Solution(solution);
+  pareto->adicionarSol(sol);
+
+  delete sol;
 }

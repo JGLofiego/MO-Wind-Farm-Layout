@@ -92,5 +92,10 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
   calculate_cost(offspring_solution);
   calculate_power(offspring_solution);
 
+  Solution * sol = new Solution(offspring_solution);
+  pareto->adicionarSol(sol);
+
+  delete sol;
+
   return offspring_solution;
 }

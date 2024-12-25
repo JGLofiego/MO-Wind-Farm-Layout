@@ -9,7 +9,11 @@ vector<Solution> create_initial_population(int size_population) {
   vector<Solution> population;
 
   for (int i = 0; i < size_population; i++) {
-    population.push_back(generate_solution());
+    Solution * sol = new Solution(generate_solution());
+    population.push_back(*sol);
+    pareto->adicionarSol(sol);
+
+    delete sol;
   }
 
   return population;

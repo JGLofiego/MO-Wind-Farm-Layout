@@ -130,7 +130,7 @@ void get_instance_info(int argc, char* argv[]){
 
     file.close();
 
-    foundations.pop_back();
+    foundations[num_zones - 1].pop_back();
 
     file.open(pathFolders + "/wtg/" + "NREL-10-179.txt");
 

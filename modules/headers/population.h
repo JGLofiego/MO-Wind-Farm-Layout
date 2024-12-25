@@ -3,7 +3,10 @@
 
 #include <vector>
 #include "generate_rSolution.h"
+#include "../../adaptive_grid/BoundedParetoSet.cpp"
 using namespace std;
+
+extern BoundedParetoSet * pareto;
 
 vector<Solution> create_initial_population(int size_population);
 
