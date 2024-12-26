@@ -72,4 +72,10 @@ void mutation2(Solution &solution, double input_mutation_prob, vector<Solution> 
 
   calculate_cost(solution);
   calculate_power(solution);
+
+  Solution * s = new Solution(solution);
+  pareto->adicionarSol(s);
+  delete s;
+
+  countRevalue++;
 }

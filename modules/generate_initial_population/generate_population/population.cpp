@@ -13,6 +13,8 @@ vector<Solution> create_initial_population(int size_population) {
     population.push_back(*sol);
     pareto->adicionarSol(sol);
 
+    countRevalue++;
+
     delete sol;
   }
 

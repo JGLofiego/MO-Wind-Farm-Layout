@@ -30,10 +30,10 @@ vector<Solution> moead(vector<Solution>& population){
 
   //MOAED parameters 
   int size_population = population.size();
-  double input_cross_prob = 0.9;
-  double input_mutation_prob = 0.1;
-  int number_of_neighbors = 150;
-  int max_generations = 500;
+  double input_cross_prob = 0.6;
+  double input_mutation_prob = 0.5;
+  int number_of_neighbors = 10;
+  int stop_criteria = 1000000;
 
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
@@ -63,9 +63,9 @@ vector<Solution> moead(vector<Solution>& population){
 
   int generation = 0;
 
-  while (generation < max_generations) {
+  while (countRevalue < stop_criteria) {
 
-    Solution child1, child2;
+    cout << "Generation " << generation << "| Revalues: " << countRevalue << endl;
 
     for (int i = 0; i < size_population; i++) {
 
@@ -81,24 +81,36 @@ vector<Solution> moead(vector<Solution>& population){
 
       Solution parentA = population[k];
       Solution parentB = population[l];
-      child1 = parentA;
-      child2 = parentB;
+      Solution * child1 = new Solution(parentA);
+      Solution * child2 = new Solution(parentB);
 
       // Generate new solution y using genetic operators
+
+      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
+        mutation2(parentA, input_mutation_prob, EP);
+      }
+
+      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
+        mutation2(parentB, input_mutation_prob, EP);
+      }
 
       //Crossover
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_cross_prob){ 
-        child1 = crossover(parentA, parentB);
-        child2 = crossover(parentB, parentA);
-      }
-      else{
-        mutation2(child1, input_mutation_prob, EP);
-        mutation2(child2, input_mutation_prob, EP);
+        child1 = new Solution(crossover(parentA, parentB));
+        child2 = new Solution(crossover(parentB, parentA));
       }
 
-      updateEP(EP, child1);
-      updateEP(EP, child2);
+      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
+        mutation2(*child1, input_mutation_prob, EP);
+      }
+
+      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
+        mutation2(*child2, input_mutation_prob, EP);
+      }
+
+      updateEP(EP, *child1);
+      updateEP(EP, *child2);
       
       // Step 2.3: Update of z point
       for(const auto& sol : EP){
@@ -108,27 +120,29 @@ vector<Solution> moead(vector<Solution>& population){
 
       // Step 2.4: Neighboring solutions update
       for (int j : neighborhood[i]) {
-        double child1_tch = calculate_gte(child1.fitness, lambda_vector[j], z_point);
+        double child1_tch = calculate_gte(child1->fitness, lambda_vector[j], z_point);
         double sol1_pop = calculate_gte(population[j].fitness, lambda_vector[j], z_point);
         if (child1_tch <= sol1_pop) {
-          population[j] = child1;
+          population[j] = *child1;
         }
         
-        double child2_tch = calculate_gte(child2.fitness, lambda_vector[j], z_point);
+        double child2_tch = calculate_gte(child2->fitness, lambda_vector[j], z_point);
         double sol2_pop = calculate_gte(population[j].fitness, lambda_vector[j], z_point);
         if (child2_tch <= sol2_pop) {
-          population[j] = child2;
+          population[j] = *child2;
         }
       }
+      delete child1;
+      delete child2;
     }
     generation++;
   }
 
-  for(auto& i : EP){
-    cout << i.fitness.first * (-1) << " " << i.fitness.second << endl;
-  }
+  // for(auto& i : EP){
+  //   cout << i.fitness.first * (-1) << " " << i.fitness.second << endl;
+  // }
   
-  cout << endl;
+  // cout << endl;
 
   return EP;
 }

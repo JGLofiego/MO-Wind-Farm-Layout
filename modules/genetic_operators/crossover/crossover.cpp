@@ -97,5 +97,7 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
 
   delete sol;
 
+  countRevalue++;
+
   return offspring_solution;
 }
