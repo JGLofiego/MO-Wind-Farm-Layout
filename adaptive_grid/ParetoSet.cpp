@@ -36,6 +36,15 @@ void printSolucao(FILE* f, Solution *s){
 	fprintf(f, "(%.10lf, %.10lf)\n", s->fitness.first, s->fitness.second);
 }
 
+void printLayout(FILE * f, Solution *s){
+	for (int i = 0; i < s->turbines.size(); i++){
+		for(int j = 0; j < s->turbines[i].size(); j++){
+			fprintf(f, "%.10lf %.10lf\n", s->turbines[i][j].x, s->turbines[i][j].y);
+		}
+	}
+	fprintf(f, "\n");
+}
+
 class ParetoSet {
 	protected:
 	list<Solution *> sol;
@@ -198,6 +207,16 @@ class ParetoSet {
 			s = *i;
 			fprintf (f, "\n\n\n");
 			printSolucao(f, s);
+			i++;
+		}
+	}
+
+	void printAllSolutionsLayout(FILE *f) {
+		list<Solution *>::iterator i = sol.begin();
+		Solution *s;
+		while (i != sol.end()) {
+			s = *i;
+			printLayout(f, s);
 			i++;
 		}
 	}

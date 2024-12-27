@@ -99,5 +99,10 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
 
   countRevalue++;
 
+  if(countRevalue % 100000 == 0){
+    fprintf(f, "============== %d Revalues ==============\n", countRevalue);
+    pareto->printAllSolutions(f);
+  }
+
   return offspring_solution;
 }

@@ -87,8 +87,6 @@ void get_instance_info(int argc, char* argv[]){
         windFile = (string) argv[5];
     };
 
-    turbines_per_zone = turbines_instace[instance];
-
     file.open(pathFolders + "/wind/" + windFile);
 
     if(file.fail()){
@@ -131,6 +129,26 @@ void get_instance_info(int argc, char* argv[]){
     file.close();
 
     foundations[num_zones - 1].pop_back();
+
+    if(turbines_instace.count(instance) > 0){
+        turbines_per_zone = turbines_instace[instance];
+    } else {
+        file.open(pathFolders + "/site/" + instance + "/turbines_per_zone.txt");
+
+        if(file.fail()){
+            cout << "ERROR: Invalid instance name" << endl;
+            throw invalid_argument("Invalid instance folder name");
+        }
+
+        turbines_per_zone.resize(num_zones);
+
+        for(int i = 0; i < num_zones; i++){
+            file >> turbines_per_zone[i];
+            // cout << turbines_per_zone[i] << " " << turbines_per_zone.size() << endl;
+        }
+
+        file.close();
+    }
 
     file.open(pathFolders + "/wtg/" + "NREL-10-179.txt");
 

@@ -7,6 +7,7 @@
 using namespace std;
 
 extern BoundedParetoSet * pareto;
+extern FILE * f;
 extern int countRevalue;
 
 vector<Solution> create_initial_population(int size_population);

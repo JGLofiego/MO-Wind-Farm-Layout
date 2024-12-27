@@ -78,4 +78,9 @@ void mutation2(Solution &solution, double input_mutation_prob, vector<Solution> 
   delete s;
 
   countRevalue++;
+
+  if(countRevalue % 100000 == 0){
+    fprintf(f, "============== %d Revalues ==============\n", countRevalue);
+    pareto->printAllSolutions(f);
+  }
 }

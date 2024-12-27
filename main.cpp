@@ -12,13 +12,21 @@ string folder_name_random_walk;
 int countRevalue = 0;
 
 BoundedParetoSet * pareto = new BoundedParetoSet();
+FILE * f;
 
 int main(int argc, char* argv[]){
 
-    FILE * f;
+    string instance = "A";
 
-    f = fopen("output.out", "w");
+    string algorithm = "nsga2";
 
+    if(argc > 1){
+        instance = argv[1];
+    }
+
+    string path = instance + "_" + algorithm + "_log.txt";
+
+    f = fopen(path.c_str(), "w");
 
     int num_neighbors = 25;
 
@@ -26,18 +34,27 @@ int main(int argc, char* argv[]){
 
     int size_of_population = 100;
 
-
     auto population = create_initial_population(size_of_population);        
 
-    auto ep = moead(population);
+    auto ep = nsga2(population);
 
-    for(Solution sol: ep){
-        Solution * s = new Solution(sol);
-        pareto->adicionarSol(s);
-        delete s;
-    }
+    fclose(f);
 
+    path = instance + "_" + algorithm + "_final_log.txt";
+
+    f = fopen(path.c_str(), "w");
+
+    fprintf(f, "==============   FINAL   ==============\n");
+    
     pareto->printAllSolutions(f);
+
+    fclose(f);
+
+    path = instance + "_" + algorithm + "_layout.txt";
+
+    f = fopen(path.c_str(), "w");
+
+    pareto->printAllSolutionsLayout(f);
 
     fclose(f);
 }

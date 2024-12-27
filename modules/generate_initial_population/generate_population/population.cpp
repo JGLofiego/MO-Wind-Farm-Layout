@@ -15,6 +15,11 @@ vector<Solution> create_initial_population(int size_population) {
 
     countRevalue++;
 
+    if(countRevalue % 100000 == 0){
+      fprintf(f, "============== %d Revalues ==============\n", countRevalue);
+      pareto->printAllSolutions(f);
+    }
+
     delete sol;
   }
 
