@@ -9,6 +9,7 @@ int walk_length = 8;
 float percent_neighbors = 1.0;
 string folder_name_adaptative_walk;
 string folder_name_random_walk;
+int countRevalue = 0;
 
 BoundedParetoSet * pareto = new BoundedParetoSet();
 
@@ -25,25 +26,18 @@ int main(int argc, char* argv[]){
 
     int size_of_population = 100;
 
-    for(int i = 0; i < 1; i++){
 
+    auto population = create_initial_population(size_of_population);        
 
-        auto population = create_initial_population(size_of_population);        
+    auto ep = moead(population);
 
-        auto ep = nsga2(population);
-
-        for(Solution sol: ep){
-            Solution * s = new Solution(sol);
-            pareto->adicionarSol(s);
-            delete s;
-        }
-
-        fprintf(f, "Iteration number %d printing Grid", i);
-
-        pareto->printAllSolutions(f);
-
+    for(Solution sol: ep){
+        Solution * s = new Solution(sol);
+        pareto->adicionarSol(s);
+        delete s;
     }
 
+    pareto->printAllSolutions(f);
 
     fclose(f);
 }
