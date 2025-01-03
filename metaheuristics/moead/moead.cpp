@@ -22,7 +22,7 @@
 
 using namespace std;
 
-vector<Solution*> moead(vector<Solution>& population){
+list<Solution*> moead(vector<Solution>& population){
 
   //Initializing the random number generator 
   random_device rd;
@@ -35,14 +35,17 @@ vector<Solution*> moead(vector<Solution>& population){
   int number_of_neighbors = 10;
   int stop_criteria = 1000000;
 
+
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
-  vector<Solution *> EP;
-  for(auto& sol : population){
+  list<Solution *> EP;
+  vector<Solution>::iterator it = population.begin();
+  while(it != population.end()){
     Solution *s = new Solution;
-    *s = sol;
+    *s = *it;
     updateEP(EP, s);
     delete s;
+    it++;
   }
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
