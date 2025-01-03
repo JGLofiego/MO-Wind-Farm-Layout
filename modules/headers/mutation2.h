@@ -5,6 +5,6 @@
 #include "population.h"
 using namespace std;
 
-void mutation2(Solution &solution, double input_mutation_prob, vector<Solution> &EP);
+void mutation2(Solution &solution, double input_mutation_prob, vector<Solution*> &EP);
 
 #endif 

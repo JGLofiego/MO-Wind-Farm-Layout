@@ -31,7 +31,7 @@ PS: THIS IS DONE FOR ALL ZONES i SUCH AS i < num_zones.*/
 
 //Function to find the index of a turbine (searching for its id) within of a vector of turbines in zone i.
 
-void mutationAux2(Solution &solution, int zone, double input_mutation_prob, vector<Solution> &EP){
+void mutationAux2(Solution &solution, int zone, double input_mutation_prob, vector<Solution *> &EP){
     // Inicializando o gerador de números aleatórios
     random_device rd;
     mt19937 gen(rd());
@@ -60,12 +60,15 @@ void mutationAux2(Solution &solution, int zone, double input_mutation_prob, vect
         solution.grid[zone][geneA] = 0;
         solution.grid[zone][rand_intB] = solution.turbines[zone][i].id;
 
-        updateEP(EP, solution);
+        Solution *t = new Solution;
+        *t = solution;
+        updateEP(EP, t);
+        delete t;
       }
     }
 }
 
-void mutation2(Solution &solution, double input_mutation_prob, vector<Solution> &EP){
+void mutation2(Solution &solution, double input_mutation_prob, vector<Solution *> &EP){
   for(int i = 0; i < num_zones; i++){
     mutationAux2(solution, i, input_mutation_prob, EP);
   }

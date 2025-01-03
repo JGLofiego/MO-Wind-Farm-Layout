@@ -139,8 +139,9 @@ class ParetoSet {
 				remover.push_back(i);
 				//printf("Dominada -> (%.3lf,%.3lf) por (%.3lf,%.3lf)!\n",(**i).getObj(0),(**i).getObj(1),s->getObj(0),s->getObj(1));
 			}
-			if (dominatesP(**i, *s)|| equals(**i, *s))
+			if (dominatesP(**i, *s)|| equals(**i, *s)){
 				return false;
+			}
 			i++;
 		}
 
@@ -148,6 +149,7 @@ class ParetoSet {
 		while (j != remover.end()) {
 		    // remove do grid
 			g.removeGrid( calcularGridPos(***j) );
+			
 			delete( **j );
 			// remove do conjunto pareto
 			sol.erase( *j );

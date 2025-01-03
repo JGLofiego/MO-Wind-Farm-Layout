@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
 
     string instance = "A";
 
-    string algorithm = "nsga2";
+    string algorithm = "moead";
 
     if(argc > 1){
         instance = argv[1];
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
 
     auto population = create_initial_population(size_of_population);        
 
-    auto ep = nsga2(population);
+    auto ep = moead(population);
 
     fclose(f);
 

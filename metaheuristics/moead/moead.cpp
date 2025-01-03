@@ -22,7 +22,7 @@
 
 using namespace std;
 
-vector<Solution> moead(vector<Solution>& population){
+vector<Solution*> moead(vector<Solution>& population){
 
   //Initializing the random number generator 
   random_device rd;
@@ -37,9 +37,12 @@ vector<Solution> moead(vector<Solution>& population){
 
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
-  vector<Solution> EP;
+  vector<Solution *> EP;
   for(auto& sol : population){
-    updateEP(EP, sol);
+    Solution *s = new Solution;
+    *s = sol;
+    updateEP(EP, s);
+    delete s;
   }
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
@@ -109,13 +112,13 @@ vector<Solution> moead(vector<Solution>& population){
         mutation2(*child2, input_mutation_prob, EP);
       }
 
-      updateEP(EP, *child1);
-      updateEP(EP, *child2);
+      updateEP(EP, child1);
+      updateEP(EP, child2);
       
       // Step 2.3: Update of z point
-      for(const auto& sol : EP){
-        z_point.first = max(z_point.first, sol.fitness.first);
-        z_point.second = max(z_point.second, sol.fitness.second);
+      for(const auto sol : EP){
+        z_point.first = max(z_point.first, sol->fitness.first);
+        z_point.second = max(z_point.second, sol->fitness.second);
       }
 
       // Step 2.4: Neighboring solutions update

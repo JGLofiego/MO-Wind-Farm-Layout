@@ -5,6 +5,6 @@
 #include "generate_rSolution.h"
 using namespace std;
 
-void updateEP(vector<Solution> &EP, Solution &child);
+void updateEP(vector<Solution *> &EP, Solution * child);
 
 #endif 
