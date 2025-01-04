@@ -102,5 +102,7 @@ void mutation(Solution &solution){
   Solution *sol = new Solution(solution);
   pareto->adicionarSol(sol);
 
+  countRevalue++;
+
   delete sol;
 }

@@ -59,24 +59,15 @@ void mutationAux2(Solution &solution, int zone, double input_mutation_prob, list
         // Atualizar a grid com as novas posições trocadas
         solution.grid[zone][geneA] = 0;
         solution.grid[zone][rand_intB] = solution.turbines[zone][i].id;
-
-        calculate_cost(solution);
-        calculate_power(solution);
-
-        Solution *t = new Solution;
-        *t = solution;
-        pareto->adicionarSol(t);
-        updateEP(EP, t);
-        countRevalue++;
-        delete t;
       }
     }
 }
 
 void mutation2(Solution &solution, double input_mutation_prob, list<Solution *> &EP){
-  for(int i = 0; i < num_zones; i++){
-    mutationAux2(solution, i, input_mutation_prob, EP);
-  }
+
+  int i = rand() % solution.turbines.size();
+
+  mutationAux2(solution, i, input_mutation_prob, EP);
 
   calculate_cost(solution);
   calculate_power(solution);
