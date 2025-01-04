@@ -60,9 +60,14 @@ void mutationAux2(Solution &solution, int zone, double input_mutation_prob, list
         solution.grid[zone][geneA] = 0;
         solution.grid[zone][rand_intB] = solution.turbines[zone][i].id;
 
+        calculate_cost(solution);
+        calculate_power(solution);
+
         Solution *t = new Solution;
         *t = solution;
+        pareto->adicionarSol(t);
         updateEP(EP, t);
+        countRevalue++;
         delete t;
       }
     }

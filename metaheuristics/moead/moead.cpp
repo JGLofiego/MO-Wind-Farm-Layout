@@ -30,11 +30,10 @@ list<Solution*> moead(vector<Solution>& population){
 
   //MOAED parameters 
   int size_population = population.size();
-  double input_cross_prob = 0.6;
+  double input_cross_prob = 0.5;
   double input_mutation_prob = 0.5;
   int number_of_neighbors = 10;
   int stop_criteria = 1000000;
-
 
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
@@ -96,31 +95,27 @@ list<Solution*> moead(vector<Solution>& population){
 
       // Generate new solution y using genetic operators
 
-      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
-        mutation2(*parentA, input_mutation_prob, EP);
-      }
-
-      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
-        mutation2(*parentB, input_mutation_prob, EP);
-      }
-
-      //Crossover
+      //CROSSOVER
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_cross_prob){ 
         *child1 = crossover(*parentA, *parentB);
         *child2 = crossover(*parentB, *parentA);
+        
+        updateEP(EP, child1);
+        updateEP(EP, child2);
+      }
+
+      //MUTATION
+
+      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
+        mutation2(*parentA, input_mutation_prob, EP);
+        mutation2(*parentB, input_mutation_prob, EP);
       }
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
         mutation2(*child1, input_mutation_prob, EP);
-      }
-
-      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
         mutation2(*child2, input_mutation_prob, EP);
       }
-
-      updateEP(EP, child1);
-      updateEP(EP, child2);
 
       delete parentA;
       delete parentB;
@@ -150,12 +145,6 @@ list<Solution*> moead(vector<Solution>& population){
     }
     generation++;
   }
-
-  // for(auto& i : EP){
-  //   cout << i.fitness.first * (-1) << " " << i.fitness.second << endl;
-  // }
-  
-  // cout << endl;
 
   return EP;
 }

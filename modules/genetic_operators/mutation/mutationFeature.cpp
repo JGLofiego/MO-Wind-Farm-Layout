@@ -44,7 +44,7 @@ void mutationAuxFeature(Solution &solution, int zone){
       rand_intA = rand() % zone_size;
       rand_intB = rand() % zone_size;
     } while((solution.grid[zone][rand_intA] == 0 && solution.grid[zone][rand_intB] == 0) ||
-             solution.grid[zone][rand_intA] != 0 && solution.grid[zone][rand_intB] != 0);
+             (solution.grid[zone][rand_intA] != 0 && solution.grid[zone][rand_intB] != 0));
 
     // Swapping the genes (turbine_id) betwen grid[zone][rand_intA] e grid[zone][rand_intB]
     int geneA = solution.grid[zone][rand_intA];
