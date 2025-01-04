@@ -85,26 +85,30 @@ list<Solution*> moead(vector<Solution>& population){
         l = neighborhood[i][dis(gen)];
       }
 
-      Solution parentA = population[k];
-      Solution parentB = population[l];
-      Solution * child1 = new Solution(parentA);
-      Solution * child2 = new Solution(parentB);
+      Solution * parentA = new Solution;
+      *parentA = population[k];
+      Solution * parentB = new Solution;
+      *parentB = population[l];
+      Solution * child1 = new Solution;
+      *child1 = *parentA;
+      Solution * child2 = new Solution;
+      *child2 = *parentB;
 
       // Generate new solution y using genetic operators
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
-        mutation2(parentA, input_mutation_prob, EP);
+        mutation2(*parentA, input_mutation_prob, EP);
       }
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
-        mutation2(parentB, input_mutation_prob, EP);
+        mutation2(*parentB, input_mutation_prob, EP);
       }
 
       //Crossover
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_cross_prob){ 
-        child1 = new Solution(crossover(parentA, parentB));
-        child2 = new Solution(crossover(parentB, parentA));
+        *child1 = crossover(*parentA, *parentB);
+        *child2 = crossover(*parentB, *parentA);
       }
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
@@ -117,6 +121,9 @@ list<Solution*> moead(vector<Solution>& population){
 
       updateEP(EP, child1);
       updateEP(EP, child2);
+
+      delete parentA;
+      delete parentB;
       
       // Step 2.3: Update of z point
       for(const auto sol : EP){
