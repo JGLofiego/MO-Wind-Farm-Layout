@@ -19,7 +19,6 @@
 #include "../modules/moead/generate_neighborhood.cpp"
 #include "../modules/moead/get_best_z_point.cpp"
 #include "../modules/moead/tchebycheff.cpp"
-#include "../modules/moead/updateEP.cpp"
 
 #include "../metaheuristics/nsga2/nsga2.cpp"
 #include "../modules/nsga2/binary_tournament.cpp"

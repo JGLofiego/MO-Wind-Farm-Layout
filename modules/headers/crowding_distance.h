@@ -5,6 +5,6 @@
 #include <vector>
 using namespace std;
 
-vector<Solution> crowding_distance(vector<Solution> &population);
+vector<Solution*> crowding_distance(vector<Solution*> &population);
 
 #endif 

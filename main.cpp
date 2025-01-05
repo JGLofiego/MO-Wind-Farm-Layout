@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
 
     auto population = create_initial_population(size_of_population);        
 
-    auto ep = moead(population);
+    moead(population);
 
     fclose(f);
 

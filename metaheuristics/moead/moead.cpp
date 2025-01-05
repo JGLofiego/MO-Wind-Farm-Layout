@@ -18,11 +18,9 @@
 #include "../../modules/headers/dominates.h"
 #include "../../modules/headers/isEqual.h"
 
-#include "../../modules/headers/updateEP.h"
-
 using namespace std;
 
-list<Solution*> moead(vector<Solution>& population){
+void moead(vector<Solution>& population){
 
   //Initializing the random number generator 
   random_device rd;
@@ -37,15 +35,6 @@ list<Solution*> moead(vector<Solution>& population){
 
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
-  list<Solution *> EP;
-  vector<Solution>::iterator it = population.begin();
-  while(it != population.end()){
-    Solution *s = new Solution;
-    *s = *it;
-    updateEP(EP, s);
-    delete s;
-    it++;
-  }
 
   //Building the lambda vector, ie, the vector of weights to each subproblem i
   vector<pair<double, double>> lambda_vector = build_weight_vector(size_population); 
@@ -99,29 +88,26 @@ list<Solution*> moead(vector<Solution>& population){
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_cross_prob){ 
         *child1 = crossover(*parentA, *parentB);
-        *child2 = crossover(*parentB, *parentA);
-        
-        updateEP(EP, child1);
-        updateEP(EP, child2);
+        *child2 = crossover(*parentB, *parentA);        
       }
 
       //MUTATION
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
-        mutation2(*parentA, input_mutation_prob, EP);
-        mutation2(*parentB, input_mutation_prob, EP);
+        mutation(*parentA);
+        mutation(*parentB);
       }
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
-        mutation2(*child1, input_mutation_prob, EP);
-        mutation2(*child2, input_mutation_prob, EP);
+        mutation(*child1);
+        mutation(*child2);
       }
 
       delete parentA;
       delete parentB;
       
       // Step 2.3: Update of z point
-      for(const auto sol : EP){
+      for(const auto sol : pareto->getElementos()){
         z_point.first = max(z_point.first, sol->fitness.first);
         z_point.second = max(z_point.second, sol->fitness.second);
       }
@@ -145,6 +131,4 @@ list<Solution*> moead(vector<Solution>& population){
     }
     generation++;
   }
-
-  return EP;
 }

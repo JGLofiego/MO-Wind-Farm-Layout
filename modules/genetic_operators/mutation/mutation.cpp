@@ -92,9 +92,9 @@ void mutationAux(Solution &solution, int zone){
 }
 
 void mutation(Solution &solution){
-  for(int i = 0; i < num_zones; i++){
-    mutationAux(solution, i);
-  }
+  
+  int i = rand() % solution.turbines.size();
+  mutationAux(solution, i);
 
   calculate_cost(solution);
   calculate_power(solution);

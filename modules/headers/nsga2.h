@@ -5,6 +5,6 @@
 #include <vector>
 using namespace std;
 
-vector<Solution> nsga2(vector<Solution>& population);
+vector<Solution*> nsga2(vector<Solution>& population);
 
 #endif 
