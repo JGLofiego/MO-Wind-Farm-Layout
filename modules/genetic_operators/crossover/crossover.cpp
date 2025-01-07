@@ -13,6 +13,8 @@ has not already been added to the offspring, we add that turbine to the offsprin
 PS: THIS IS DONE FOR ALL ZONES i SUCH AS i < num_zones.*/
 
 extern vector<int> turbines_per_zone;
+extern string algorithm;
+extern string instance;
 
 //Function to find the index of a turbine (searching for its id) within of a vector of turbines in zone i.
 int find_turbine(vector<Turbine> &vec, int value){
@@ -100,8 +102,12 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
   countRevalue++;
 
   if(countRevalue % 100000 == 0){
-    fprintf(f, "============== %d Revalues ==============\n", countRevalue);
-    pareto->printAllSolutions(f);
+    string path = instance + "_" + algorithm + "_" + to_string(countRevalue) + ".txt";
+    pareto->printAllSolutions(root_folder + path);
+
+    if(countRevalue >= stop_criteria){
+      pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_final.txt");
+    }
   }
 
   return offspring_solution;

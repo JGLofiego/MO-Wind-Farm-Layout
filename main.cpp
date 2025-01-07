@@ -12,21 +12,21 @@ string folder_name_random_walk;
 int countRevalue = 0;
 
 BoundedParetoSet * pareto = new BoundedParetoSet();
-FILE * f;
+int stop_criteria = 1000000;
+string algorithm = "moead";
+string instance = "A";
+string root_folder = "./";
 
 int main(int argc, char* argv[]){
 
-    string instance = "A";
-
-    string algorithm = "moead";
-
-    if(argc > 1){
+    if(argc == 1){
         instance = argv[1];
+    } else if (argc > 2){
+        instance = argv[1];
+        root_folder = argv[2];
     }
 
-    string path = instance + "_" + algorithm + "_log.txt";
-
-    f = fopen(path.c_str(), "w");
+    string path;
 
     int num_neighbors = 25;
 
@@ -34,27 +34,7 @@ int main(int argc, char* argv[]){
 
     int size_of_population = 100;
 
-    auto population = create_initial_population(size_of_population);        
+    auto population = create_initial_population(size_of_population);
 
     moead(population);
-
-    fclose(f);
-
-    path = instance + "_" + algorithm + "_final_log.txt";
-
-    f = fopen(path.c_str(), "w");
-
-    fprintf(f, "==============   FINAL   ==============\n");
-    
-    pareto->printAllSolutions(f);
-
-    fclose(f);
-
-    path = instance + "_" + algorithm + "_layout.txt";
-
-    f = fopen(path.c_str(), "w");
-
-    pareto->printAllSolutionsLayout(f);
-
-    fclose(f);
 }

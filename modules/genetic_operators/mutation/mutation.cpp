@@ -104,5 +104,15 @@ void mutation(Solution &solution){
 
   countRevalue++;
 
+  if(countRevalue % 100000 == 0){
+    string path = instance + "_" + algorithm + "_" + to_string(countRevalue) + ".txt";
+
+    pareto->printAllSolutions(root_folder + path);
+
+    if(countRevalue >= stop_criteria){
+      pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_final.txt");
+    }
+  }
+
   delete sol;
 }

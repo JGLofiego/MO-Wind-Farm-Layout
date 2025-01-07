@@ -7,8 +7,11 @@
 using namespace std;
 
 extern BoundedParetoSet * pareto;
-extern FILE * f;
 extern int countRevalue;
+extern string instance;
+extern string algorithm;
+extern string root_folder;
+extern int stop_criteria;
 
 vector<Solution> create_initial_population(int size_population);
 

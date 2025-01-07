@@ -16,8 +16,13 @@ vector<Solution> create_initial_population(int size_population) {
     countRevalue++;
 
     if(countRevalue % 100000 == 0){
-      fprintf(f, "============== %d Revalues ==============\n", countRevalue);
-      pareto->printAllSolutions(f);
+      string path = instance + "_" + algorithm + "_" + to_string(countRevalue) + ".txt";
+
+      pareto->printAllSolutions(root_folder + path);
+
+      if(countRevalue >= stop_criteria){
+        pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_final.txt");
+      }
     }
 
     delete sol;

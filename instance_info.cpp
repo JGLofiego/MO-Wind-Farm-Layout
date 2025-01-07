@@ -62,30 +62,30 @@ void get_instance_info(int argc, char* argv[]){
     string strWind = "0.0";
     string strPow, strTC;
 
-    if(argc == 2){
+    if(argc > 1){
         instance = (string) argv[1];
-    } else if(argc == 3){
-        instance = (string) argv[1];
-        walk_length = atoi(argv[2]);
-    } else if(argc == 4){
-        instance = (string) argv[1];
-        walk_length = atoi(argv[2]);
-        percent_neighbors = stof(argv[3]);
+    } // else if(argc == 3){
+    //     instance = (string) argv[1];
+    //     walk_length = atoi(argv[2]);
+    // } else if(argc == 4){
+    //     instance = (string) argv[1];
+    //     walk_length = atoi(argv[2]);
+    //     percent_neighbors = stof(argv[3]);
 
-        folder_name_random_walk =  "l" + string(argv[2]) + "_r" + string(argv[3]);
-        folder_name_adaptative_walk = "l" + string(argv[2]);   
-    } else if(argc == 5){
-        instance = (string) argv[1];
-        walk_length = atoi(argv[2]);
-        percent_neighbors = stof(argv[3]);
-        pathFolders = (string) argv[4];
-    } else if(argc > 6){
-        instance = (string) argv[1];
-        walk_length = atoi(argv[2]);
-        percent_neighbors = stof(argv[3]);
-        pathFolders = (string) argv[4];
-        windFile = (string) argv[5];
-    };
+    //     folder_name_random_walk =  "l" + string(argv[2]) + "_r" + string(argv[3]);
+    //     folder_name_adaptative_walk = "l" + string(argv[2]);   
+    // } else if(argc == 5){
+    //     instance = (string) argv[1];
+    //     walk_length = atoi(argv[2]);
+    //     percent_neighbors = stof(argv[3]);
+    //     pathFolders = (string) argv[4];
+    // } else if(argc > 6){
+    //     instance = (string) argv[1];
+    //     walk_length = atoi(argv[2]);
+    //     percent_neighbors = stof(argv[3]);
+    //     pathFolders = (string) argv[4];
+    //     windFile = (string) argv[5];
+    // };
 
     file.open(pathFolders + "/wind/" + windFile);
 

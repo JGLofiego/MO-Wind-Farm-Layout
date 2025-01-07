@@ -7,7 +7,6 @@
 #include "../modules/generate_initial_population/generate_population/population.cpp"
 
 #include "../modules/genetic_operators/mutation/mutation.cpp"
-#include "../modules/genetic_operators/mutation/mutation2.cpp"
 #include "../modules/genetic_operators/mutation/mutationFeature.cpp"
 #include "../modules/genetic_operators/crossover/crossover.cpp"
 

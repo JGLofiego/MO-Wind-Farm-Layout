@@ -36,13 +36,13 @@ void printSolucao(FILE* f, Solution *s){
 	fprintf(f, "(%.10lf, %.10lf)\n", s->fitness.first, s->fitness.second);
 }
 
-void printLayout(FILE * f, Solution *s){
+void printLayout(ofstream & file, Solution *s){
 	for (int i = 0; i < s->turbines.size(); i++){
 		for(int j = 0; j < s->turbines[i].size(); j++){
-			fprintf(f, "%.10lf %.10lf\n", s->turbines[i][j].x, s->turbines[i][j].y);
+			file << s->turbines[i][j].x << " " << s->turbines[i][j].y << endl;
 		}
 	}
-	fprintf(f, "\n");
+	file << "\n";
 }
 
 class ParetoSet {
@@ -181,52 +181,44 @@ class ParetoSet {
 		return true;
 	}
 
-	void printSet(FILE *f) {
-		list<Solution *>::iterator i = sol.begin();
-		Solution *s;
+	void printAllSolutions(string path) {
+		ofstream file(path);
 
-		fprintf(f,"Ranges = [%.2lf,%.2lf] e [%.2lf,%.2lf]\n",rangeAtual[0].min,rangeAtual[0].max,rangeAtual[1].min,rangeAtual[1].max);
-		while (i != sol.end()) {
-			s = *i;
-			fprintf(f,"(%.10lf,%.10lf) -> %d\n",getObj(s, 0),getObj(s, 1),calcularGridPos(*s));
-			i++;
-		}
-	}
-	void printSetPoints(FILE *f) {
-		list<Solution *>::iterator i = sol.begin();
-		Solution *s;
-		while (i != sol.end()) {
-			s = *i;
-			fprintf(f,"%.10lf %.10lf\n",getObj(s, 0),getObj(s, 1));
-			i++;
-		}
-	}
+		file << fixed << setprecision(10);
 
-	void printAllSolutions(FILE *f) {
-		list<Solution *>::iterator i = sol.begin();
-		Solution *s;
-		while (i != sol.end()) {
-			s = *i;
-			fprintf (f, "\n\n\n");
-			printSolucao(f, s);
-			i++;
+		if(file.is_open()){
+			list<Solution *>::iterator i = sol.begin();
+			Solution *s;
+			while (i != sol.end()) {
+				s = *i;
+				file << abs(s->fitness.first) << " " << s->fitness.second << endl;
+				i++;
+			}
+			file.close();
+		} else{
+			cerr << "Erro ao abrir o arquivo para escrita: " << path << endl;
 		}
+
 	}
 
-	void printAllSolutionsLayout(FILE *f) {
-		list<Solution *>::iterator i = sol.begin();
-		Solution *s;
-		while (i != sol.end()) {
-			s = *i;
-			printLayout(f, s);
-			i++;
-		}
-	}
+	void printAllSolutionsLayout(string path) {
+		fopen(path.c_str(), "w");
+		ofstream file(path);
 
-	void printOnePoint(list<Solution *>::iterator i, FILE *f) {
-		Solution *s;
-		s = *i;
-		fprintf(f,"%.10lf %.10lf\n",getObj(s, 0),getObj(s, 1));
+		file << fixed << setprecision(10);
+
+		if(file.is_open()){
+			list<Solution *>::iterator i = sol.begin();
+			Solution *s;
+			while (i != sol.end()) {
+				s = *i;
+				printLayout(file, s);
+				i++;
+			}
+			file.close();
+		} else {
+			cerr << "Erro ao abrir o arquivo para escrita: " << path << endl;
+		}
 	}
 
 	int getSize() {
@@ -243,8 +235,6 @@ class ParetoSet {
 		}
 		return NULL;
 	}
-
-
 
 	void clear() {
 		list<Solution *>::iterator i = sol.begin(), j;

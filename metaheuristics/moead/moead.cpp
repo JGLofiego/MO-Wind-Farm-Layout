@@ -31,7 +31,6 @@ void moead(vector<Solution>& population){
   double input_cross_prob = 0.5;
   double input_mutation_prob = 0.5;
   int number_of_neighbors = 10;
-  int stop_criteria = 1000000;
 
   // Step 1.1: Initialize EP (External Population)
   //The EP vector will contain only the non-dominated and not equal solutions from the initial population
@@ -59,7 +58,7 @@ void moead(vector<Solution>& population){
 
   while (countRevalue < stop_criteria) {
 
-    cout << "Generation " << generation << "| Revalues: " << countRevalue << endl;
+    cout << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
 
     for (int i = 0; i < size_population; i++) {
 
