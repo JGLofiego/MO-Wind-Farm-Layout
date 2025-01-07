@@ -19,7 +19,7 @@ string root_folder = "./";
 
 int main(int argc, char* argv[]){
 
-    if(argc == 1){
+    if(argc == 2){
         instance = argv[1];
     } else if (argc > 2){
         instance = argv[1];
