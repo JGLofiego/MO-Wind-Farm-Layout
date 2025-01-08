@@ -166,10 +166,10 @@ vector<Solution*> nsga2(vector<Solution>& pop){
     //   // }
     // // } // cout << endl;
 
-    // for(auto i : *population){
-    //   delete i;
-    // }
-    // population->clear();
+    for(auto i : *population){
+      delete i;
+    }
+    population->clear();
     
     int k = 0;
     for (auto& front : *fronts) {
@@ -184,7 +184,7 @@ vector<Solution*> nsga2(vector<Solution>& pop){
         // If the front doesn't fit all the way, sort by crowding distance and add the missing solutions
         auto * front_sorted = new vector<Solution*>();
         *front_sorted = crowding_distance(*front);
-    //     // cout << "ADDING PART OF FRONT " << k << " (crowding distance)" << endl;
+        // cout << "ADDING PART OF FRONT " << k << " (crowding distance)" << endl;
         
         // Calculate how many solutions are missing to complete the population
         int remaining_spots = size_population - population->size();
