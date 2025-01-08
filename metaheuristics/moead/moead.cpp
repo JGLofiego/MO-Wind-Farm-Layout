@@ -10,7 +10,7 @@
 #include "../../modules/headers/generate_neighborhood.h"
 #include "../../modules/headers/get_best_z_point.h"
 #include "../../modules/headers/tchebycheff.h"
-// #include "../../modules/headers/mutation.h"
+#include "../../modules/headers/mutation.h"
 #include "../../modules/headers/mutation2.h"
 #include "../../modules/headers/crossover.h"
 

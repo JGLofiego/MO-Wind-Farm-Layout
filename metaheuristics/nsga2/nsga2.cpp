@@ -84,7 +84,7 @@ vector<Solution*> nsga2(vector<Solution>& pop){
 
   while(countRevalue < stop_criteria){
 
-    cout << "Generation " << generation << "| Revalues: " << countRevalue << endl;
+    cout << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
 
     // cout << "======================= GENERATION: " << generation << "=======================" << endl << endl;
 
