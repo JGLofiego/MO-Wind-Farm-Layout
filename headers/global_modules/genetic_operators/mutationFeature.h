@@ -1,7 +1,7 @@
 #ifndef MUTATION_FEATURE_H
 #define MUTATION_FEATURE_H
 
-#include "population.h"
+#include "../generate_initial_population/population.h"
 
 void mutationFeature(Solution &solution);
 

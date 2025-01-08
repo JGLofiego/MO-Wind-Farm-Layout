@@ -1,5 +1,5 @@
-#include "../../headers/population.h"
-#include "../../headers/mutation2.h"
+#include "../../../../headers/global_modules/generate_initial_population/population.h"
+#include "../../../../headers/global_modules/genetic_operators/mutationElisama.h"
 
 #include <algorithm>
 #include <random>
@@ -62,7 +62,7 @@ void mutationAux2(Solution &solution, int zone, double input_mutation_prob, list
     }
 }
 
-void mutation2(Solution &solution, double input_mutation_prob, list<Solution *> &EP){
+void mutationElisama(Solution &solution, double input_mutation_prob, list<Solution *> &EP){
 
   int i = rand() % solution.turbines.size();
 
@@ -77,8 +77,8 @@ void mutation2(Solution &solution, double input_mutation_prob, list<Solution *> 
 
   countRevalue++;
 
-  if(countRevalue % 100000 == 0){
-    fprintf(f, "============== %d Revalues ==============\n", countRevalue);
-    pareto->printAllSolutions(f);
-  }
+  // if(countRevalue % 100000 == 0){
+  //   fprintf(f, "============== %d Revalues ==============\n", countRevalue);
+  //   pareto->printAllSolutions(f);
+  // }
 }

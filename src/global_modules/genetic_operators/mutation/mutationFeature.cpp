@@ -1,5 +1,6 @@
-#include "../../headers/population.h"
-#include "../../headers/mutation.h"
+#include "../../../../headers/global_modules/generate_initial_population/population.h"
+#include "../../../../headers/global_modules/genetic_operators/mutationFeature.h"
+
 #include <algorithm>
 #include <cstdlib>
 using namespace std;
