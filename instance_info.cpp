@@ -1,5 +1,6 @@
 #include <iomanip>
-#include "modules/headers/generate_rSolution.h"
+#include "./headers/global_modules/generate_initial_population/generate_rSolution.h"
+#include "./headers/instance_info.h"
 #include <fstream>
 #include <iostream>
 #include <string>
