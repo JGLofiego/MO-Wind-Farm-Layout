@@ -13,7 +13,7 @@ bool cmp_cd(const pair<int, double>&a, const pair<int, double>&b){
     return a.second >= b.second;
 }
 
-vector<Solution> crowding_distance(vector<Solution> &population){
+vector<Solution*> crowding_distance(vector<Solution*> &population){
     //Constantes Reutilizáveis
     int num = population.size();
     pair<int, double> dfault = make_pair(0, 1);
@@ -32,12 +32,12 @@ vector<Solution> crowding_distance(vector<Solution> &population){
     //aux é uma cópia da população para auxiliar a rearranjar o vetor
     vector<pair<int, double>> byF1, byF2, final;
     byF1 = byF2 = final = base;
-    vector<Solution> aux = population;
+    vector<Solution*> aux = population;
 
     //loop que a cada iteração coloca o valor do second como sendo o valor da respectiva função
     for(int i=0; i<num; i++){
-        byF1[i].second = population[i].fitness.first;
-        byF2[i].second = population[i].fitness.second * -1;
+        byF1[i].second = population[i]->fitness.first;
+        byF2[i].second = population[i]->fitness.second * -1;
     }
 
     //Ordena os vetores baseados no second
@@ -57,8 +57,8 @@ vector<Solution> crowding_distance(vector<Solution> &population){
 
     //Atribui no second o valor do Crowding distance daquela solução em relação aos vizinhos
     for(int i = 1; i < num-1; i++){
-        distancesF1[i].second = population[byF1[i+1].first].fitness.first - population[byF1[i-1].first].fitness.first;
-        distancesF2[i].second = (population[byF2[i+1].first].fitness.second - population[byF2[i-1].first].fitness.second) * -1;
+        distancesF1[i].second = population[byF1[i+1].first]->fitness.first - population[byF1[i-1].first]->fitness.first;
+        distancesF2[i].second = (population[byF2[i+1].first]->fitness.second - population[byF2[i-1].first]->fitness.second) * -1;
     }
 
     //Coloca no vetor final o valor da multiplicação do crowding de f1 com o crowding de f2

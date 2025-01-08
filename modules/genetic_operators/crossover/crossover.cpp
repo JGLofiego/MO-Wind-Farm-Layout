@@ -54,6 +54,7 @@ void crossoverAux(Solution &parent_solutionA, Solution &parent_solutionB, Soluti
 
   }
 
+
   // Second part of crossover with parent_solutionB
   
   for(int i = parent_solutionB.grid[zone].size() - 1; i >= 0; i--){
@@ -81,7 +82,7 @@ void crossoverAux(Solution &parent_solutionA, Solution &parent_solutionB, Soluti
   }
 }
 
-Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
+Solution crossover(Solution parent_solutionA, Solution parent_solutionB){
 
   Solution offspring_solution;
   offspring_solution.grid.resize(num_zones);

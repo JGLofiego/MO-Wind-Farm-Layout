@@ -10,7 +10,7 @@ bool dominates(Solution solutionA, Solution solutionB){
 }
 
 //Building the fronts
-vector<vector<Solution>> non_dominated_sorting(vector<Solution>& solutions){
+vector<vector<Solution*>*> non_dominated_sorting(vector<Solution*>& solutions){
   vector<vector<int>> fronts_indices; // It's a vector that contains each front (that is, the indexes of the solutions in each front)
   vector<int> first_front; // Contains the solutions' indexes that are in the first front
 
@@ -28,10 +28,10 @@ vector<vector<Solution>> non_dominated_sorting(vector<Solution>& solutions){
     int domination_count = 0;
     for(int q = 0; q < solutions.size(); q++){
       if(p != q){
-        if(dominates(solutions[p], solutions[q])){
+        if(dominates(*solutions[p], *solutions[q])){
           domination_vector[p].push_back(q); // Adding the index of the solution q to domination_vector[p], since solutions[p] domines solutions[q]
         }
-        else if(dominates(solutions[q], solutions[p])){
+        else if(dominates(*solutions[q], *solutions[p])){
           domination_count++;
         }
       }
@@ -71,11 +71,11 @@ vector<vector<Solution>> non_dominated_sorting(vector<Solution>& solutions){
   }
 
   // Converting back the indices to the solutions
-  vector<vector<Solution>> fronts;
-  for (const auto& front : fronts_indices) {
-    vector<Solution> front_solutions;
+  vector<vector<Solution*>*> fronts;
+  for (const auto front : fronts_indices) {
+    vector<Solution*> * front_solutions = new vector<Solution*>();
     for (int index : front) {
-      front_solutions.push_back(solutions[index]);
+      front_solutions->push_back(new Solution (*solutions[index]));
     }
     fronts.push_back(front_solutions);
   }
