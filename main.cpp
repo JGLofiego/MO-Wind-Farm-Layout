@@ -33,7 +33,18 @@ int main(int argc, char* argv[]){
 
     int size_of_population = 100;
 
+    int sum = 0;
+    for(auto elem : turbines_per_zone)
+        sum += elem;
+
+    cout << "Number of fixed turbines: " << fixd.size() << endl;
+    cout << "Number of mobile turbines: " << sum << endl;
+    cout << "Wind: " << wind << endl;
+    cout << "Angle: " << angle << endl << endl;
+
     auto population = create_initial_population(size_of_population);
 
     moead(population);
+
+    cout << "TOTAL NUMBER OF AVALIATIONS: " << countRevalue;
 }
