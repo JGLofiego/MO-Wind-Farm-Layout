@@ -97,23 +97,17 @@ vector<Solution*> nsga2(vector<Solution>& pop){
       // Crossover
       Solution * child1 = new Solution;
       Solution * child2 = new Solution;
+      *child1 = *parents[0];
+      *child2 = *parents[1];
       double k = dist(re);
 
       if(k < cross_prob){
         *child1 = crossover(*parents[0], *parents[1]);
         *child2 = crossover(*parents[1], *parents[0]);
-      }
-      else{
-        *child1 = *parents[0];
-        *child2 = *parents[1];
-      }
 
-      delete parents[0];
-      delete parents[1];
-      delete[] parents; 
-
-      offspring_population->push_back(new Solution(*child1));
-      offspring_population->push_back(new Solution(*child2));
+        offspring_population->push_back(new Solution(*child1));
+        offspring_population->push_back(new Solution(*child2));
+      }
 
       //Mutation
       k = dist(re);
@@ -121,10 +115,14 @@ vector<Solution*> nsga2(vector<Solution>& pop){
       if(k < mutation_prob){
         mutation(*child1);
         mutation(*child2);
+
+        offspring_population->push_back(new Solution(*child1));
+        offspring_population->push_back(new Solution(*child2));
       }
 
-      offspring_population->push_back(new Solution(*child1));
-      offspring_population->push_back(new Solution(*child2));
+      delete parents[0];
+      delete parents[1];
+      delete[] parents; 
 
       delete child1;
       delete child2;
