@@ -59,6 +59,8 @@ void moead(vector<Solution>& population){
 
   int generation = 0;
 
+  ofstream infoRun(root_folder + "infoRun.txt");
+
   while (countRevalue < stop_criteria) {
 
     infoRun << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
@@ -127,4 +129,7 @@ void moead(vector<Solution>& population){
     }
     generation++;
   }
+  
+  infoRun.close();
+
 }

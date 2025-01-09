@@ -16,7 +16,6 @@ string algorithm = "moead";
 string instance = "A";
 string root_folder = "./";
 
-ofstream infoRun(root_folder + "infoRun.txt");
 
 int main(int argc, char* argv[]){
 
@@ -38,15 +37,16 @@ int main(int argc, char* argv[]){
     for(auto elem : turbines_per_zone)
         sum += elem;
 
-    cout << "Number of subproblems: " << size_of_population << endl << endl;
+    cout << endl;
+    cout << "Number of subproblems: " << size_of_population << endl;
     cout << "Number of neighbors: " << num_neighbors << endl;
     cout << "Number of fixed turbines: " << fixd.size() << endl;
     cout << "Number of mobile turbines: " << sum << endl;
     cout << "Wind: " << wind << endl;
     cout << "Angle: " << angle << endl << endl;
 
+    cout << "Run time:" << endl;
+    
     auto population = create_initial_population(size_of_population);
-
     moead(population);
-    infoRun.close();
 }
