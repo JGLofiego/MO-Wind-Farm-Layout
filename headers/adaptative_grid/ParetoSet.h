@@ -27,31 +27,31 @@ void printSolucao(FILE* f, Solution *s);
 void printLayout(ofstream &file, Solution *s);
 
 class ParetoSet {
-protected:
-    list<Solution *> sol;
-    range rangeNovo[2], rangeAtual[2];
-    int frequencia[NUMEROVERTICES][NUMEROVERTICES];
-    Grid g;
+    protected:
+        list<Solution *> sol;
+        range rangeNovo[2], rangeAtual[2];
+        int frequencia[NUMEROVERTICES][NUMEROVERTICES];
+        Grid g;
 
-    int calcularGridPos(Solution &s);
-    void updateGrid();
-    void reiniciarRanges();
+        int calcularGridPos(Solution &s);
+        void updateGrid();
+        void reiniciarRanges();
 
-public:
-    ParetoSet();
-    virtual ~ParetoSet();
+    public:
+        ParetoSet();
+        virtual ~ParetoSet();
 
-    int getPositionCount(Solution &s);
-    int getPositionCount(int p);
-    list<Solution *> getElementos();
-    
-    virtual bool adicionarSol(Solution *s);
-    void printAllSolutions(string path);
-    void printAllSolutionsLayout(string path);
-    int getSize();
-    Solution *getSolucao(int p);
-    void clear();
-    bool confereGrid();
+        int getPositionCount(Solution &s);
+        int getPositionCount(int p);
+        list<Solution *> getElementos();
+        
+        virtual bool adicionarSol(Solution *s);
+        void printAllSolutions(string path);
+        void printAllSolutionsLayout(string path);
+        int getSize();
+        Solution *getSolucao(int p);
+        void clear();
+        bool confereGrid();
 };
 
 #endif // PARETOSET_H

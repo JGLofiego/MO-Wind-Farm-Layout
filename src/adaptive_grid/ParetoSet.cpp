@@ -14,6 +14,8 @@
 #include "../../headers/global_modules/generate_initial_population/generate_rSolution.h"
 #include "../../headers/adaptative_grid/ParetoSet.h"
 
+using namespace std;
+
 double getObj(Solution *s, int obj){
     if(obj == 0){
         return s->fitness.first;
@@ -65,6 +67,7 @@ int ParetoSet::calcularGridPos(Solution &s) {
 
 void ParetoSet::updateGrid() {
     g.clearGrid();
+
     list<Solution *>::iterator it = sol.begin();
     reiniciarRanges();
     while (it != sol.end()) {
@@ -114,11 +117,19 @@ list<Solution *> ParetoSet::getElementos() {
 
 bool ParetoSet::adicionarSol(Solution *s) {
     ASS ( assert( confereGrid() ); )
+    /* nem testa as solucoes piores */
+	//if (s->getObj(0) >= ranges[0].max && s->getObj(1) >= ranges[1].max) {
+		//fprintf(stderr,"Nem testei!\n");
+		//return false;
+	//}
+
+    /* percorre o vetor de solucoes e de valores e, caso exista solucao dominada, retira e retorna true. caso contrario, retorna false */
     list<Solution *>::iterator i = sol.begin();
     list<list<Solution *>::iterator> remover;
     while (i != sol.end()) {
         if (dominatesP(*s, **i)) {
             remover.push_back(i);
+            //printf("Dominada -> (%.3lf,%.3lf) por (%.3lf,%.3lf)!\n",(**i).getObj(0),(**i).getObj(1),s->getObj(0),s->getObj(1));
         }
         if (dominatesP(**i, *s) || equals(**i, *s)) {
             return false;
@@ -128,15 +139,20 @@ bool ParetoSet::adicionarSol(Solution *s) {
 
     list<list<Solution *>::iterator>::iterator j = remover.begin();
     while (j != remover.end()) {
+        // remove do grid
         g.removeGrid(calcularGridPos(***j));
+
         delete (**j);
+        // remove do conjunto pareto
         sol.erase(*j);
         j++;
     }
 
     Solution *t = new Solution;
     *t = *s;
+    // adiciona ao conjunto pareto
     sol.push_front(t);
+    // adiciona ao grid
     g.addGrid(calcularGridPos(*t));
 
     for (int k = 0; k < NUMOBJETIVOS; k++) {
@@ -144,9 +160,11 @@ bool ParetoSet::adicionarSol(Solution *s) {
         rangeNovo[k].max = max(rangeNovo[k].max, getObj(t, k));
     }
 
+    // se houve uma mudanca grande nos ranges (maior que 10% valor), atualizar o grid
     for (int k = 0; k < NUMOBJETIVOS; k++) {
         if (fabs(rangeNovo[k].min - rangeAtual[k].min) > 0.1 * rangeAtual[k].min ||
             fabs(rangeNovo[k].max - rangeAtual[k].max) > 0.1 * rangeAtual[k].max) {
+            //fprintf(stderr,"Atualizando grid!\n");
             updateGrid();
             break;
         }
@@ -158,7 +176,9 @@ bool ParetoSet::adicionarSol(Solution *s) {
 
 void ParetoSet::printAllSolutions(string path) {
     ofstream file(path);
+
     file << fixed << setprecision(10);
+
     if (file.is_open()) {
         list<Solution *>::iterator i = sol.begin();
         Solution *s;
@@ -169,13 +189,16 @@ void ParetoSet::printAllSolutions(string path) {
         }
         file.close();
     } else {
-        cerr << "Erro ao abrir o arquivo para escrita: " << path << endl;
+        cerr << "ERROR! ParetoSet.cpp -> Erro ao abrir o arquivo para escrita: " << path << endl;
     }
 }
 
 void ParetoSet::printAllSolutionsLayout(string path) {
+    fopen(path.c_str(), "w");
     ofstream file(path);
+
     file << fixed << setprecision(10);
+
     if (file.is_open()) {
         list<Solution *>::iterator i = sol.begin();
         Solution *s;
@@ -186,7 +209,7 @@ void ParetoSet::printAllSolutionsLayout(string path) {
         }
         file.close();
     } else {
-        cerr << "Erro ao abrir o arquivo para escrita: " << path << endl;
+        cerr << "ERROR! ParetoSet.cpp -> Erro ao abrir o arquivo para escrita: " << path << endl;
     }
 }
 
