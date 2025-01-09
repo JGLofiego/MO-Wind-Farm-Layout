@@ -76,12 +76,13 @@ void moead(vector<Solution>& population){
       }
 
       Solution * parentA = new Solution;
-      *parentA = population[k];
       Solution * parentB = new Solution;
+      *parentA = population[k];
       *parentB = population[l];
+
       Solution * child1 = new Solution;
-      *child1 = *parentA;
       Solution * child2 = new Solution;
+      *child1 = *parentA;
       *child2 = *parentB;
 
       // Generate new solution y using genetic operators
@@ -91,13 +92,6 @@ void moead(vector<Solution>& population){
       if((static_cast<double>(rand()) / RAND_MAX) < input_cross_prob){ 
         *child1 = crossover(*parentA, *parentB);
         *child2 = crossover(*parentB, *parentA);        
-      }
-
-      //MUTATION
-
-      if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
-        mutation(*parentA);
-        mutation(*parentB);
       }
 
       if((static_cast<double>(rand()) / RAND_MAX) < input_mutation_prob){
