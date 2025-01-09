@@ -9,12 +9,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "../../headers/adaptative_grid/Grid.h"
-#include "../../headers/adaptative_grid/ParetoSet.h"
 #include "../../headers/adaptative_grid/param.h"
+#include "../../headers/adaptative_grid/Grid.h"
 #include "../../headers/global_modules/generate_initial_population/generate_rSolution.h"
-
-#include "ParetoSet.h"
+#include "../../headers/adaptative_grid/ParetoSet.h"
 
 double getObj(Solution *s, int obj){
     if(obj == 0){

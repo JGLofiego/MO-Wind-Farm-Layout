@@ -9,13 +9,9 @@
 
 using namespace std;
 
-BoundedParetoSet::BoundedParetoSet() {
-    // Construtor
-}
+BoundedParetoSet::BoundedParetoSet() {}
 
-BoundedParetoSet::~BoundedParetoSet() {
-    // Destrutor
-}
+BoundedParetoSet::~BoundedParetoSet() {}
 
 bool BoundedParetoSet::adicionarSol(Solution *s) {
     ASS ( assert( confereGrid() ); )
@@ -49,8 +45,21 @@ bool BoundedParetoSet::adicionarSol(Solution *s) {
     // se a solucao que vai entrar nao domina nenhuma e o tamanho do conjunto pareto ja esta no maximo
     // (se nenhuma solucao vai sair do conjunto), remove a mais populosa
     if (remover.size() == 0 && getSize()+1 > MAXARCSIZE) {
+        // //fprintf(stderr,"BoundedPareto: removendo a solucao mais populosa de pop = %d\n",maiorPositionCount);
+		// if (!existeFileGlobal) {
+		// 	// globalf = fopen (nomeglobalf.data(), "a");
+		// 	existeFileGlobal = true;
+		// }
+		// else {
+		// 	if (globalf == NULL)
+		// 		cerr << "erro ao abrir arquivo!!" << endl;
+		// 	else
+		// 		printOnePoint (maisPopuloso, globalf);
+		// }
         remover.push_back(maisPopuloso);
     }
+
+    //fprintf(stderr,"getSize = %d %d\n",getSize(),sol.size());
 
     list< list<Solution *>::iterator >::iterator j = remover.begin();
     while (j != remover.end()) {
@@ -78,6 +87,7 @@ bool BoundedParetoSet::adicionarSol(Solution *s) {
     // se houve uma mudanca grande nos ranges (maior que 10% valor), atualizar o grid
     for (int k=0;k<NUMOBJETIVOS;k++) {
         if (fabs(rangeNovo[k].min-rangeAtual[k].min) > 0.1*rangeAtual[k].min || fabs(rangeNovo[k].max-rangeAtual[k].max) > 0.1*rangeAtual[k].max) {
+            //fprintf(stderr,"Atualizando grid!\n");
             updateGrid();
             break;
         }
@@ -87,4 +97,4 @@ bool BoundedParetoSet::adicionarSol(Solution *s) {
     return true;
 }
 
-#endif // BOUNDEDPARETOSET_CPP
+#endif
