@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "../modules/headers/generate_rSolution.h" // Certifique-se de que este caminho está correto
+#include "../../headers/global_modules/generate_initial_population/generate_rSolution.h"
 #include <iomanip>
 
 using namespace std;
