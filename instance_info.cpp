@@ -88,7 +88,7 @@ void get_instance_info(int argc, char* argv[]){
     //     windFile = (string) argv[5];
     // };
 
-    file.open(pathFolders + "/wind/" + windFile);
+    file.open(pathFolders + "/instances/wind/" + windFile);
 
     if(file.fail()){
         cout << "ERROR: Invalid wind file" << endl;
@@ -109,7 +109,7 @@ void get_instance_info(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathFolders + "/site/" + instance + "/availablePositions.txt");
+    file.open(pathFolders + "/instances/site/" + instance + "/availablePositions.txt");
 
     if(file.fail()){
         cout << "ERROR: Invalid instance" << endl;
@@ -134,7 +134,7 @@ void get_instance_info(int argc, char* argv[]){
     if(turbines_instace.count(instance) > 0){
         turbines_per_zone = turbines_instace[instance];
     } else {
-        file.open(pathFolders + "/site/" + instance + "/turbines_per_zone.txt");
+        file.open(pathFolders + "/instances/site/" + instance + "/turbines_per_zone.txt");
 
         if(file.fail()){
             cout << "ERROR: Invalid instance name" << endl;
@@ -151,11 +151,11 @@ void get_instance_info(int argc, char* argv[]){
         file.close();
     }
 
-    file.open(pathFolders + "/wtg/" + "NREL-10-179.txt");
+    file.open(pathFolders + "/instances/wtg/" + "NREL-10-179.txt");
 
     if(file.fail()){
-        cout << "ERROR: '/wtg' not found" << endl;
-        throw invalid_argument("'/wtg' not found");
+        cout << "ERROR: '/instances/wtg' not found" << endl;
+        throw invalid_argument("'/instances/wtg' not found");
     }
 
     while(file.good() && stof(strWind) != wind){
@@ -173,7 +173,7 @@ void get_instance_info(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathFolders + "/wtg/" + "NREL-15-240.txt");
+    file.open(pathFolders + "/instances/wtg/" + "NREL-15-240.txt");
 
     strWind = "0.0";
 
@@ -192,7 +192,7 @@ void get_instance_info(int argc, char* argv[]){
 
     file.close();
 
-    file.open(pathFolders + "/site/" + instance + "/fixed_wf.txt");
+    file.open(pathFolders + "/instances/site/" + instance + "/fixed_wf.txt");
 
     turb.diameter = 179;
     turb.power = powerFxd;
