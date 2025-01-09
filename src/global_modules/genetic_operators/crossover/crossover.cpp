@@ -106,7 +106,7 @@ Solution crossover(Solution &parent_solutionA, Solution &parent_solutionB){
     pareto->printAllSolutions(root_folder + path);
 
     if(countRevalue >= stop_criteria){
-      pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_final.txt");
+      pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_layout.txt");
     }
   }
 

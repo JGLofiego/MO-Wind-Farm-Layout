@@ -22,7 +22,7 @@ vector<Solution> create_initial_population(int size_population) {
       pareto->printAllSolutions(root_folder + path);
 
       if(countRevalue >= stop_criteria){
-        pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_final.txt");
+        pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_layout.txt");
       }
     }
 

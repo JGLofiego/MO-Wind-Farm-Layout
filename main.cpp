@@ -28,15 +28,16 @@ int main(int argc, char* argv[]){
     string path;
 
     int num_neighbors = 25;
+    int size_of_population = 100;
 
     get_instance_info(argc, argv);
-
-    int size_of_population = 100;
 
     int sum = 0;
     for(auto elem : turbines_per_zone)
         sum += elem;
 
+    cout << "Number of subproblems: " << size_of_population << endl << endl;
+    cout << "Number of neighbors: " << num_neighbors << endl;
     cout << "Number of fixed turbines: " << fixd.size() << endl;
     cout << "Number of mobile turbines: " << sum << endl;
     cout << "Wind: " << wind << endl;
@@ -45,6 +46,4 @@ int main(int argc, char* argv[]){
     auto population = create_initial_population(size_of_population);
 
     moead(population);
-
-    cout << "TOTAL NUMBER OF AVALIATIONS: " << countRevalue;
 }

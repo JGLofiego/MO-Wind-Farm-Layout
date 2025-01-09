@@ -63,22 +63,7 @@ void mutationAux(Solution &solution, int zone){
       indexB = find_index(solution.turbines[zone], solution.grid[zone][rand_intB]);
     }
 
-    if(indexA != -1 && indexB != -1){
-      int index;
-      double x, y;
-
-      index = solution.turbines[zone][indexA].index;
-      x = solution.turbines[zone][indexA].x;
-      y = solution.turbines[zone][indexA].y;
-
-      solution.turbines[zone][indexA].index = solution.turbines[zone][indexB].index;
-      solution.turbines[zone][indexA].x = solution.turbines[zone][indexB].x;
-      solution.turbines[zone][indexA].y = solution.turbines[zone][indexB].y;
-
-      solution.turbines[zone][indexB].index = index;
-      solution.turbines[zone][indexB].x = x;
-      solution.turbines[zone][indexB].y = y;
-    } else if (indexA != -1 && indexB == -1){
+    if (indexA != -1 && indexB == -1){
       solution.turbines[zone][indexA].index = rand_intB;
       solution.turbines[zone][indexA].x = foundations[zone][rand_intB].x;
       solution.turbines[zone][indexA].y = foundations[zone][rand_intB].y;
@@ -111,7 +96,7 @@ void mutation(Solution &solution){
     pareto->printAllSolutions(root_folder + path);
 
     if(countRevalue >= stop_criteria){
-      pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_final.txt");
+      pareto->printAllSolutionsLayout(root_folder + instance + "_" + algorithm + "_layout.txt");
     }
   }
 
