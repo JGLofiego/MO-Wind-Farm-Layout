@@ -16,6 +16,8 @@ string algorithm = "moead";
 string instance = "A";
 string root_folder = "./";
 
+ofstream infoRun(root_folder + "infoRun.txt");
+
 int main(int argc, char* argv[]){
 
     if(argc == 2){
@@ -46,4 +48,5 @@ int main(int argc, char* argv[]){
     auto population = create_initial_population(size_of_population);
 
     moead(population);
+    infoRun.close();
 }

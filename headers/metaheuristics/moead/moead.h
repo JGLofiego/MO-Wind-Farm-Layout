@@ -7,4 +7,6 @@
 
 void moead(std::vector<Solution>& population);
 
+extern ofstream infoRun;
+
 #endif 

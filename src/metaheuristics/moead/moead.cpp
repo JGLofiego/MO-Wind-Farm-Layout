@@ -61,7 +61,7 @@ void moead(vector<Solution>& population){
 
   while (countRevalue < stop_criteria) {
 
-    cout << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
+    infoRun << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
 
     for (int i = 0; i < size_population; i++) {
 
