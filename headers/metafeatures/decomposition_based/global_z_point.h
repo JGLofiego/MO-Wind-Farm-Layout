@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <utility>
-#include "../../../modules/headers/turbine.h"
+#include "../../../headers/wind_farm_entities/turbine.h"
 
 extern std::vector<int> turbines_per_zone;
 extern float wind;

@@ -1,6 +1,6 @@
 #include <vector>
 #include <cstdlib>
-#include "../../../../headers/global_modules/turbine.h"
+#include "../../../../headers/wind_farm_entities/turbine.h"
 #include "../../../../headers/global_modules/generate_initial_population/generate_rSolution.h"
 #include <time.h>
 #include <cmath>

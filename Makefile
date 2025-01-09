@@ -9,8 +9,8 @@ CXXFLAGS = -std=c++17 -Werror \
     -I./headers/global_modules/genetic_operators \
     -I./headers/global_modules/generate_initial_population \
     -I./headers/adaptative_grid \
-    -I./headers/metaheuristics/pareto_based \
-    -I./headers/metaheuristics/walks
+    -I./headers/wind_farm_entities
+
 
 SRC_DIR = src
 HEADER_DIR = headers
