@@ -2,17 +2,17 @@
 #define POPULATION_H
 
 #include <vector>
+#include <string>
 #include "generate_rSolution.h"
 #include "../../adaptative_grid/BoundedParetoSet.h"
-using namespace std;
 
 extern BoundedParetoSet * pareto;
 extern int countRevalue;
-extern string instance;
-extern string algorithm;
-extern string root_folder;
+extern std::string instance;
+extern std::string algorithm;
+extern std::string root_folder;
 extern int stop_criteria;
 
-vector<Solution> create_initial_population(int size_population);
+std::vector<Solution> create_initial_population(int size_population);
 
-#endif 
+#endif

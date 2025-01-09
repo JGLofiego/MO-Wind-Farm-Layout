@@ -2,7 +2,6 @@
 #define ISEQUAL_H
 
 #include "./generate_initial_population/generate_rSolution.h"
-using namespace std;
 
 bool isEqual(Solution solutionA, Solution solutionB);
 

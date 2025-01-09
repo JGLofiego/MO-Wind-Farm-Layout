@@ -9,8 +9,6 @@
 #include <cmath>
 #include <algorithm>
 
-using namespace std;
-
 // Classe BoundedParetoSet
 class BoundedParetoSet : public ParetoSet {
     private:

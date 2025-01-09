@@ -2,7 +2,6 @@
 #define DOMINATES_H
 
 #include "./generate_initial_population/generate_rSolution.h"
-using namespace std;
 
 bool dominates(Solution solutionA, Solution solutionB);
 
