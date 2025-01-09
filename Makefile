@@ -5,6 +5,8 @@ CXXFLAGS = -std=c++17 -Werror \
     -I./headers/metaheuristics \
     -I./headers/metaheuristics/moead \
     -I./headers/metaheuristics/moead/modules \
+    -I./headers/metaheuristics/nsga2 \
+    -I./headers/metaheuristics/nsga2/modules \
     -I./headers/global_modules \
     -I./headers/global_modules/genetic_operators \
     -I./headers/global_modules/generate_initial_population \
@@ -35,6 +37,10 @@ SRC_FILES = \
     $(SRC_DIR)/metaheuristics/moead/modules/tchebycheff.cpp \
     $(SRC_DIR)/metaheuristics/moead/modules/updateEP.cpp \
     $(SRC_DIR)/metaheuristics/moead/moead.cpp \
+    ${SRC_DIR}/metaheuristics/nsga2/modules/binary_tournament.cpp \
+    $(SRC_DIR)/metaheuristics/nsga2/modules/non_dominated_sorting.cpp \
+    ${SRC_DIR}/metaheuristics/nsga2/modules/crowding_distance.cpp \
+    $(SRC_DIR)/metaheuristics/nsga2/nsga2.cpp \
     instance_info.cpp
 
 MAIN_FILE = main.cpp
