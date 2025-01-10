@@ -9,4 +9,6 @@ void updatePopulation(vector<Solution*>& population);
 
 vector<Solution*> nsga2(vector<Solution>& pop);
 
+extern ofstream infoRunNSGA2;
+
 #endif 

@@ -78,11 +78,13 @@ vector<Solution*> nsga2(vector<Solution>& pop){
 
   // cout << "SIZE OF INITIAL POPULATION: " << population.size() << endl << endl;
 
+  ofstream infoRunNSGA2(root_folder + "infoRun.txt");
+
   int generation = 0;
 
   while(countRevalue < stop_criteria){
 
-    cout << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
+    infoRunNSGA2 << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
 
     // cout << "======================= GENERATION: " << generation << "=======================" << endl << endl;
 
@@ -213,8 +215,9 @@ vector<Solution*> nsga2(vector<Solution>& pop){
     generation++;
   }
 
-
   updatePopulation(*population);
+  
+  infoRunNSGA2.close();
   
   // cout << endl;
   // cout << "------------FINAL POPULATION ------------ " << endl;
