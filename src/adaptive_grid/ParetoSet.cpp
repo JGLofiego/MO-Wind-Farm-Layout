@@ -194,7 +194,6 @@ void ParetoSet::printAllSolutions(string path) {
 }
 
 void ParetoSet::printAllSolutionsLayout(string path) {
-    fopen(path.c_str(), "w");
     ofstream file(path);
 
     file << fixed << setprecision(10);
@@ -212,6 +211,7 @@ void ParetoSet::printAllSolutionsLayout(string path) {
         cerr << "ERROR! ParetoSet.cpp -> Erro ao abrir o arquivo para escrita: " << path << endl;
     }
 }
+
 
 int ParetoSet::getSize() {
     return sol.size();
