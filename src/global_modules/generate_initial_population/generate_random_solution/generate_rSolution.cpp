@@ -9,12 +9,20 @@ using namespace std;
 
 const double PI = 3.14159265358979323846;
 
+// References:
+// [1] - Multi-objective genetic algorithm based innovative wind farm layout optimization method | By Ying Chen, Hua Li, Bang He, Pengcheng Wang, Kai Jin
+// [2] - Multi-objective optimization of wind farm layouts – Complexity, constraint handling and scalability | By S. Rodrigues, P. Bauer, Peter A.N. Bosman
+
+
+// Power produced by a turbine according to [1]
+// 0.6127 = 0.5 * 1.2254
 float power_produced(double& wind, Turbine& turbine){
-    return 0.6125 * turbine.power * turbine.thrust_coef * (wind * wind * wind);
+    return 0.6127 * turbine.power * (wind * wind * wind);
 }
 
+// Power produced by a turbine according to [1]
 float power_alt(float& wind, float& power, float& tc){
-    return 0.6125 * power * tc * (wind * wind * wind);
+    return 0.6127 * power * (wind * wind * wind);
 }
 
 double calculate_cost(Solution& sol){
@@ -62,6 +70,9 @@ double calculate_interference(Turbine& t_initial, Turbine& t_interfered){
         return 0;
     }
 
+    // Wake decay coefficient according to [2]
+    double alpha = 0.5 / log(t_initial.height / 0.0005);
+
     // Ponto projetado na direção do vento
     float xWake = t_initial.x + scalar * xWind;
     float yWake = t_initial.y + scalar * yWind;
@@ -72,7 +83,7 @@ double calculate_interference(Turbine& t_initial, Turbine& t_interfered){
     float distBtwnCenter = sqrt((xWake - t_interfered.x) * (xWake - t_interfered.x) + (yWake - t_interfered.y) * (yWake - t_interfered.y));
 
     // Diametro do wake effect no ponto
-    float wakeDiameter = t_initial.diameter + 2 * 0.04 * wakeDistance;
+    float wakeDiameter = t_initial.diameter + alpha * wakeDistance;
 
     // Se o raio do wake effect + o raio da turbina for menor ou igual a distância entre os centros
     // Então a turbina não sofre interferência do wake effect
@@ -80,7 +91,11 @@ double calculate_interference(Turbine& t_initial, Turbine& t_interfered){
         return 0;
     }
 
-    double result = (1 - sqrt(1 - t_interfered.thrust_coef)) * (t_interfered.diameter / wakeDiameter * t_interfered.diameter / wakeDiameter);
+    // Distância entre as turbinas
+    double distBtwnturbs = sqrt((xVector * xVector) + (yVector * yVector));
+
+    // Interference that t_initial caused on t_interfered according to [2]
+    double result = (1 - sqrt(1 - t_initial.thrust_coef)) / pow(1 + alpha * distBtwnturbs / (t_interfered.diameter * 0.5), 2);
 
     // ********** Teste da interferência entre turbinas **********
     // cout << "Interferencia que a turbina " << t_initial.id << " causa na turbina "
@@ -93,10 +108,14 @@ double calculate_power(Solution& sol){
     double power = 0;
     double deficit, windResulted, result;
 
+    // Para cada turbina móvel [z][i] vai calcular o deficit resultante que incide nela, tanto pelas outras turbinas móveis, quanto pelas fixas.
+    // Depois calcula a energia produzida pela turbina, para armazenar no total da solução.
     for(int z = 0; z < num_zones; z++){
         for(int i = 0; i < sol.turbines[z].size(); i++){
+            // Varíavel que armazenará a soma de quadrados descrita em [2]
             deficit = 0;
 
+            // Calcula a interferência que a turbina [j][k] causa na turbina [z][i]
             for(int j = 0; j < num_zones; j++){
                 for(int k = 0; k < sol.turbines[j].size(); k++){
                     result = calculate_interference(sol.turbines[j][k], sol.turbines[z][i]);
@@ -104,11 +123,13 @@ double calculate_power(Solution& sol){
                 }
             }
 
+            // Calcula a interferência que as turbinas fixas causam na turbina [z][i]
             for(int a = 0; a < fixd.size(); a++){
                 result = calculate_interference(fixd[a], sol.turbines[z][i]);
                 deficit += result * result;
             }
 
+            // Wind resulted according to [2]
             windResulted = wind * (1 - sqrt(deficit));
 
             // ********** Teste da potência produzida **********
@@ -119,14 +140,18 @@ double calculate_power(Solution& sol){
         }
     }
 
+    // Para cada turbina fixa [i] vai calcular o deficit resultante que incide nela, tanto pelas turbinas móveis, quanto pelas outras fixas.
     for (int i = 0; i < fixd.size(); i++){
+        // Varíavel que armazenará a soma de quadrados descrita em [2]
         deficit = 0.0;
 
+        // Calcula a interferência que a turbina fixa j causa na turbina fixa i
         for(int j = 0; j < fixd.size(); j++){
             result = calculate_interference(fixd[j], fixd[i]);
             deficit += result * result;
         }
 
+        // Calcula a interferência que a turbina [j][k] causa na turbina fixa i
         for(int j = 0; j < num_zones; j++){
             for(int k = 0; k < turbines_per_zone[j]; k++){
                 result = calculate_interference(sol.turbines[j][k], fixd[i]);
@@ -134,6 +159,7 @@ double calculate_power(Solution& sol){
             }
         }
 
+        // Wind resulted according to [2]
         windResulted = wind * (1 - sqrt(deficit));
 
         power += power_produced(windResulted, fixd[i]);
@@ -182,6 +208,7 @@ Solution generate_solution(){
     int elmn;
 
     t.diameter = 240;
+    t.height = 150;
 
     for(int z = 0; z < num_zones; z++){
         for(int i = 0; i < turbines_per_zone[z]; i++){

@@ -197,6 +197,7 @@ void get_instance_info(int argc, char* argv[]){
     turb.diameter = 179;
     turb.power = powerFxd;
     turb.thrust_coef = tcFxd;
+    turb.height = 119;
 
     while(file.good()){
         file >> strX >> strY >> _ >> strCost >> zone;
