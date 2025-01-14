@@ -130,7 +130,7 @@ double calculate_power(Solution& sol){
             }
 
             // Wind resulted according to [2]
-            windResulted = wind * (1 - sqrt(deficit));
+            windResulted = wind * (1 - min(sqrt(deficit), 1.0));
 
             // ********** Teste da potência produzida **********
             // cout << "Velocidade do vento em "<< sol.turbines[i].id << " : " <<
