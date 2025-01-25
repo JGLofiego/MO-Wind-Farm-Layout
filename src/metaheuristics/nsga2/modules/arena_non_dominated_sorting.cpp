@@ -3,61 +3,69 @@
 #include <set>
 #include "../../../../headers/metaheuristics/nsga2/modules/non_dominated_sorting.h"
 #include "../../../../headers/global_modules/dominates.h"
+#include "../../../../headers/global_modules/isEqual.h"
 
-vector<vector<Solution>> arena_non_dominated_sorting(vector<Solution> &population) {
-  vector<vector<Solution>> fronts; 
+vector<Solution> build_front(vector<Solution> &population) {
   vector<Solution> Q = population;
+  vector<Solution> Nds; 
 
   while (!Q.empty()) {
-    vector<Solution> Nds; 
     vector<Solution> RK, R;  
+    Solution X = Q.back();
+    Q.pop_back();
 
-    while (!Q.empty()) {
-      Solution X = Q.back();
-      Q.pop_back();
-
-      for (auto it = Q.begin(); it != Q.end();) {
-        if (dominates(X, *it)) {
-          it = Q.erase(it); // Q = Q − {Y}
-        } else if (dominates(*it, X)) {
-          X = *it; // X = Y
-          it = Q.erase(it); // Q = Q − {Y}
-          RK.insert(RK.end(), R.begin(), R.end()); // RK = RK ∪ R
-          R.clear(); // R = ∅
-        } else {  
-          R.push_back(*it); // R = R ∪ {Y}
-          it = Q.erase(it); // Q = Q − {Y}
-        }
-      }
-
-      vector<Solution> RK_2;
-
-      for (size_t i = 0; i < RK.size(); ++i) {
-        if (!dominates(X, RK[i])) {
-          RK_2.push_back(RK[i]);
-        }
-      }
-
-      Nds.push_back(X); // front = front ∪ {X}
-
-      Q.insert(Q.end(), RK_2.begin(), RK_2.end());
-      Q.insert(Q.end(), R.begin(), R.end());
-      R.clear(); 
-      RK.clear();
-      RK_2.clear();
-
-      if(Q.size() <= 1){
-        Nds.insert(Nds.end(), Q.begin(), Q.end());
-        break;
+    for (auto it = Q.begin(); it != Q.end();) {
+      if (dominates(X, *it)) {
+        it = Q.erase(it); // Q = Q − {Y}
+      } else if (dominates(*it, X)) {
+        X = *it; // X = Y
+        it = Q.erase(it); // Q = Q − {Y}
+        RK.insert(RK.end(), R.begin(), R.end()); // RK = RK ∪ R
+        R.clear(); // R = ∅
+      } else {  
+        R.push_back(*it); // R = R ∪ {Y}
+        it = Q.erase(it); // Q = Q − {Y}
       }
     }
 
-    fronts.push_back(Nds);
+    vector<Solution> RK_2;
 
-    // Q.erase(remove_if(Q.begin(), Q.end(), [&](const Solution &sol) {
-    // return find(Nds.begin(), Nds.end(), sol) != Nds.end();
-    // }), Q.end());
+    for (size_t i = 0; i < RK.size(); ++i) {
+      if (!dominates(X, RK[i])) {
+        RK_2.push_back(RK[i]);
+      }
+    }
+
+    Nds.push_back(X); // front = front ∪ {X}
+
+    Q.insert(Q.end(), RK_2.begin(), RK_2.end());
+    Q.insert(Q.end(), R.begin(), R.end());
+
+    if(Q.size() <= 1){
+      Nds.insert(Nds.end(), Q.begin(), Q.end());
+      break;
+    }
   }
 
+  for (size_t i = 0; i < Nds.size(); ++i) {
+    for (auto it = population.begin(); it != population.end(); ) {
+      if (isEqual(Nds[i], *it)) {
+        it = population.erase(it); 
+      } else {
+        ++it;
+      }
+    }
+  }
+
+  return Nds;
+}
+
+vector<vector<Solution>> arena_non_dominated_sorting(vector<Solution> &population){
+  vector<vector<Solution>> fronts; 
+
+  while (!population.empty()){
+    fronts.push_back(build_front(population));
+  }
+  
   return fronts;
 }
