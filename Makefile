@@ -13,7 +13,6 @@ CXXFLAGS = -std=c++17 -Werror -O2 \
     -I./headers/adaptative_grid \
     -I./headers/wind_farm_entities
 
-
 SRC_DIR = src
 HEADER_DIR = headers
 META_DIR = $(SRC_DIR)/global_modules/genetic_operators/mutation
@@ -39,13 +38,14 @@ SRC_FILES = \
     $(SRC_DIR)/metaheuristics/moead/moead.cpp \
     ${SRC_DIR}/metaheuristics/nsga2/modules/binary_tournament.cpp \
     $(SRC_DIR)/metaheuristics/nsga2/modules/non_dominated_sorting.cpp \
+    $(SRC_DIR)/metaheuristics/nsga2/modules/arena_non_dominated_sorting.cpp \
     ${SRC_DIR}/metaheuristics/nsga2/modules/crowding_distance.cpp \
     $(SRC_DIR)/metaheuristics/nsga2/nsga2.cpp \
     instance_info.cpp
 
 MAIN_FILE = main.cpp
 
-OUTPUT = moead
+OUTPUT = nsga2
 
 $(OUTPUT): $(SRC_FILES) $(MAIN_FILE)
 	@echo Starting compilation of $(OUTPUT)...

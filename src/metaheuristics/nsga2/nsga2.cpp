@@ -10,6 +10,8 @@
 #include "../../../headers/metaheuristics/nsga2/modules/binary_tournament.h"
 #include "../../../headers/metaheuristics/nsga2/modules/crowding_distance.h"
 #include "../../../headers/metaheuristics/nsga2/modules/non_dominated_sorting.h"
+#include "../../../headers/metaheuristics/nsga2/modules/arena_non_dominated_sorting.h"
+
 
 #include "../../../headers/global_modules/dominates.h"
 #include "../../../headers/global_modules/isEqual.h"
@@ -144,11 +146,14 @@ vector<Solution*> nsga2(vector<Solution>& pop){
     }
 
     delete offspring_population;
-    // cout << "SIZE OF TOTAL POPULATION: " << total_population->size() << endl << endl;
+    cout << "SIZE OF TOTAL POPULATION: " << total_population->size() << endl << endl;
 
-    //Non dominated sorting
+    //Non dominating sorting
+    vector<vector<Solution*> *> * fronts_fast = new vector<vector<Solution*>*>();
+    *fronts_fast = non_dominated_sorting(*total_population);
+
     vector<vector<Solution*> *> * fronts = new vector<vector<Solution*>*>();
-    *fronts = non_dominated_sorting(*total_population);
+    *fronts = arena_non_dominated_sorting(*total_population);
 
     for(auto i : *total_population){
       delete i;
@@ -156,17 +161,48 @@ vector<Solution*> nsga2(vector<Solution>& pop){
 
     delete total_population;
 
-    // // cout << "========================== FRONTS ==========================" << endl << endl;
-    // // for(int i = 0; i < fronts.size(); i++){
-    //   // cout << "----------------------- FRONT: "<< i << " -----------------------" << endl;
-    //   // for(int j = 0; j < fronts[i].size(); j++){
-    //     // cout << "<" << fronts[i][j].fitness.first << ", " << fronts[i][j].fitness.second << ">"<< endl;
-    //   // }
-    // // } // cout << endl;
+    int qtd = 0;
+    for (int i = 0; i < fronts->size(); i++) {
+      for (int j = 0; j < (*(*fronts)[i]).size(); j++) {
+        qtd++;
+      }
+    }
+
+    cout << "POPULACAO ARENA -> " << qtd << endl;
+
+    qtd = 0;
+    for (int i = 0; i < fronts_fast->size(); i++) {
+      for (int j = 0; j < (*(*fronts_fast)[i]).size(); j++) {
+        qtd++;
+      }
+    }
+
+    cout << "POPULACAO FAST -> " << qtd << endl;
+
+    cout << "========================== FRONTS - ARENA ==========================" << endl << endl;
+    for (int i = 0; i < fronts->size(); i++) {
+      cout << "----------------------- FRONT: " << i << " -----------------------" << endl;
+      for (int j = 0; j < (*(*fronts)[i]).size(); j++) {
+        cout << "FRONT SIZE: " << (*(*fronts)[i]).size() << endl;
+        cout << "<" << (*(*(*fronts)[i])[j]).fitness.first << ", " << (*(*(*fronts)[i])[j]).fitness.second << ">" << endl;
+      }
+    }
+
+    cout << "========================== FRONTS - FAST ==========================" << endl << endl;
+    for (int i = 0; i < fronts_fast->size(); i++) {
+      cout << "----------------------- FRONT: " << i << " -----------------------" << endl;
+      for (int j = 0; j < (*(*fronts_fast)[i]).size(); j++) {
+        cout << "FRONT SIZE: " << (*(*fronts_fast)[i]).size() << endl;
+        cout << "<" << (*(*(*fronts_fast)[i])[j]).fitness.first << ", " << (*(*(*fronts_fast)[i])[j]).fitness.second << ">" << endl;
+      }
+    }
+
+    break;    
 
     for(auto i : *population){
       delete i;
     }
+
     population->clear();
     
     int k = 0;

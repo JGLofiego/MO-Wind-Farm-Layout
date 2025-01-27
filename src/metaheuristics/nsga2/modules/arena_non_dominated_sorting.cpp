@@ -1,9 +1,11 @@
 #include <vector>
 #include <utility>
 #include <set>
-#include "../../../../headers/metaheuristics/nsga2/modules/non_dominated_sorting.h"
+#include <iostream>
+#include "../../../../headers/metaheuristics/nsga2/modules/arena_non_dominated_sorting.h"
 #include "../../../../headers/global_modules/dominates.h"
 #include "../../../../headers/global_modules/isEqual.h"
+#include "../../../../headers/globals.h"
 
 vector<Solution*>* build_front(vector<Solution*> &population) {
   vector<Solution*>* Q = new vector<Solution*>(population.begin(), population.end()); 
@@ -47,7 +49,6 @@ vector<Solution*>* build_front(vector<Solution*> &population) {
     }
   }
 
-  // Removendo as soluções dominadas da população
   for (size_t i = 0; i < Nds->size(); ++i) {
     for (auto it = population.begin(); it != population.end(); ) {
       if (isEqual(*Nds->at(i), **it)) {
@@ -65,9 +66,17 @@ vector<Solution*>* build_front(vector<Solution*> &population) {
 
 vector<vector<Solution*>*> arena_non_dominated_sorting(vector<Solution*> &population) {
   vector<vector<Solution*>*> fronts;
+  int population_count = 0; //A counter to see if we reach the 'size_of_population'
 
   while (!population.empty()) {
-    fronts.push_back(build_front(population));
+    auto front = build_front(population);
+    population_count += front->size();
+
+    fronts.push_back(front);
+
+    if (population_count >= SIZE_OF_POPULATION) {
+      break;
+    }
   }
   
   return fronts;
