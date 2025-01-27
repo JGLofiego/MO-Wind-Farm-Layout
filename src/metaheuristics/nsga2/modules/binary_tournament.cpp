@@ -1,7 +1,7 @@
 #include <utility>
 #include <random>
 #include "../../../../headers/global_modules/generate_initial_population/generate_rSolution.h"
-#include "../../../../headers/metaheuristics/nsga2//modules/binary_tournament.h"
+#include "../../../../headers/metaheuristics/nsga2/modules/binary_tournament.h"
 
 Solution** binary_tournament(vector<Solution*>& population){
   Solution** parents = new Solution*[2];

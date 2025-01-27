@@ -17,39 +17,15 @@
 #include "../../../headers/global_modules/isEqual.h"
 #include "../../../headers/metaheuristics/nsga2/nsga2.h"
 
-void updatePopulation(vector<Solution*>& population) {
-  // Loop through each solution in the population
-  for (int i = 0; i < population.size(); i++) {
-    bool isDominated = false;
-
-    // Check if the solution is dominated by any other solution in the population
-    for (int j = 0; j < population.size(); j++) {
-      if (i != j && dominates(*population[j], *population[i])) {
-        isDominated = true;
-        // If the solution is dominated, remove it and adjust the index
-        population.erase(population.begin() + i);
-        i--;
-        break;
-      }
-    }
-
-    // If the solution has not been dominated, check if there are copies of it
-    if (!isDominated) {
-      vector<int> copies;
-      for (int j = 0; j < population.size(); j++) {
-        if (i != j && isEqual(*population[j], *population[i])) {
-          copies.push_back(j);
-        }
-      }
-
-      // Removes back-to-front copies to avoid indexing issues
-      if (!copies.empty()) {
-        for (int k = copies.size() - 1; k >= 0; k--) {
-          population.erase(population.begin() + copies[k]);
-        }
-      }
+// Checking if there are copies of 'solution' in population
+void add(vector<Solution*>& population, Solution* solution){
+  for (auto& existing_solution : population) {
+    if (isEqual(*existing_solution, *solution)) {
+      delete solution; 
+      return;          
     }
   }
+  population.push_back(solution);
 }
 
 vector<Solution*> nsga2(vector<Solution>& pop){
@@ -58,7 +34,7 @@ vector<Solution*> nsga2(vector<Solution>& pop){
 
   for(auto sol : pop){
     Solution * s = new Solution(sol);
-    population->push_back(s);
+    add(*population, s);
   }
 
   //Initializing the random number generator 
@@ -107,8 +83,8 @@ vector<Solution*> nsga2(vector<Solution>& pop){
         *child1 = crossover(*parents[0], *parents[1]);
         *child2 = crossover(*parents[1], *parents[0]);
 
-        offspring_population->push_back(new Solution(*child1));
-        offspring_population->push_back(new Solution(*child2));
+        add(*offspring_population, new Solution(*child1));
+        add(*offspring_population, new Solution(*child2));
       }
 
       //Mutation
@@ -118,8 +94,8 @@ vector<Solution*> nsga2(vector<Solution>& pop){
         mutation(*child1);
         mutation(*child2);
 
-        offspring_population->push_back(new Solution(*child1));
-        offspring_population->push_back(new Solution(*child2));
+        add(*offspring_population, new Solution(*child1));
+        add(*offspring_population, new Solution(*child2));
       }
 
       delete parents[0];
@@ -250,8 +226,6 @@ vector<Solution*> nsga2(vector<Solution>& pop){
 
     generation++;
   }
-
-  updatePopulation(*population);
   
   infoRunNSGA2.close();
   
