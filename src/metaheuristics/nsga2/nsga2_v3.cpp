@@ -11,15 +11,16 @@
 #include "../../../headers/metaheuristics/nsga2/modules/crowding_distance.h"
 #include "../../../headers/metaheuristics/nsga2/modules/non_dominated_sorting.h"
 #include "../../../headers/metaheuristics/nsga2/modules/arena_non_dominated_sorting.h"
+#include "../../../headers/metaheuristics/nsga2/modules/arena_non_dominated_sorting_v3.h"
 
 
 #include "../../../headers/global_modules/dominates.h"
 #include "../../../headers/global_modules/isEqual.h"
-#include "../../../headers/metaheuristics/nsga2/nsga2.h"
+#include "../../../headers/metaheuristics/nsga2/nsga2_v3.h"
 #include "../../../headers/globals.h"
 
 // Checking if there are copies of 'solution' in population
-void add(vector<Solution*>& population, Solution* solution){
+void add_v3(vector<Solution*>& population, Solution* solution){
   for (auto& existing_solution : population) {
     if (isEqual(*existing_solution, *solution)) {
       delete solution; 
@@ -29,13 +30,13 @@ void add(vector<Solution*>& population, Solution* solution){
   population.push_back(solution);
 }
 
-vector<Solution*> nsga2(vector<Solution>& pop){
+vector<Solution*> nsga2_v3(vector<Solution>& pop){
 
   vector<Solution*> * population = new vector<Solution*>();
 
-  for(auto sol : pop){
-    Solution * s = new Solution(sol);
-    add(*population, s);
+  for (auto& sol : pop) {
+    Solution* s = new Solution(sol);
+    add_v3(*population, s);
   }
 
   //Initializing the random number generator 
@@ -48,15 +49,6 @@ vector<Solution*> nsga2(vector<Solution>& pop){
   double mutation_prob = 0.05;
   int stop_criteria = 1000000;
 
-  // cout << endl;
-  // cout << "------------INITIAL POPULATION ------------ " << endl;
-  // for(auto& i : population){
-    // cout << "<" << i.fitness.first << ", " << i.fitness.second << ">" << endl;
-  // }
-  // cout << "------------------------------------------- " << endl << endl;
-
-  // cout << "SIZE OF INITIAL POPULATION: " << population.size() << endl << endl;
-
   ofstream infoRunNSGA2(root_folder + "infoRun.txt");
 
   int generation = 0;
@@ -64,8 +56,6 @@ vector<Solution*> nsga2(vector<Solution>& pop){
   while(countRevalue < stop_criteria){
 
     infoRunNSGA2 << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
-
-    // cout << "======================= GENERATION: " << generation << "=======================" << endl << endl;
 
     vector<Solution*> * offspring_population = new vector<Solution*>();
 
@@ -84,8 +74,8 @@ vector<Solution*> nsga2(vector<Solution>& pop){
         *child1 = crossover(*parents[0], *parents[1]);
         *child2 = crossover(*parents[1], *parents[0]);
 
-        add(*offspring_population, new Solution(*child1));
-        add(*offspring_population, new Solution(*child2));
+        add_v3(*offspring_population, new Solution(*child1));
+        add_v3(*offspring_population, new Solution(*child2));
       }
 
       //Mutation
@@ -95,8 +85,8 @@ vector<Solution*> nsga2(vector<Solution>& pop){
         mutation(*child1);
         mutation(*child2);
 
-        add(*offspring_population, new Solution(*child1));
-        add(*offspring_population, new Solution(*child2));
+        add_v3(*offspring_population, new Solution(*child1));
+        add_v3(*offspring_population, new Solution(*child2));
       }
 
       delete parents[0];
@@ -115,8 +105,6 @@ vector<Solution*> nsga2(vector<Solution>& pop){
       total_population->push_back(new Solution(*i));
     }
 
-    // total_population->insert(total_population->end(), offspring_population->begin(), offspring_population->end());
-
     for (auto i : *offspring_population){
       total_population->push_back(new Solution(*i));
       delete i;
@@ -124,14 +112,24 @@ vector<Solution*> nsga2(vector<Solution>& pop){
 
     delete offspring_population;
 
-    // cout << "SIZE OF TOTAL POPULATION: " << total_population->size() << endl << endl;
+    cout << "SIZE OF TOTAL POPULATION: " << total_population->size() << endl << endl;
 
     //Non dominating sorting
-    // vector<vector<Solution*> *> * fronts_fast = new vector<vector<Solution*>*>();
-    // *fronts_fast = non_dominated_sorting(*total_population);
+    vector<Solution *> fronts[SIZE_OF_POPULATION * 5];
+    arena_non_dominated_sorting_v3(*total_population, fronts);
 
-    vector<vector<Solution*> *> * fronts = new vector<vector<Solution*>*>();
-    *fronts = arena_non_dominated_sorting(*total_population);
+    int qtd = 0;
+    for (int i = 0; i < fronts->size(); i++) {
+      if (!fronts[i].empty())
+        qtd += fronts[i].size();
+    }
+
+    cout << "POPULACAO ARENA EXTERNO -> " << qtd << endl << endl;
+
+    if(qtd < SIZE_OF_POPULATION){
+      cerr << "ERROR -> MENOR QUE 100" << endl;
+      break;
+    }
 
     for(auto i : *total_population){
       delete i;
@@ -139,68 +137,40 @@ vector<Solution*> nsga2(vector<Solution>& pop){
 
     delete total_population;
 
-    // int qtd = 0;
-    // for (int i = 0; i < fronts->size(); i++) {
-    //   for (int j = 0; j < (*(*fronts)[i]).size(); j++) {
-    //     qtd++;
-    //   }
-    // }
-
-    // cout << "POPULACAO ARENA -> " << qtd << endl;
-
-    // if(qtd < SIZE_OF_POPULATION){
-    //   cerr << "ERROR - MENOR QUE 100" << endl;
-    //   break;
-    // }
-
-    // qtd = 0;
-    // for (int i = 0; i < fronts_fast->size(); i++) {
-    //   for (int j = 0; j < (*(*fronts_fast)[i]).size(); j++) {
-    //     qtd++;
-    //   }
-    // }
-
-    // cout << "POPULACAO FAST -> " << qtd << endl;
-
-    // cout << "========================== FRONTS - ARENA ==========================" << endl << endl;
-    // for (int i = 0; i < fronts->size(); i++) {
-    //   cout << "----------------------- FRONT: " << i << " -----------------------" << endl;
-    //   for (int j = 0; j < (*(*fronts)[i]).size(); j++) {
-    //     cout << "FRONT SIZE: " << (*(*fronts)[i]).size() << endl;
-    //     cout << "<" << (*(*(*fronts)[i])[j]).fitness.first << ", " << (*(*(*fronts)[i])[j]).fitness.second << ">" << endl;
-    //   }
-    // }
-
-    // cout << "========================== FRONTS - FAST ==========================" << endl << endl;
-    // for (int i = 0; i < fronts_fast->size(); i++) {
-    //   cout << "----------------------- FRONT: " << i << " -----------------------" << endl;
-    //   for (int j = 0; j < (*(*fronts_fast)[i]).size(); j++) {
-    //     cout << "FRONT SIZE: " << (*(*fronts_fast)[i]).size() << endl;
-    //     cout << "<" << (*(*(*fronts_fast)[i])[j]).fitness.first << ", " << (*(*(*fronts_fast)[i])[j]).fitness.second << ">" << endl;
-    //   }
-    // }
-
-    // break;    
-
     for(auto i : *population){
       delete i;
     }
 
     population->clear();
+
+    // cout << "Fronts size: " << fronts->size() << std::endl;
+
+    // cout << "========================== FRONTS - ARENA ==========================" << endl << endl;
+
+    // for (size_t i = 0; i < fronts->size(); i++) {
+    //   cout << "----------------------- FRONT: " << i << " -----------------------" << endl;
+    //   cout << "FRONT SIZE: " << fronts[i].size() << endl;
+    //   cout << "TESTE: "<< i << endl;
+    //   for (auto* solution : fronts[i]) {
+    //     cout << "<" << solution->fitness.first << ", " << solution->fitness.second << ">" << endl;
+    //   }
+    // }
     
+    // break;  
+
     int k = 0;
-    for (auto& front : *fronts) {
-      if (population->size() + front->size() <= size_population) {
+    for (auto& front : fronts) {
+      if (population->size() + front.size() <= size_population) {
         // Add the entire front if it fits in the population
         // cout << "ADDING THE WHOLE FRONT " << k << endl;
-        for (auto solution : *front) {
+        for (auto solution : front) {
           population->push_back(new Solution(*solution));
         }
       }
       else {
         // If the front doesn't fit all the way, sort by crowding distance and add the missing solutions
         auto * front_sorted = new vector<Solution*>();
-        *front_sorted = crowding_distance(*front);
+        *front_sorted = crowding_distance(front);
         // cout << "ADDING PART OF FRONT " << k << " (crowding distance)" << endl;
         
         // Calculate how many solutions are missing to complete the population
@@ -222,28 +192,15 @@ vector<Solution*> nsga2(vector<Solution>& pop){
       k++;
     }
 
-    for(auto front : *fronts){
-      for(auto solution : *front){
+    for (auto& front : fronts) {
+      for(auto solution : front){
         delete solution;
       }
-      delete front;
     }
-
-    delete fronts;
 
     generation++;
   }
   
   infoRunNSGA2.close();
-  
-  // cout << endl;
-  // cout << "------------FINAL POPULATION ------------ " << endl;
-  // for(auto& i : population){
-    // cout << "<" << i.fitness.first << ", " << i.fitness.second << ">" << endl;
-  // }
-  // cout << "------------------------------------------- " << endl << endl;
-
-  // cout << "SIZE OF FINAL POPULATION: " << population.size() << endl << endl;
-  
   return *population;
 }
