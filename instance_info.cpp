@@ -17,11 +17,11 @@ extern string folder_name_random_walk;
 
 int num_zones;
 int id = 0;
-float wind;
+float wind = 10.0;
 float power, powerFxd;
 float thrust_coef = 1.0;
 float tcFxd = 1.0;
-float angle;
+float angle = 30.0;
 
 map<string, vector<int>> turbines_instace = {
     {"A", {26, 8}},
@@ -63,9 +63,15 @@ void get_instance_info(int argc, char* argv[]){
     string strWind = "0.0";
     string strPow, strTC;
 
-    if(argc > 1){
+
+    cout << argc << endl;
+    if(argc > 1 && argc < 5){
         instance = (string) argv[1];
-    } // else if(argc == 3){
+    } else if(argc >= 5){
+        instance = (string) argv[1];
+        angle = stof((string) argv[3]);
+        wind = stof((string) argv[4]);
+    }
     //     instance = (string) argv[1];
     //     walk_length = atoi(argv[2]);
     // } else if(argc == 4){
@@ -88,26 +94,26 @@ void get_instance_info(int argc, char* argv[]){
     //     windFile = (string) argv[5];
     // };
 
-    file.open(pathFolders + "/instances/wind/" + windFile);
+    // file.open(pathFolders + "/instances/wind/" + windFile);
 
-    if(file.fail()){
-        cout << "ERROR: Invalid wind file" << endl;
-        throw invalid_argument("Invalid wind file");
-    }
+    // if(file.fail()){
+    //     cout << "ERROR: Invalid wind file" << endl;
+    //     throw invalid_argument("Invalid wind file");
+    // }
 
-    double rand_double = dist(re);
-    double accChance = 0.0;
-    double aux;
+    // double rand_double = dist(re);
+    // double accChance = 0.0;
+    // double aux;
 
-    while(file.good()){
-        file >> angle >> wind >> aux;
-        if(accChance + aux > rand_double){
-            break;
-        }
-        accChance += aux;
-    }
+    // while(file.good()){
+    //     file >> angle >> wind >> aux;
+    //     if(accChance + aux > rand_double){
+    //         break;
+    //     }
+    //     accChance += aux;
+    // }
 
-    file.close();
+    // file.close();
 
     file.open(pathFolders + "/instances/site/" + instance + "/availablePositions.txt");
 
