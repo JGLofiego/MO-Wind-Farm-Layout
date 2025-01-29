@@ -44,8 +44,8 @@ vector<Solution*> nsga2(vector<Solution>& pop){
 
   //NGSAII paramets 
   int size_population = population->size(); //Size of the population
-  double cross_prob = 0.95;
-  double mutation_prob = 0.05;
+  double cross_prob = 0.6;
+  double mutation_prob = 0.5;
   int stop_criteria = 1000000;
 
   // cout << endl;
@@ -83,9 +83,6 @@ vector<Solution*> nsga2(vector<Solution>& pop){
       if((static_cast<double>(rand()) / RAND_MAX) < cross_prob){
         *child1 = crossover(*parents[0], *parents[1]);
         *child2 = crossover(*parents[1], *parents[0]);
-
-        add(*offspring_population, new Solution(*child1));
-        add(*offspring_population, new Solution(*child2));
       }
 
       //Mutation
@@ -94,10 +91,10 @@ vector<Solution*> nsga2(vector<Solution>& pop){
       if((static_cast<double>(rand()) / RAND_MAX) < mutation_prob){
         mutation(*child1);
         mutation(*child2);
-
-        add(*offspring_population, new Solution(*child1));
-        add(*offspring_population, new Solution(*child2));
       }
+
+      add(*offspring_population, new Solution(*child1));
+      add(*offspring_population, new Solution(*child2));
 
       delete parents[0];
       delete parents[1];
