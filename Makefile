@@ -27,7 +27,6 @@ SRC_FILES = \
     $(SRC_DIR)/global_modules/dominates.cpp \
     $(SRC_DIR)/global_modules/isEqual.cpp \
     $(POPULATION_DIR)/population.cpp \
-    $(POPULATION_DIR)/population_v2.cpp \
     $(RSOLUTION_DIR)/generate_rSolution.cpp \
     $(META_DIR)/mutation.cpp \
     $(CROSS_DIR)/crossover.cpp \
@@ -38,16 +37,10 @@ SRC_FILES = \
     $(SRC_DIR)/metaheuristics/moead/modules/updateEP.cpp \
     $(SRC_DIR)/metaheuristics/moead/moead.cpp \
     ${SRC_DIR}/metaheuristics/nsga2/modules/binary_tournament.cpp \
-    ${SRC_DIR}/metaheuristics/nsga2/modules/binary_tournament_v2.cpp \
     $(SRC_DIR)/metaheuristics/nsga2/modules/non_dominated_sorting.cpp \
     $(SRC_DIR)/metaheuristics/nsga2/modules/arena_non_dominated_sorting.cpp \
-    $(SRC_DIR)/metaheuristics/nsga2/modules/arena_non_dominated_sorting_v2.cpp \
-    $(SRC_DIR)/metaheuristics/nsga2/modules/arena_non_dominated_sorting_v3.cpp \
     ${SRC_DIR}/metaheuristics/nsga2/modules/crowding_distance.cpp \
-    ${SRC_DIR}/metaheuristics/nsga2/modules/crowding_distance_v2.cpp \
     $(SRC_DIR)/metaheuristics/nsga2/nsga2.cpp \
-    $(SRC_DIR)/metaheuristics/nsga2/nsga2_v2.cpp \
-    $(SRC_DIR)/metaheuristics/nsga2/nsga2_v3.cpp \
     instance_info.cpp
 
 MAIN_FILE = main.cpp

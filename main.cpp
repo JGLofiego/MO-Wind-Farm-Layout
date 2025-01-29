@@ -43,5 +43,5 @@ int main(int argc, char* argv[]){
     cout << "Run time:" << endl;
     
     auto population = create_initial_population(SIZE_OF_POPULATION);
-    nsga2_v3(population);
+    nsga2(population);
 }

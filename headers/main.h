@@ -4,7 +4,6 @@
 #include "../headers/instance_info.h"
 
 #include "../headers/global_modules/generate_initial_population/population.h"
-#include "../headers/global_modules/generate_initial_population/population_v2.h"
 #include "../headers/global_modules/generate_initial_population/generate_rSolution.h"
 
 #include "../headers/global_modules/genetic_operators/mutation.h"
@@ -19,16 +18,10 @@
 #include "../headers/metaheuristics/moead/modules/tchebycheff.h"
 
 #include "./metaheuristics/nsga2/nsga2.h"
-#include "./metaheuristics/nsga2/nsga2_v2.h"
-#include "./metaheuristics/nsga2/nsga2_v3.h"
 #include "./metaheuristics/nsga2/modules/binary_tournament.h"
-#include "./metaheuristics/nsga2/modules/binary_tournament_v2.h"
 #include "./metaheuristics/nsga2/modules/crowding_distance.h"
-#include "./metaheuristics/nsga2/modules/crowding_distance_v2.h"
 #include "./metaheuristics/nsga2/modules/non_dominated_sorting.h"
 #include "./metaheuristics/nsga2/modules/arena_non_dominated_sorting.h"
-#include "./metaheuristics/nsga2/modules/arena_non_dominated_sorting_v2.h"
-#include "./metaheuristics/nsga2/modules/arena_non_dominated_sorting_v3.h"
 
 
 // #include "../metafeatures/features_extraction.cpp"
