@@ -9,7 +9,7 @@ int countRevalue = 0;
 
 BoundedParetoSet * pareto = new BoundedParetoSet();
 int stop_criteria = 1000000;
-string algorithm = "nsga2";
+string algorithm = "moead";
 string instance = "A";
 string root_folder = "./";
 
@@ -43,5 +43,5 @@ int main(int argc, char* argv[]){
     cout << "Run time:" << endl;
     
     auto population = create_initial_population(SIZE_OF_POPULATION);
-    nsga2(population);
+    moead(population);
 }
