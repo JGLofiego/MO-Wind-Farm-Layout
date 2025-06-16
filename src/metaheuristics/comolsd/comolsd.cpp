@@ -19,6 +19,8 @@
 #include "../../../headers/metaheuristics/moead/modules/generate_neighborhood.h"
 #include "../../../headers/metaheuristics/moead/modules/get_best_z_point.h"
 
+#include "../../../headers/metaheuristics/comolsd/comolsd.h"
+
 using namespace std;
 
 void comolsd(vector<Solution>& population_p){
