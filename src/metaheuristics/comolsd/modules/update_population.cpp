@@ -4,8 +4,8 @@
 using namespace std;
 
 vector<Solution> update_population(
-    const vector<Solution>& TP,
     const vector<pair<double, double>>& direction_vector,
+    const vector<Solution>& TP,
     const pair<double, double>& reference_point,
     function<double(const pair<double, double>&,
                     const pair<double, double>&,
