@@ -15,11 +15,11 @@ void unionSets(vector<int>& clusters, int x, int y) {
     }
 }
 
-double euclidDistance(Solution& a, Solution& b){
+double euclidDistance(const Solution& a, const Solution& b){
     return sqrt(pow(b.fitness.first - a.fitness.first, 2) + pow(b.fitness.second - a.fitness.second, 2));
 }
 
-int findNearest(vector<Solution>& population, int actual){
+int findNearest(const vector<Solution>& population, int actual){
     int nearest = 0;
     if(nearest == actual){
         nearest = 1;
@@ -41,7 +41,7 @@ int findNearest(vector<Solution>& population, int actual){
     return nearest;
 }
 
-vector<vector<Solution>> unionFind(vector<Solution>& P){
+vector<vector<Solution>> unionFind(const vector<Solution>& P){
     vector<int> clusters(P.size());
     vector<vector<Solution>> result;
 

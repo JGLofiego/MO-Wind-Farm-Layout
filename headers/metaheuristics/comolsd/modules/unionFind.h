@@ -9,8 +9,8 @@ using namespace std;
 
 int findParent(vector<int>& parent, int x);
 void unionSets(vector<int>& clusters, int x, int y);
-double euclidDistance(Solution& a, Solution& b);
-int findNearest(vector<Solution>& population, int actual);
-vector<vector<Solution>> unionFind(vector<Solution>& P);
+double euclidDistance(const Solution& a,const Solution& b);
+int findNearest(const vector<Solution>& population, int actual);
+vector<vector<Solution>> unionFind(const vector<Solution>& P);
 
 #endif
