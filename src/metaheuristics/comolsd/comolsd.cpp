@@ -33,22 +33,19 @@ void comolsd(vector<Solution>& population_p){
   vector<pair<double, double>> w1 = build_weight_vector(size_population); 
   
   //Getting z_point
-  pair<double, double> ideal_point = get_best_z_point(population_p);
+  pair<double, double> ideal_point = get_best_z_point(population_p); //Ideal z* point
   pair<double, double> nadir_point = get_nadir_point(population_p);
-
-  //Building the neighborhood (B) of each lambda vector i (or each subproblem i)
-  vector<vector<int>> neighborhood = build_neighborhood(number_of_neighbors, w1, size_population);
 
   //Set Q
   vector<Solution> population_q;
   
   while (countRevalue < stop_criteria) {
-    local_search(make_population_pointers(population_p), w1, ideal_point, neighborhood, make_aggregation_function(calculate_ws));
+    local_search(make_population_pointers(population_p), w1, ideal_point, number_of_neighbors, make_aggregation_function(calculate_ws));
 
     vector<Solution> union_pq = population_p;
     union_pq.insert(union_pq.end(), population_q.begin(), population_q.end());
 
-    // Update of the ideal z* point and the nadir point
+    // Updating the ideal z* point and the nadir point
     for (const auto& sol : union_pq) {
         // Updates ideal point (z*)
         ideal_point.first = max(ideal_point.first, sol.fitness.first);
@@ -62,8 +59,8 @@ void comolsd(vector<Solution>& population_p){
     auto w2 = codvs(nadir_point, population_p, population_q, size_population);
 
     population_q = update_population(w2, union_pq, nadir_point, make_aggregation_function(calculate_ipbi));
-    //verificar envio de vizinhança
-    local_search(make_population_pointers(population_q), w2, nadir_point, neighborhood, make_aggregation_function(calculate_ipbi));
+
+    local_search(make_population_pointers(population_q), w2, nadir_point, number_of_neighbors, make_aggregation_function(calculate_ipbi));
 
     population_p = update_population(w1, union_pq, ideal_point, make_aggregation_function(calculate_ws));
   }

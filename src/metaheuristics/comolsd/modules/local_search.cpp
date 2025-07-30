@@ -1,4 +1,5 @@
 #include "../../../../headers/metaheuristics/comolsd/modules/local_search.h"
+#include "../../../../headers/metaheuristics/comolsd/modules/build_neighborhood_decision_space.h"
 #include "../../../../headers/global_modules/genetic_operators/mutation.h"
 
 using namespace std;
@@ -6,8 +7,10 @@ using namespace std;
 void local_search(vector<Solution*>& population,
                   const vector<pair<double, double>>& weight_vectors,
                   const pair<double, double>& reference_point,
-                  const vector<vector<int>>& neighborhood,
-                  function<double(const pair<double, double>&, const pair<double, double>&, const pair<double, double>&)> aggregation_function) {
+                  int number_of_neighbors,
+                  function<double(const pair<double, double>&,
+                                  const pair<double, double>&,
+                                  const pair<double, double>&)> aggregation_function) {
 
     int size_population = population.size();
     vector<bool> isSearched(size_population, false);
@@ -17,32 +20,30 @@ void local_search(vector<Solution*>& population,
     while (!all_searched) {
         all_searched = true;
 
-        for (int i = 0; i < size_population; i++) {
+        for (int i = 0; i < size_population; ++i) {
             if (isSearched[i]) continue;
-            
-            isSearched[i] = true; // Mark as searched
+
+            isSearched[i] = true;
             all_searched = false;
 
-            // Searching for xi's neighbors
-            vector<int> neighbors_indices = neighborhood[i]; //Indices of the neighbors of solution i
-            
-            vector<Solution*> neighbors;
-            for(int j = 0; j < neighbors_indices.size(); j++) 
-              neighbors.push_back(population[neighbors_indices[j]]);
+            // Generate the neighbors of x^i in the decision space
+            vector<Solution> neighbors = build_neighborhood_decision_space(*population[i], number_of_neighbors);
 
-            Solution* current = population[i]; //Current solution
-            for (Solution* y : neighbors) {
-                double y_value = aggregation_function(y->fitness, weight_vectors[i], reference_point);
-                double xi_value = aggregation_function(current->fitness, weight_vectors[i], reference_point);
+            // For each neighbor y ∈ N(x^i)
+            for (const Solution& y : neighbors) { //N(x) neighborhood exploration
 
-                //!!! preciso atualizar a vizinhanca?
-                if (y_value <= xi_value) {
-                    *population[i] = *y;
-                    isSearched[i] = false; // mark as "unsearched" as it has been updated
+                // For each subproblem j (λ^j)
+                for (int j = 0; j < size_population; ++j) {
+
+                    double g_y = aggregation_function(y.fitness, weight_vectors[j], reference_point);
+                    double g_xj = aggregation_function(population[j]->fitness, weight_vectors[j], reference_point);
+
+                    // If y improves subproblem j, then update
+                    if (g_y <= g_xj) {
+                        *population[j] = y;                 // Replaces it 
+                        isSearched[j] = false;             // Mark as "unsearched" as it has been updated
+                    }
                 }
-
-                //!!!Preciso deletar y?
-                //delete y;
             }
         }
     }

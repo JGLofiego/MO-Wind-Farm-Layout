@@ -2,13 +2,17 @@
 #define LOCAL_SEARCH_H
 
 #include <vector>
+#include <utility>
 #include <functional>
-#include "../../../global_modules/generate_initial_population/generate_rSolution.h"
+#include "solution.h"
 
+// Perform local search based on CoMOLS/D Algorithm 2
 void local_search(std::vector<Solution*>& population,
                   const std::vector<std::pair<double, double>>& weight_vectors,
                   const std::pair<double, double>& reference_point,
-                  const std::vector<std::vector<int>>& neighborhood,
-                  std::function<double(const std::pair<double, double>&, const std::pair<double, double>&, const std::pair<double, double>&)> aggregation_function);
+                  int number_of_neighbors,
+                  std::function<double(const std::pair<double, double>&,
+                                       const std::pair<double, double>&,
+                                       const std::pair<double, double>&)> aggregation_function);
 
 #endif
