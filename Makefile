@@ -7,6 +7,8 @@ CXXFLAGS = -std=c++17 -Werror -O2 \
     -I./headers/metaheuristics/moead/modules \
     -I./headers/metaheuristics/nsga2 \
     -I./headers/metaheuristics/nsga2/modules \
+    -I./headers/metaheuristics/comolsd \
+    -I./headers/metaheuristics/comolsd/modules \
     -I./headers/global_modules \
     -I./headers/global_modules/genetic_operators \
     -I./headers/global_modules/generate_initial_population \
@@ -41,11 +43,22 @@ SRC_FILES = \
     $(SRC_DIR)/metaheuristics/nsga2/modules/arena_non_dominated_sorting.cpp \
     ${SRC_DIR}/metaheuristics/nsga2/modules/crowding_distance.cpp \
     $(SRC_DIR)/metaheuristics/nsga2/nsga2.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/aggregation_wrapper.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/calculate_ipbi.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/calculate_ws.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/codvs.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/get_nadir_point.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/local_search.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/make_population_pointers.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/unionFind.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/update_population.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/modules/build_neighborhood_decision_space.cpp \
+    ${SRC_DIR}/metaheuristics/comolsd/comolsd.cpp \
     instance_info.cpp
 
 MAIN_FILE = main.cpp
 
-OUTPUT = nsga2
+OUTPUT = comolsd
 
 $(OUTPUT): $(SRC_FILES) $(MAIN_FILE)
 	@echo Starting compilation of $(OUTPUT)...

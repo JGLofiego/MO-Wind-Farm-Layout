@@ -23,6 +23,18 @@
 #include "./metaheuristics/nsga2/modules/non_dominated_sorting.h"
 #include "./metaheuristics/nsga2/modules/arena_non_dominated_sorting.h"
 
+#include "../headers/metaheuristics/comolsd/comolsd.h"
+#include "../headers/metaheuristics/comolsd/modules/aggregation_wrapper.h"
+#include "../headers/metaheuristics/comolsd/modules/build_neighborhood_decision_space.h"
+#include "../headers/metaheuristics/comolsd/modules/calculate_ipbi.h"
+#include "../headers/metaheuristics/comolsd/modules/calculate_ws.h"
+#include "../headers/metaheuristics/comolsd/modules/codvs.h"
+#include "../headers/metaheuristics/comolsd/modules/get_nadir_point.h"
+#include "../headers/metaheuristics/comolsd/modules/local_search.h"
+#include "../headers/metaheuristics/comolsd/modules/make_population_pointers.h"
+#include "../headers/metaheuristics/comolsd/modules/unionFind.h"
+#include "../headers/metaheuristics/comolsd/modules/update_population.h"
+
 
 // #include "../metafeatures/features_extraction.cpp"
 // #include "../metafeatures/modules/decomposition_based/get_global_z_point.cpp"
