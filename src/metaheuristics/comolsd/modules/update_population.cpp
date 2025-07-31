@@ -29,7 +29,7 @@ vector<Solution> update_population(
             double new_value = aggregation_function(x.fitness, direction_vector[i], reference_point);
             double current_value = aggregation_function(TQ[i].fitness, direction_vector[i], reference_point);
 
-            if (new_value <= current_value) {
+            if (new_value >= current_value) {
                 TQ[i] = x;
             }
         }

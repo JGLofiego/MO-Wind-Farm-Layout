@@ -39,7 +39,7 @@ void local_search(vector<Solution*>& population,
                     double g_xj = aggregation_function(population[j]->fitness, weight_vectors[j], reference_point);
 
                     // If y improves subproblem j, then update
-                    if (g_y <= g_xj) {
+                    if (g_y >= g_xj) {
                         *population[j] = y;                 // Replaces it 
                         isSearched[j] = false;             // Mark as "unsearched" as it has been updated
                     }

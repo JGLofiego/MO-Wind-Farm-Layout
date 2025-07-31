@@ -24,7 +24,7 @@ int findNearest(const vector<Solution>& population, int actual){
     if(nearest == actual){
         nearest = 1;
     }
-    int nearVal = euclidDistance(population[nearest], population[actual]);
+    double nearVal = euclidDistance(population[nearest], population[actual]);
 
     for (int i = 0; i < population.size(); i++){
         if(i == actual){
