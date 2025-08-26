@@ -14,6 +14,9 @@
 #include "../../../headers/metaheuristics/comolsd/modules/get_nadir_point.h"
 #include "../../../headers/metaheuristics/comolsd/modules/aggregation_wrapper.h"
 #include "../../../headers/metaheuristics/comolsd/modules/make_population_pointers.h"
+#include "../../../headers/metaheuristics/comolsd/modules/get_global_z_point.h"
+#include "../../../headers/metaheuristics/comolsd/modules/get_global_nadir_point.h"
+#include "../../../headers/metaheuristics/comolsd/modules/min_max_cost.h"
 
 #include "../../../headers/metaheuristics/moead/modules/generate_weight_vectors.h"
 #include "../../../headers/metaheuristics/moead/modules/generate_neighborhood.h"
@@ -35,6 +38,11 @@ void comolsd(vector<Solution>& population_p){
   //Getting z_point
   pair<double, double> ideal_point = get_best_z_point(population_p); //Ideal z* point
   pair<double, double> nadir_point = get_nadir_point(population_p);
+
+  // Getting global points to be used on normalization
+  pair<double, double> interval = min_max_cost(); //Interval consists on the (min_cost, max_cost)
+  pair<double, double> global_nadir_point = get_global_nadir_point(interval.first);
+  pair<double, double> global_ideal_point = get_global_z_point(interval.second);
 
   //Set Q
   vector<Solution> population_q;
