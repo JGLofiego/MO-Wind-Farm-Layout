@@ -55,7 +55,7 @@ void comolsd(vector<Solution>& population_p){
     infoRun << "Generation " << generation << " | Revalues: " << countRevalue << " | GridSize: " << pareto->getSize() << endl;
 
     auto population_p_pointers = make_population_pointers(population_p);
-    local_search(population_p_pointers, w1, ideal_point, number_of_neighbors, make_aggregation_function(calculate_ws));
+    local_search(population_p_pointers, w1, ideal_point, number_of_neighbors, make_aggregation_function(calculate_ws, global_ideal_point, global_nadir_point));
 
     vector<Solution> union_pq = population_p;
     union_pq.insert(union_pq.end(), population_q.begin(), population_q.end());
@@ -73,12 +73,12 @@ void comolsd(vector<Solution>& population_p){
 
     auto w2 = codvs(nadir_point, population_p, population_q, size_population);
 
-    population_q = update_population(w2, union_pq, nadir_point, make_aggregation_function(calculate_ipbi));
+    population_q = update_population(w2, union_pq, nadir_point, make_aggregation_function(calculate_ipbi, global_ideal_point, global_nadir_point));
 
     auto population_q_pointers = make_population_pointers(population_q);
-    local_search(population_q_pointers, w2, nadir_point, number_of_neighbors, make_aggregation_function(calculate_ipbi));
+    local_search(population_q_pointers, w2, nadir_point, number_of_neighbors, make_aggregation_function(calculate_ipbi, global_ideal_point, global_nadir_point));
 
-    population_p = update_population(w1, union_pq, ideal_point, make_aggregation_function(calculate_ws));
+    population_p = update_population(w1, union_pq, ideal_point, make_aggregation_function(calculate_ws, global_ideal_point, global_nadir_point));
     
     generation++;
   }

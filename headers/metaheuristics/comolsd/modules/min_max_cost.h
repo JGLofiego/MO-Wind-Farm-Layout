@@ -3,6 +3,6 @@
 
 #include "../../../global_modules/generate_initial_population/generate_rSolution.h"
 
-pair<double,double> min_max_cost();
+std::pair<double,double> min_max_cost();
 
 #endif

@@ -25,4 +25,3 @@ double calculate_ipbi(const pair<double, double>& fitness,
     double theta = 2.0;
     return d1 - theta * d2;
 }
-
