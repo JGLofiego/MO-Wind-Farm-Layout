@@ -4,7 +4,7 @@
 using namespace std;
 
 
-// Para funções como calculate_ws (2 argumentos)
+// Normalization of the second objective
 std::function<double(const pair<double, double>&,
                      const pair<double, double>&,
                      const pair<double, double>&)>
@@ -24,7 +24,7 @@ make_aggregation_function(
     };
 }
 
-// Para funções como calculate_ipbi (3 argumentos)
+// For functions like calculate_ipbi (3 arguments)
 std::function<double(const pair<double, double>&,
                      const pair<double, double>&,
                      const pair<double, double>&)>

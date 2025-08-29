@@ -9,16 +9,16 @@ pair<double, double> normalize_objectives(
 
     pair<double, double> normalized;
 
-    // Normalização do primeiro objetivo
+    // Normalization of the first objective
     if (global_ideal_point.first != global_nadir_point.first) {
         normalized.first = 
             (fitness.first - global_nadir_point.first) / 
             (global_ideal_point.first - global_nadir_point.first);
     } else {
-        normalized.first = 0.0; // evita divisão por zero
+        normalized.first = 0.0; // avoid division by zero
     }
 
-    // Normalização do segundo objetivo
+    // Normalization of the second objective
     if (global_ideal_point.second != global_nadir_point.second) {
         normalized.second = 
             (fitness.second - global_nadir_point.second) / 
