@@ -44,7 +44,7 @@ vector<double> mo_features_extraction_pareto(LandscapeMetrics landscapeMetrics){
   mo_dom_features = inf_neighbors_features;
   mo_dom_features.insert(mo_dom_features.end(), sup_neighbors_features.begin(), sup_neighbors_features.end());
   mo_dom_features.insert(mo_dom_features.end(), inc_neighbors_features.begin(), inc_neighbors_features.end());
-  mo_dom_features.insert(mo_dom_features.end(), inc_neighbors_features.begin(), inc_neighbors_features.end());
+  mo_dom_features.insert(mo_dom_features.end(), ind_neighbors_features.begin(), ind_neighbors_features.end());
 
   return mo_dom_features;
 }
